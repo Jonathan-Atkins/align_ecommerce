@@ -17,9 +17,7 @@ const AlignLogo = () => (
 const navLinks = [
   { name: "Home", href: "#", active: true },
   { name: "About Us", href: "#" },
-  { name: "Our Mission", href: "#" },
-  { name: "Payment Solution", href: "#" },
-  { name: "Referral Program", href: "#" },
+  { name: "Payment Solutions", href: "#" },
   { name: "Blog", href: "#" },
   { name: "Contact Us", href: "#" },
 ];
