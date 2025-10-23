@@ -5,6 +5,53 @@
   --foreground: #171717;
 }
 
+/* Light defaults */
+:root{
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --card: #f8fafc;
+  --nav-divider: #e6eddc;
+  --nav-button-bg: #95B75D;
+}
+
+/* Dark mode when .dark class present */
+.dark {
+  --bg: #0b1020;
+  --text: #e6eef8;
+  --muted: #94a3b8;
+  --card: #0f1724;
+  --nav-divider: #2f3a2b;
+  --nav-button-bg: #6f873b;
+}
+
+/* Respect system preference as fallback (will be overridden by class if set) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1020;
+    --text: #e6eef8;
+    --muted: #94a3b8;
+    --card: #0f1724;
+    --nav-divider: #2f3a2b;
+    --nav-button-bg: #6f873b;
+  }
+}
+
+/* Apply variables globally */
+html,body,#__next {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* helper utilities (optional) */
+.nav-divider {
+  background-color: var(--nav-divider);
+}
+.nav-button {
+  background-color: var(--nav-button-bg);
+  color: white;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -23,4 +70,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
 }
