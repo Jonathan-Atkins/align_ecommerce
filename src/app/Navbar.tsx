@@ -15,11 +15,19 @@ const navLinks = [
 ];
 
 const baseLinkStyles = [
-  "group relative px-5 py-1 text-sm font-medium tracking-wide text-neutral-700 transition-colors duration-200",
-  "after:pointer-events-none after:absolute after:content-[''] after:-bottom-2 after:left-1/2 after:h-[3px] after:w-3/5",
+  "group relative font-medium tracking-wide text-neutral-700 transition-colors duration-200",
+  "after:pointer-events-none after:absolute after:content-[''] after:left-1/2 after:h-[3px] after:w-3/5",
+  "after:-bottom-1 md:after:-bottom-2",
   "after:-translate-x-1/2 after:rounded-full after:bg-white after:opacity-0 after:scale-x-50",
   "after:shadow-[0_2px_8px_rgba(0,0,0,0.12)] after:transition-all after:duration-300 after:ease-out",
   "group-hover:text-neutral-900 group-hover:after:opacity-100 group-hover:after:scale-x-100",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-align-green focus-visible:ring-offset-2",
+].join(" ");
+
+const activeLinkStyles = [
+  "text-align-green",
+  "after:opacity-100 after:scale-x-100",
+  "group-hover:text-align-green",
 ].join(" ");
 
 export default function Navbar() {
