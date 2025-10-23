@@ -13,8 +13,6 @@ const navLinks = [
   { name: "Blog", href: "/blog" },
 ];
 
-
-
 export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full bg-white px-8 py-4 flex items-center justify-between">
@@ -31,30 +29,32 @@ export default function Navbar() {
         </Link>
       </div>
       {/* Nav Links */}
-      <div className="hidden md:flex items-center space-x-8">
-        {navLinks.map((link) => {
-          return (
+      <div className="hidden md:flex items-center">
+        {navLinks.map((link, index) => (
+          <React.Fragment key={link.name}>
             <Link
-              key={link.name}
               href={link.href}
-              className={`text-base ${
-                link.name === "Home" 
-                ? "text-[#95B75D]" 
-                : "text-black hover:text-[#95B75D] transition-colors"
+              className={`text-base px-4 ${
+                link.name === "Home"
+                  ? "text-[#95B75D]"
+                  : "text-black hover:text-[#95B75D] transition-colors"
               }`}
             >
               {link.name}
             </Link>
-          );
-        })}
+            {index < navLinks.length - 1 && (
+              <div className="h-4 w-[1px] bg-gray-300" />
+            )}
+          </React.Fragment>
+        ))}
       </div>
       {/* Contact Button */}
       <Link
         href="/contact"
-        className="bg-[#95B75D] text-white px-8 py-3 rounded-[50px] font-medium hover:bg-[#85A54D] transition-colors flex items-center"
+        className="bg-[#95B75D] text-white px-8 py-3 rounded-full font-medium hover:bg-[#85A54D] transition-colors flex items-center"
       >
         CONTACT
-        <span className="ml-2 text-lg">›</span>
+        <span className="ml-2">›</span>
       </Link>
     </nav>
   );
