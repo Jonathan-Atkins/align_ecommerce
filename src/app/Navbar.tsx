@@ -83,6 +83,21 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="block py-2 px-4 text-base hover:bg-gray-100 dark:hover:bg-[color:var(--card)] dark:text-[color:var(--text)]"
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }
