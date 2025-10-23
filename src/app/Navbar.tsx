@@ -14,98 +14,57 @@ const navLinks = [
   { name: "Blog", href: "/blog" },
 ];
 
-const baseLinkStyles = [
-  "group relative font-medium tracking-wide text-neutral-700 transition-colors duration-200",
-  "after:pointer-events-none after:absolute after:content-[''] after:left-1/2 after:h-[3px] after:w-3/5",
-  "after:-bottom-1 md:after:-bottom-2",
-  "after:-translate-x-1/2 after:rounded-full after:bg-white after:opacity-0 after:scale-x-50",
-  "after:shadow-[0_2px_8px_rgba(0,0,0,0.12)] after:transition-all after:duration-300 after:ease-out",
-  "group-hover:text-neutral-900 group-hover:after:opacity-100 group-hover:after:scale-x-100",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-align-green focus-visible:ring-offset-2",
-].join(" ");
-
-const activeLinkStyles = [
-  "text-align-green",
-  "after:opacity-100 after:scale-x-100",
-  "group-hover:text-align-green",
-].join(" ");
-
 export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-10 py-5">
-        {/* Logo */}
+    <nav className="w-full bg-white border-t-[2px] border-[#7C8F5A]">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-10 py-5">
+        {/* Logo and Divider */}
         <div className="flex items-center">
-          <Link href="/">
+          <Link href="/" className="flex items-center">
             <Image
               src="/Align%20ecommerce%20Vector.png"
               alt="Align ecommerce logo"
-              width={160}
-              height={40}
+              width={110}
+              height={46}
               priority
             />
           </Link>
+          <div className="h-12 w-px bg-[#B7C7A4] mx-6" />
         </div>
         {/* Nav Links */}
-        <div className="hidden md:flex items-center text-neutral-700">
-          {navLinks.map((link, index) => {
-            const isActive =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname?.startsWith(link.href);
-
-            return (
+        <div className="hidden md:flex items-center space-x-0">
+          {navLinks.map((link, idx) => (
+            <React.Fragment key={link.name}>
               <Link
-                key={link.name}
                 href={link.href}
-                aria-current={isActive ? "page" : undefined}
-                className={`${baseLinkStyles} ${
-                  index !== 0 ? "border-l border-neutral-200" : ""
-                } ${
-                  isActive
-                    ? [
-                        "text-align-green",
-                        "after:opacity-100 after:scale-x-100",
-                        "group-hover:text-align-green",
-                      ].join(" ")
-                    : ""
-                }`}
+                className={`px-6 text-lg font-semibold transition-colors
+                  ${
+                    pathname === link.href
+                      ? "text-[#A6C07A]"
+                      : "text-black hover:text-[#A6C07A]"
+                  }
+                `}
               >
                 {link.name}
               </Link>
-            );
-          })}
-        </div>
-        {/* CTA Button */}
-        <div className="flex items-center">
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 rounded-full bg-[#6D8C3B] px-8 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-colors duration-200 hover:bg-[#5f7a31]"
-          >
-            Contact
-            <span aria-hidden className="text-base font-normal">
-              →
-            </span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="block py-2 px-4 text-base hover:bg-gray-100 dark:hover:bg-[color:var(--card)] dark:text-[color:var(--text)]"
-            >
-              {link.name}
-            </Link>
+              {/* Divider except after last link */}
+              {idx < navLinks.length - 1 && (
+                <div className="h-6 w-px bg-[#E6EDD6]" />
+              )}
+            </React.Fragment>
           ))}
         </div>
-      )}
+        {/* Contact Button */}
+        <Link
+          href="/contact"
+          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-lg font-semibold px-12 py-4 rounded-full flex items-center"
+        >
+          CONTACT
+          <span className="ml-3 text-2xl font-bold">&#8250;</span>
+        </Link>
+      </div>
     </nav>
   );
 }

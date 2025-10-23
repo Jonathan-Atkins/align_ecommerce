@@ -1,7 +1,10 @@
-export default function Home() {
+import HeroSection from "./HeroSection";
+
+export default function HomePage() {
   return (
-    <section>
-      {/* Page content goes here */}
-    </section>
+    <>
+      <HeroSection />
+      {/* ...other homepage sections... */}
+    </>
   );
 }
