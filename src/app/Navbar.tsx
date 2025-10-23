@@ -16,9 +16,9 @@ const navLinks = [
 const baseLinkStyles = [
   "group relative text-sm font-medium transition-colors duration-200",
   "after:absolute after:left-0 after:-bottom-2 after:h-0.5 after:w-full",
-  "after:origin-left after:scale-x-0 after:rounded-full after:bg-align-green",
+  "after:origin-left after:scale-x-0 after:rounded-full after:bg-white/80",
   "after:opacity-0 after:transition after:duration-300 after:ease-out",
-  "group-hover:after:scale-x-100 group-hover:after:opacity-100",
+  "group-hover:after:scale-x-100 group-hover:after:opacity-80",
 ].join(" ");
 
 export default function Navbar() {
@@ -53,10 +53,10 @@ export default function Navbar() {
               aria-current={isActive ? "page" : undefined}
               className={`${baseLinkStyles} ${
                 isActive
-                  ? "text-align-green after:scale-x-100 after:opacity-100"
+                  ? "text-align-green after:scale-x-100 after:opacity-90 after:bg-white"
                   : "text-white hover:text-align-green"
-              }`}
-            >
+            }`}
+          >
               {link.name}
             </Link>
           );
