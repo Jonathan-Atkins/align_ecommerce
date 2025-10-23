@@ -2,23 +2,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About Us", href: "/about" },
-  { name: "Our Mission", href: "/mission" },
+  { name: "Our Mission", href: "/our-mission" },
   { name: "Why Align", href: "/why-align" },
-  { name: "Referral Program", href: "/referral" },
+  { name: "Referral Program", href: "/referral-program" },
   { name: "Blog", href: "/blog" },
 ];
 
+const baseLinkStyles = [
+  "group relative px-5 py-1 text-sm font-medium tracking-wide text-neutral-700 transition-colors duration-200",
+  "after:pointer-events-none after:absolute after:content-[''] after:-bottom-2 after:left-1/2 after:h-[3px] after:w-3/5",
+  "after:-translate-x-1/2 after:rounded-full after:bg-white after:opacity-0 after:scale-x-50",
+  "after:shadow-[0_2px_8px_rgba(0,0,0,0.12)] after:transition-all after:duration-300 after:ease-out",
+  "group-hover:text-neutral-900 group-hover:after:opacity-100 group-hover:after:scale-x-100",
+].join(" ");
+
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white dark:bg-[color:var(--bg)] px-4 md:px-8 py-4">
-      <div className="flex items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full bg-white">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-10 py-5">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/">
@@ -31,46 +40,47 @@ export default function Navbar() {
             />
           </Link>
         </div>
+        {/* Nav Links */}
+        <div className="hidden md:flex items-center text-neutral-700">
+          {navLinks.map((link, index) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname?.startsWith(link.href);
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
-
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center">
-          {navLinks.map((link, index) => (
-            <React.Fragment key={link.name}>
+            return (
               <Link
+                key={link.name}
                 href={link.href}
-                className={`text-base px-4 ${
-                  link.name === "Home"
-                    ? "text-[#95B75D]"
-                    : "text-black dark:text-[color:var(--text)] hover:text-[#95B75D] dark:hover:text-[#95B75D] transition-colors"
+                aria-current={isActive ? "page" : undefined}
+                className={`${baseLinkStyles} ${
+                  index !== 0 ? "border-l border-neutral-200" : ""
+                } ${
+                  isActive
+                    ? [
+                        "text-align-green",
+                        "after:opacity-100 after:scale-x-100",
+                        "group-hover:text-align-green",
+                      ].join(" ")
+                    : ""
                 }`}
               >
                 {link.name}
               </Link>
-              {index < navLinks.length - 1 && (
-                <div className="h-4 w-[1px] bg-gray-300 dark:bg-[color:var(--nav-divider)]" />
-              )}
-            </React.Fragment>
-          ))}
+            );
+          })}
+        </div>
+        {/* CTA Button */}
+        <div className="flex items-center">
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 rounded-full bg-[#6D8C3B] px-8 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-colors duration-200 hover:bg-[#5f7a31]"
+          >
+            Contact
+            <span aria-hidden className="text-base font-normal">
+              →
+            </span>
+          </Link>
         </div>
       </div>
 
