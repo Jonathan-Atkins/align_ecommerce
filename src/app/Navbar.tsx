@@ -32,15 +32,10 @@ const activeLinkStyles = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 md:px-10 md:py-5">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-10 py-5">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/">
@@ -53,8 +48,8 @@ export default function Navbar() {
             />
           </Link>
         </div>
-        {/* Desktop Navigation */}
-        <div className="hidden items-center text-neutral-700 md:flex">
+        {/* Nav Links */}
+        <div className="hidden md:flex items-center text-neutral-700">
           {navLinks.map((link, index) => {
             const isActive =
               link.href === "/"
@@ -66,47 +61,25 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`${baseLinkStyles} inline-flex items-center justify-center px-5 py-1 text-sm ${
+                className={`${baseLinkStyles} ${
                   index !== 0 ? "border-l border-neutral-200" : ""
-                } ${isActive ? activeLinkStyles : ""}`}
+                } ${
+                  isActive
+                    ? [
+                        "text-align-green",
+                        "after:opacity-100 after:scale-x-100",
+                        "group-hover:text-align-green",
+                      ].join(" ")
+                    : ""
+                }`}
               >
                 {link.name}
               </Link>
             );
           })}
         </div>
-        {/* Mobile Toggle */}
-        <button
-          type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 text-neutral-700 transition-colors duration-200 hover:border-neutral-300 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-align-green focus-visible:ring-offset-2 md:hidden"
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="primary-navigation"
-          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-        >
-          <span className="sr-only">Toggle navigation</span>
-          <svg
-            className="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            {isMobileMenuOpen ? (
-              <path d="M6 6L18 18M18 6L6 18" />
-            ) : (
-              <>
-                <path d="M4 7h16" />
-                <path d="M4 12h16" />
-                <path d="M4 17h16" />
-              </>
-            )}
-          </svg>
-        </button>
         {/* CTA Button */}
-        <div className="hidden items-center md:flex">
+        <div className="flex items-center">
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 rounded-full bg-[#6D8C3B] px-8 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-colors duration-200 hover:bg-[#5f7a31]"
@@ -118,55 +91,21 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
-      {/* Mobile Navigation */}
-      <div
-        id="primary-navigation"
-        className={`${isMobileMenuOpen ? "block" : "hidden"} md:hidden`}
-        aria-hidden={!isMobileMenuOpen}
-      >
-        <div className="mx-4 mt-2 rounded-3xl border border-neutral-200 bg-white shadow-lg transition-opacity duration-200">
-          <div className="flex flex-col divide-y divide-neutral-200">
-            {navLinks.map((link) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname?.startsWith(link.href);
 
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  aria-current={isActive ? "page" : undefined}
-                  className={`${baseLinkStyles} flex items-center justify-between px-6 py-3 text-base after:-bottom-1 ${
-                    isActive ? activeLinkStyles : ""
-                  }`}
-                >
-                  <span>{link.name}</span>
-                  <span
-                    aria-hidden
-                    className={`text-sm transition-transform duration-200 ${
-                      isMobileMenuOpen ? "translate-x-0" : "translate-x-1"
-                    }`}
-                  >
-                    →
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-          <div className="px-6 py-4">
+      {/* Mobile Navigation */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden">
+          {navLinks.map((link) => (
             <Link
-              href="/contact"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#6D8C3B] px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-colors duration-200 hover:bg-[#5f7a31]"
+              key={link.name}
+              href={link.href}
+              className="block py-2 px-4 text-base hover:bg-gray-100 dark:hover:bg-[color:var(--card)] dark:text-[color:var(--text)]"
             >
-              Contact
-              <span aria-hidden className="text-base font-normal">
-                →
-              </span>
+              {link.name}
             </Link>
-          </div>
+          ))}
         </div>
-      </div>
+      )}
     </nav>
   );
 }
