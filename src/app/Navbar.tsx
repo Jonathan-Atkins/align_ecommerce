@@ -14,11 +14,13 @@ const navLinks = [
 ];
 
 const baseLinkStyles = [
-  "group relative text-sm font-medium transition-colors duration-200",
-  "after:absolute after:left-0 after:-bottom-2 after:h-0.5 after:w-full",
-  "after:origin-left after:scale-x-0 after:rounded-full after:bg-white/80",
-  "after:opacity-0 after:transition after:duration-300 after:ease-out",
-  "group-hover:after:scale-x-100 group-hover:after:opacity-80",
+  "group relative text-sm font-medium text-white transition-colors duration-200",
+  "before:pointer-events-none before:absolute before:content-[''] before:left-1/2 before:-translate-x-1/2",
+  "before:-bottom-2 before:h-[3px] before:w-full before:max-w-[120%]",
+  "before:rounded-full before:bg-white/0 before:opacity-0 before:scale-x-50",
+  "before:blur-[3px] before:transform before:transition before:duration-300 before:ease-out before:origin-center",
+  "group-hover:text-align-green group-hover:before:bg-white/80 group-hover:before:opacity-90",
+  "group-hover:before:scale-x-100 group-hover:before:shadow-[0_0_14px_rgba(255,255,255,0.45)] group-hover:before:blur-0",
 ].join(" ");
 
 export default function Navbar() {
@@ -53,9 +55,13 @@ export default function Navbar() {
               aria-current={isActive ? "page" : undefined}
               className={`${baseLinkStyles} ${
                 isActive
-                  ? "text-align-green after:scale-x-100 after:opacity-90 after:bg-white"
-                  : "text-white hover:text-align-green"
-            }`}
+                  ? [
+                      "text-align-green",
+                      "before:bg-white before:opacity-100 before:scale-x-100",
+                      "before:shadow-[0_0_18px_rgba(255,255,255,0.45)] before:blur-[1.5px]",
+                    ].join(" ")
+                  : ""
+              }`}
           >
               {link.name}
             </Link>
