@@ -1,10 +1,7 @@
-// import Image from "next/image";
-import Navbar from "./Navbar";
-
 export default function Home() {
   return (
     <section>
-      <Navbar/>
+      {/* Page content goes here */}
     </section>
   );
 }
