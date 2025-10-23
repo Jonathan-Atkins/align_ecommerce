@@ -17,7 +17,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white px-4 md:px-8 py-4">
+    <nav className="sticky top-0 z-50 w-full bg-white dark:bg-[color:var(--bg)] px-4 md:px-8 py-4">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
@@ -61,13 +61,13 @@ export default function Navbar() {
                 className={`text-base px-4 ${
                   link.name === "Home"
                     ? "text-[#95B75D]"
-                    : "text-black hover:text-[#95B75D] transition-colors"
+                    : "text-black dark:text-[color:var(--text)] hover:text-[#95B75D] dark:hover:text-[#95B75D] transition-colors"
                 }`}
               >
                 {link.name}
               </Link>
               {index < navLinks.length - 1 && (
-                <div className="h-4 w-[1px] bg-gray-300" />
+                <div className="h-4 w-[1px] bg-gray-300 dark:bg-[color:var(--nav-divider)]" />
               )}
             </React.Fragment>
           ))}
@@ -81,7 +81,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="block py-2 px-4 text-base hover:bg-gray-100"
+              className="block py-2 px-4 text-base hover:bg-gray-100 dark:hover:bg-[color:var(--card)] dark:text-[color:var(--text)]"
             >
               {link.name}
             </Link>

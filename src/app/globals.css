@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  Centralized color variables.
+  - Uses --bg / --text etc. as the single source of truth.
+  - Respects user system preference via prefers-color-scheme.
+  - Also allows toggling `.dark` on <html> if you add a client-side theme toggle.
+*/
 
-/* Light defaults */
-:root{
+:root {
+  /* Light theme defaults */
   --bg: #ffffff;
   --text: #111827;
   --muted: #6b7280;
@@ -15,17 +17,7 @@
   --nav-button-bg: #95B75D;
 }
 
-/* Dark mode when .dark class present */
-.dark {
-  --bg: #0b1020;
-  --text: #e6eef8;
-  --muted: #94a3b8;
-  --card: #0f1724;
-  --nav-divider: #2f3a2b;
-  --nav-button-bg: #6f873b;
-}
-
-/* Respect system preference as fallback (will be overridden by class if set) */
+/* Dark theme values (applies when system preference is dark or when `.dark` class is present) */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0b1020;
@@ -37,13 +29,23 @@
   }
 }
 
-/* Apply variables globally */
-html,body,#__next {
+/* If you prefer class-based toggling, `.dark` can override as well */
+.dark {
+  --bg: #0b1020;
+  --text: #e6eef8;
+  --muted: #94a3b8;
+  --card: #0f1724;
+  --nav-divider: #2f3a2b;
+  --nav-button-bg: #6f873b;
+}
+
+/* Apply variables globally (components using CSS vars will follow) */
+html, body, #__next {
   background-color: var(--bg);
   color: var(--text);
 }
 
-/* helper utilities (optional) */
+/* Helper utilities backed by variables */
 .nav-divider {
   background-color: var(--nav-divider);
 }
@@ -52,23 +54,7 @@ html,body,#__next {
   color: white;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -76,7 +62,6 @@ body {
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
   .safe-top {
     padding-top: env(safe-area-inset-top);
   }
