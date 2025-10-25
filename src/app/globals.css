@@ -1,26 +1,68 @@
 @import "tailwindcss";
 
+/*
+  Centralized color variables.
+  - Uses --bg / --text etc. as the single source of truth.
+  - Respects user system preference via prefers-color-scheme.
+  - Also allows toggling `.dark` on <html> if you add a client-side theme toggle.
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme defaults */
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --card: #f8fafc;
+  --nav-divider: #e6eddc;
+  --nav-button-bg: #95B75D;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Dark theme values (applies when system preference is dark or when `.dark` class is present) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #0b1020;
+    --text: #e6eef8;
+    --muted: #94a3b8;
+    --card: #0f1724;
+    --nav-divider: #2f3a2b;
+    --nav-button-bg: #6f873b;
   }
 }
 
+/* If you prefer class-based toggling, `.dark` can override as well */
+.dark {
+  --bg: #0b1020;
+  --text: #e6eef8;
+  --muted: #94a3b8;
+  --card: #0f1724;
+  --nav-divider: #2f3a2b;
+  --nav-button-bg: #6f873b;
+}
+
+/* Apply variables globally (components using CSS vars will follow) */
+html, body, #__next {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Helper utilities backed by variables */
+.nav-divider {
+  background-color: var(--nav-divider);
+}
+.nav-button {
+  background-color: var(--nav-button-bg);
+  color: white;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
 }
