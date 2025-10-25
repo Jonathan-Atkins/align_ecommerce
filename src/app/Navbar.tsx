@@ -11,21 +11,33 @@ const navLinks = [
   { name: "Blog", href: "/blog" },
 ];
 
-export default function Navbar() {
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Only one info bar here */}
+        <Navbar />
+        <main>{children}</main>
+      </body>
+    </html>
+  );
+}
+
+function Navbar() {
   return (
     <>
       {/* Top Info Bar */}
       <div className="w-full bg-[#7C8F5A]/90 text-white text-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-2">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-2">
           {/* Left: Email and Phone */}
           <div className="flex items-center gap-6">
             <a
               href="mailto:support@alignecommerce.com"
               className="flex items-center gap-2 hover:underline"
             >
-              <span className="bg-white rounded-full p-1 flex items-center justify-center">
+              <span className="bg-white rounded-full p-2 flex items-center justify-center">
                 <svg
-                  className="w-5 h-5 text-[#7C8F5A]"
+                  className="w-6 h-6 text-[#7C8F5A]"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={2}
@@ -42,15 +54,15 @@ export default function Navbar() {
                   <path d="M22 6 12 13 2 6" stroke="currentColor" />
                 </svg>
               </span>
-              support@alignecommerce.com
+              <span className="font-medium">support@alignecommerce.com</span>
             </a>
             <a
               href="tel:+17029001030"
               className="flex items-center gap-2 hover:underline"
             >
-              <span className="bg-white rounded-full p-1 flex items-center justify-center">
+              <span className="bg-white rounded-full p-2 flex items-center justify-center">
                 <svg
-                  className="w-5 h-5 text-[#7C8F5A]"
+                  className="w-6 h-6 text-[#7C8F5A]"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={2}
@@ -59,7 +71,7 @@ export default function Navbar() {
                   <path d="M22 16.92V21a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h4.09a2 2 0 0 1 2 1.72c.13 1.13.37 2.23.72 3.29a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c1.06.35 2.16.59 3.29.72A2 2 0 0 1 22 16.92z" />
                 </svg>
               </span>
-              (702) 900-1030
+              <span className="font-medium">(702) 900-1030</span>
             </a>
           </div>
           {/* Right: Instagram */}
@@ -70,9 +82,9 @@ export default function Navbar() {
             className="flex items-center"
             aria-label="Instagram"
           >
-            <span className="bg-white rounded-full p-1 flex items-center justify-center">
+            <span className="bg-white rounded-full p-2 flex items-center justify-center">
               <svg
-                className="w-5 h-5 text-[#7C8F5A]"
+                className="w-6 h-6 text-[#7C8F5A]"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -104,7 +116,7 @@ export default function Navbar() {
         </div>
       </div>
       {/* Navbar */}
-      <nav className="w-full bg-white border-b-4 border-[#7C8F5A] px-8 py-4 flex items-center justify-between">
+      <nav className="w-full bg-white border-b-4 border-[#7C8F5A] px-8 py-6 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/">
@@ -123,7 +135,7 @@ export default function Navbar() {
             <React.Fragment key={link.name}>
               <Link
                 href={link.href}
-                className={`px-6 text-lg font-semibold transition-colors ${
+                className={`px-7 text-xl font-semibold transition-colors ${
                   link.name === "Home"
                     ? "text-[#A6C07A]"
                     : "text-black hover:text-[#A6C07A]"
@@ -132,7 +144,7 @@ export default function Navbar() {
                 {link.name}
               </Link>
               {idx < navLinks.length - 1 && (
-                <div className="h-6 w-px bg-[#E6EDD6]" />
+                <div className="h-7 w-px bg-[#E6EDD6]" />
               )}
             </React.Fragment>
           ))}
@@ -140,7 +152,7 @@ export default function Navbar() {
         {/* Contact Button */}
         <Link
           href="/contact"
-          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-lg font-semibold px-12 py-4 rounded-full flex items-center"
+          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-xl font-semibold px-16 py-4 rounded-full flex items-center"
         >
           CONTACT
           <span className="ml-3 text-2xl font-bold">&#8250;</span>

@@ -28,9 +28,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-<<<<<<< HEAD
-        {/* Only keep the correct info bar above Navbar */}
-=======
         {/* Info Bar Above Navbar */}
         <div className="w-full bg-[#7C8F5A] text-white text-sm">
           <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-2">
@@ -88,7 +85,6 @@ export default function RootLayout({
             </div>
           </div>
         </div>
->>>>>>> b1358fa (Add contact information and Instagram link to the layout)
         <Navbar />
         <main>{children}</main>
       </body>
