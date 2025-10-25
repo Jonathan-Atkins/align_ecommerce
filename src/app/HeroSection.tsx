@@ -63,11 +63,6 @@ export default function HeroSection() {
                 placeholder="Email"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
               />
-              <input
-                type="email"
-                placeholder="Confirm Email"
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
               <button
                 type="submit"
                 className="w-full bg-[#F6A94A] hover:bg-[#e08a1b] text-white font-bold py-3 rounded-lg transition-colors"
