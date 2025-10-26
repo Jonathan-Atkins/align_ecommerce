@@ -70,35 +70,14 @@ export default function Navbar() {
             className="flex items-center"
             aria-label="Instagram"
           >
-            <span className="bg-white rounded-full p-1 flex items-center justify-center">
-              <svg
-                className="w-5 h-5 text-[#7C8F5A]"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <rect
-                  width="20"
-                  height="20"
-                  x="2"
-                  y="2"
-                  rx="5.75"
-                  stroke="currentColor"
-                  fill="none"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="5.25"
-                  stroke="currentColor"
-                  fill="none"
-                />
-                <circle
-                  cx="17.5"
-                  cy="6.5"
-                  r="1"
-                  fill="currentColor"
-                />
-              </svg>
+            <span className="rounded-full p-1 flex items-center justify-center" style={{ background: 'transparent' }}>
+              <Image
+                src="/01 Static Glyph/01 Gradient Glyph/Instagram_Glyph_Gradient.svg"
+                alt="Instagram"
+                width={28}
+                height={28}
+                style={{ display: "block" }}
+              />
             </span>
           </a>
         </div>
