@@ -109,7 +109,7 @@ export default function Navbar() {
             <React.Fragment key={link.name}>
               <Link
                 href={link.href}
-                className={`px-6 text-lg font-semibold transition-colors ${
+                className={`px-6 text-sm font-semibold transition-colors uppercase whitespace-nowrap ${
                   link.name === "Home"
                     ? "text-[#A6C07A]"
                     : "text-black hover:text-[#A6C07A]"
