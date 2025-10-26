@@ -88,10 +88,10 @@ export default function Navbar() {
         <div className="flex items-center">
           <Link href="/">
             <Image
-              src="/Align%20ecommerce%20Vector.png"
+              src="/big_align_logo.png"
               alt="Align ecommerce logo"
-              width={160}
-              height={40}
+              width={392}
+              height={178}
               priority
             />
           </Link>
