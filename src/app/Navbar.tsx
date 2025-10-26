@@ -140,7 +140,7 @@ export default function Navbar() {
         {/* Contact Button */}
         <Link
           href="/contact"
-          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-lg font-semibold px-12 py-4 rounded-full flex items-center"
+          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-lg font-semibold px-12 py-2 rounded-full flex items-center"
         >
           CONTACT
           <span className="ml-3 text-2xl font-bold">&#8250;</span>

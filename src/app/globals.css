@@ -72,6 +72,15 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+html, body {
+  font-family: "Syne", sans-serif;
+  font-weight: 400;
+}
+
+b, strong {
+  font-weight: 700;
+}
+
 @layer utilities {
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
