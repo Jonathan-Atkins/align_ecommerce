@@ -95,10 +95,11 @@ export default function Navbar() {
         <div className="flex items-center">
           <Link href="/">
             <Image
-              src="/Align%20ecommerce%20Vector.png"
+              src="/big_align.png"
               alt="Align ecommerce logo"
-              width={160}
-              height={40}
+              className="h-17 w-80"
+              width={170}
+              height={608}
               priority
             />
           </Link>
@@ -126,10 +127,10 @@ export default function Navbar() {
         {/* Contact Button */}
         <Link
           href="/contact"
-          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-lg font-semibold px-12 py-2 rounded-full flex items-center"
+          className="ml-8 bg-[#7C8F5A] hover:bg-[#6B7C4B] transition-colors text-white text-base font-semibold px-6 py-1 rounded-full flex items-center"
         >
           CONTACT
-          <span className="ml-3 text-2xl font-bold">&#8250;</span>
+          <span className="ml-2 text-xl font-bold">&#8250;</span>
         </Link>
       </nav>
     </>
