@@ -2,10 +2,10 @@ import React from "react";
 
 export default function HeroSection() {
   return (
-    <section className="bg-white dark:bg-gray-900 py-24">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-12 px-4">
+    <section className="bg-white dark:bg-gray-900 py-12 md:py-24">
+      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 px-2 sm:px-4 md:px-8 lg:px-16">
         {/* Hero Content */}
-        <div className="flex-1 text-center md:text-left">
+  <div className="flex-1 min-w-0 text-center md:text-left">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
             High Risk Merchant Account<br />and Payment Processing
           </h1>
@@ -32,8 +32,8 @@ export default function HeroSection() {
           </div>
         </div>
         {/* Form Section */}
-        <div className="flex-1 max-w-md w-full">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
+        <div className="flex-1 max-w-md w-full min-w-0">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 md:p-8">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white text-center">Get Started Today!</h2>
             <form className="space-y-4">
               <input
