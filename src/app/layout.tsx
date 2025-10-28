@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         {/* Only keep the correct info bar above Navbar */}
         <Navbar />
-        <main>{children}</main>
+  <main className="w-full min-h-screen flex flex-col">{children}</main>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>
