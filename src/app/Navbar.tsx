@@ -93,18 +93,20 @@ export default function Navbar() {
 			{/* Navbar */}
 			<nav className="w-full bg-white border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between">
 				{/* Logo */}
-						<div className="flex items-center min-w-0">
-							<Link href="/" className="flex items-center min-w-0">
-								<Image
-									src="/big_align.png"
-									alt="Align ecommerce logo"
-									width={392}
-									height={178}
-									className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto max-w-full"
-									priority
-								/>
-							</Link>
-						</div>
+								<div className="flex items-center min-w-0">
+									<Link href="/" className="flex items-center min-w-0">
+																			<div className="h-10 sm:h-14 md:h-16 lg:h-20 flex items-center">
+																				<Image
+																					src="/align_logo.png"
+																					alt="Align ecommerce logo"
+																					width={292}
+																					height={178}
+																					className="h-full w-auto object-contain block transform origin-left scale-200 md:scale-300"
+																					priority
+																				/>
+																			</div>
+									</Link>
+								</div>
 				{/* Nav Links */}
 				<div className="flex items-center overflow-x-auto whitespace-nowrap gap-2 md:gap-0 md:flex md:overflow-visible">
 					{navLinks.map((link, idx) => (
