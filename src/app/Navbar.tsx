@@ -1,7 +1,39 @@
 "use client";
+
+// Debug overlay for live measurement display
+function DebugNavOverlay({ nav, logo, links, cta, available, needed, compact, logoRight, firstLinkLeft, overlap }) {
+    if (process.env.NODE_ENV !== "development") return null;
+    return (
+        <div style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            zIndex: 9999,
+            background: "rgba(0,0,0,0.85)",
+            color: "#fff",
+            fontSize: 13,
+            padding: 8,
+            borderBottomRightRadius: 8,
+            pointerEvents: "none",
+            maxWidth: 340,
+        }}>
+            <div><b>Navbar Debug</b></div>
+            <div>nav: {nav?.toFixed(1)}px</div>
+            <div>logo: {logo?.toFixed(1)}px</div>
+            <div>links: {links?.toFixed(1)}px</div>
+            <div>cta: {cta?.toFixed(1)}px</div>
+            <div>available: {available?.toFixed(1)}px</div>
+            <div>needed: {needed?.toFixed(1)}px</div>
+            <div>logoRight: {logoRight?.toFixed(1)}px</div>
+            <div>firstLinkLeft: {firstLinkLeft?.toFixed(1)}px</div>
+            <div>overlap: <b style={{color: overlap ? '#f66' : '#6f6'}}>{overlap ? 'YES' : 'NO'}</b></div>
+            <div>compact: <b style={{color: compact ? '#f66' : '#6f6'}}>{compact ? 'YES' : 'NO'}</b></div>
+        </div>
+    );
+}
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useLayoutEffect, useCallback } from "react";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -12,26 +44,132 @@ const navLinks = [
     { name: "Blog", href: "/blog" },
 ];
 
-const COMPACT_BREAKPOINT = 1315; // px — hamburger + centered logo when window.innerWidth <= this
+// We'll determine compact mode by measuring elements at runtime so the nav
+// collapses exactly when the links no longer fit next to the logo/CTA.
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     const [isCompact, setIsCompact] = useState<boolean>(false);
 
-    useEffect(() => {
-        // set initial state and keep in sync with resizes
-        const check = () => {
-            const compact = window.innerWidth <= COMPACT_BREAKPOINT;
-            setIsCompact(compact);
-            if (!compact) setOpen(false); // close menu when leaving compact mode
-        };
-        check();
-        window.addEventListener("resize", check);
-        return () => window.removeEventListener("resize", check);
+    // Refs to measure actual element sizes
+    const navRef = useRef<HTMLElement | null>(null);
+    const logoRef = useRef<HTMLDivElement | null>(null);
+    const linksRef = useRef<HTMLDivElement | null>(null);
+    // We'll attach to a wrapper div around the Link so we can reliably measure
+    const ctaRef = useRef<HTMLDivElement | null>(null);
+    // Ref for the first nav link
+    const firstLinkRef = useRef<HTMLAnchorElement | null>(null);
+
+    // Debug state for overlay
+    const [debug, setDebug] = useState({
+        nav: 0,
+        logo: 0,
+        links: 0,
+        cta: 0,
+        available: 0,
+        needed: 0,
+        compact: false,
+        logoRight: 0,
+        firstLinkLeft: 0,
+        overlap: false,
+    });
+
+    // Evaluate whether the nav should be compact by measuring widths.
+    // If the total width required by the links is greater than the available
+    // space between logo and CTA, enable compact mode.
+    const evaluateCompact = useCallback(() => {
+        const nav = navRef.current;
+        const logo = logoRef.current;
+        const links = linksRef.current;
+        const cta = ctaRef.current;
+        const firstLink = firstLinkRef.current;
+        // If any element is missing, optimistically revert to non-compact to allow DOM to update
+        if (!nav || !logo || !links || !firstLink) {
+            setIsCompact(false);
+            setDebug((d) => ({ ...d, nav: 0, logo: 0, links: 0, cta: 0, available: 0, needed: 0, logoRight: 0, firstLinkLeft: 0, overlap: false, compact: false }));
+            return;
+        }
+
+        const navRect = nav.getBoundingClientRect();
+        const logoRect = logo.getBoundingClientRect();
+        const ctaWidth = cta ? cta.getBoundingClientRect().width : 0;
+        const linksNeeded = links.scrollWidth;
+        const logoRight = logoRect.right - navRect.left;
+        const availableForLinks = navRect.width - logoRight - ctaWidth - 16;
+
+        // New: check for actual overlap between logo and first link
+        const firstLinkRect = firstLink.getBoundingClientRect();
+        const firstLinkLeft = firstLinkRect.left - navRect.left;
+        const overlapGap = 6; // px buffer
+        const isOverlap = firstLinkLeft <= logoRight + overlapGap;
+
+        // If logo or firstLink have zero width/position, optimistically revert to non-compact
+        if (logoRect.width === 0 || firstLinkRect.width === 0) {
+            setIsCompact(false);
+            setDebug((d) => ({ ...d, nav: navRect.width, logo: logoRect.width, links: linksNeeded, cta: ctaWidth, available: availableForLinks, needed: linksNeeded, logoRight, firstLinkLeft, overlap: false, compact: false }));
+            return;
+        }
+
+        const shouldCompact = isOverlap || linksNeeded > availableForLinks;
+        setIsCompact((prev) => {
+            if (prev === shouldCompact) return prev;
+            if (!shouldCompact) setOpen(false);
+            return shouldCompact;
+        });
+        setDebug({
+            nav: navRect.width,
+            logo: logoRect.width,
+            links: linksNeeded,
+            cta: ctaWidth,
+            available: availableForLinks,
+            needed: linksNeeded,
+            compact: shouldCompact,
+            logoRight,
+            firstLinkLeft,
+            overlap: isOverlap,
+        });
     }, []);
+
+    useLayoutEffect(() => {
+        // initial measure after layout
+        evaluateCompact();
+
+        // watch for resizes on the nav/links and window resizes
+        const ro = new ResizeObserver(() => evaluateCompact());
+        if (navRef.current) ro.observe(navRef.current);
+        if (logoRef.current) ro.observe(logoRef.current);
+        if (linksRef.current) ro.observe(linksRef.current);
+        if (ctaRef.current) ro.observe(ctaRef.current);
+
+        let raf = 0;
+        const onResize = () => {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(evaluateCompact);
+        };
+        window.addEventListener("resize", onResize);
+
+        return () => {
+            ro.disconnect();
+            window.removeEventListener("resize", onResize);
+            cancelAnimationFrame(raf);
+        };
+    }, [evaluateCompact]);
+
+    // Ensure compact mode can revert: re-measure after DOM updates when isCompact changes
+    React.useEffect(() => {
+        // Only run if coming out of compact (links become visible)
+        if (!isCompact) {
+            // Wait for refs to attach, then re-measure
+            const id = setTimeout(() => {
+                evaluateCompact();
+            }, 0);
+            return () => clearTimeout(id);
+        }
+    }, [isCompact, evaluateCompact]);
 
     return (
         <>
+            <DebugNavOverlay {...debug} />
             {/* Top Info Bar */}
             <div className="w-full bg-[#A6C07A] text-white text-sm">
                 <div className="w-full flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 py-2">
@@ -107,12 +245,13 @@ export default function Navbar() {
             </div>
 
             {/* Navbar */}
-            <nav className="relative w-full bg-white border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between">
+            <nav ref={navRef} className="relative w-full bg-white border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between">
                 {/* Hamburger (shown when compact) */}
                 {/* (hamburger moved to right-side control container below) */}
 
                 {/* Logo: centered when compact, in-flow (left) otherwise */}
                 <div
+                    ref={logoRef}
                     className={
                         isCompact
                             ? "absolute left-1/2 transform -translate-x-1/2 h-10 sm:h-14 md:h-16 lg:h-20 flex items-center z-20"
@@ -135,10 +274,11 @@ export default function Navbar() {
 
                 {/* Nav Links (hidden in compact mode) */}
                 {!isCompact ? (
-                    <div className="flex items-center overflow-x-auto whitespace-nowrap gap-2 md:gap-0 md:flex md:overflow-visible">
+                    <div ref={linksRef} className="flex items-center overflow-x-auto whitespace-nowrap gap-2 md:gap-0 md:flex md:overflow-visible">
                         {navLinks.map((link, idx) => (
                             <React.Fragment key={link.name}>
                                 <Link
+                                    ref={idx === 0 ? firstLinkRef : undefined}
                                     href={link.href}
                                     className={`px-6 text-sm font-semibold transition-colors uppercase whitespace-nowrap ${
                                         link.name === "Home"
@@ -163,13 +303,15 @@ export default function Navbar() {
                 {/* RIGHT-anchored dropdown when compact + open */}
                 <div className="relative z-30">
                     {!isCompact ? (
-                        <Link
-                            href="/contact"
-                            className="ml-8 bg-[#A6C07A] hover:bg-[#7C8F5A] transition-colors text-white text-base font-semibold px-4 py-1 rounded-full flex items-center whitespace-nowrap"
-                        >
-                            <span className="inline-block">LETS CONNECT</span>
-                            <span className="ml-2 text-xl font-bold">&#8250;</span>
-                        </Link>
+                        <div ref={ctaRef} className="ml-8">
+                            <Link
+                                href="/contact"
+                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] transition-colors text-white text-base font-semibold px-4 py-1 rounded-full flex items-center whitespace-nowrap"
+                            >
+                                <span className="inline-block">LETS CONNECT</span>
+                                <span className="ml-2 text-xl font-bold">&#8250;</span>
+                            </Link>
+                        </div>
                     ) : (
                         <button
                             onClick={() => setOpen((s) => !s)}
