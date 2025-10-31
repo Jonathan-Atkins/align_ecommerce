@@ -208,13 +208,13 @@ export default function Navbar() {
                             <Image
                                 src="/align_logo.png"
                                 alt="Align ecommerce logo"
-                                width={isCompact ? 120 : 220}
-                                height={isCompact ? 73 : 134}
+                                width={isCompact ? 220 : 220}
+                                height={isCompact ? 134 : 134}
                                 priority
                                 className={
                                     'h-full w-auto object-contain block ' +
                                     (isCompact
-                                        ? 'max-w-[60px] sm:max-w-[80px] md:max-w-[100px]'
+                                        ? 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]'
                                         : 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]')
                                 }
                             />
