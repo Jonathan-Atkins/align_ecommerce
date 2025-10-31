@@ -77,6 +77,7 @@ export default function Navbar() {
     // Evaluate whether the nav should be compact by measuring widths.
     // If the total width required by the links is greater than the available
     // space between logo and CTA, enable compact mode.
+    const MIN_GAP = 10; // px, strict minimum gap between logo and first nav link
     const evaluateCompact = useCallback(() => {
         const nav = navRef.current;
         const logo = logoRef.current;
@@ -97,11 +98,11 @@ export default function Navbar() {
         const logoRight = logoRect.right - navRect.left;
         const availableForLinks = navRect.width - logoRight - ctaWidth - 16;
 
-        // New: check for actual overlap between logo and first link
-        const firstLinkRect = firstLink.getBoundingClientRect();
-        const firstLinkLeft = firstLinkRect.left - navRect.left;
-    // Only trigger compact if first link actually intrudes into the logo area
-    const isOverlap = firstLinkLeft < logoRight;
+    // Enforce a strict minimum gap between logo and first link
+    const firstLinkRect = firstLink.getBoundingClientRect();
+    const firstLinkLeft = firstLinkRect.left - navRect.left;
+    const gap = firstLinkLeft - logoRight;
+    const isOverlap = gap < MIN_GAP;
 
         // If logo or firstLink have zero width/position, optimistically revert to non-compact
         if (logoRect.width === 0 || firstLinkRect.width === 0) {
@@ -169,7 +170,7 @@ export default function Navbar() {
 
     return (
         <>
-            {/* <DebugNavOverlay {...debug} /> */}
+            <DebugNavOverlay {...debug} />
             {/* Top Info Bar */}
             <div className="w-full bg-[#A6C07A] text-white text-sm">
                 <div className="w-full flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 py-2">
@@ -263,10 +264,15 @@ export default function Navbar() {
                             <Image
                                 src="/align_logo.png"
                                 alt="Align ecommerce logo"
-                                width={292}
-                                height={178}
+                                width={isCompact ? 120 : 220}
+                                height={isCompact ? 73 : 134}
                                 priority
-                                className="h-full w-auto object-contain block max-w-[150px] sm:max-w-[180px] md:max-w-[260px]"
+                                className={
+                                    'h-full w-auto object-contain block ' +
+                                    (isCompact
+                                        ? 'max-w-[60px] sm:max-w-[80px] md:max-w-[100px]'
+                                        : 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]')
+                                }
                             />
                         </div>
                     </Link>
@@ -280,7 +286,7 @@ export default function Navbar() {
                                 <Link
                                     ref={idx === 0 ? firstLinkRef : undefined}
                                     href={link.href}
-                                    className={`px-6 text-sm font-semibold transition-colors uppercase whitespace-nowrap ${
+                                    className={`px-3 text-[14px] font-semibold transition-colors uppercase whitespace-nowrap ${
                                         link.name === "Home"
                                             ? "text-[#A6C07A]"
                                             : "text-black hover:text-[#A6C07A]"
@@ -303,13 +309,13 @@ export default function Navbar() {
                 {/* RIGHT-anchored dropdown when compact + open */}
                 <div className="relative z-30">
                     {!isCompact ? (
-                        <div ref={ctaRef} className="ml-8">
+                        <div ref={ctaRef} className="ml-4">
                             <Link
                                 href="/contact"
-                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] transition-colors text-white text-base font-semibold px-4 py-1 rounded-full flex items-center whitespace-nowrap"
+                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
                             >
                                 <span className="inline-block">LETS CONNECT</span>
-                                <span className="ml-2 text-xl font-bold">&#8250;</span>
+                                <span className="ml-2 text-lg font-bold">&#8250;</span>
                             </Link>
                         </div>
                     ) : (
