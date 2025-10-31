@@ -100,8 +100,8 @@ export default function Navbar() {
         // New: check for actual overlap between logo and first link
         const firstLinkRect = firstLink.getBoundingClientRect();
         const firstLinkLeft = firstLinkRect.left - navRect.left;
-        const overlapGap = 6; // px buffer
-        const isOverlap = firstLinkLeft <= logoRight + overlapGap;
+    // Only trigger compact if first link actually intrudes into the logo area
+    const isOverlap = firstLinkLeft < logoRight;
 
         // If logo or firstLink have zero width/position, optimistically revert to non-compact
         if (logoRect.width === 0 || firstLinkRect.width === 0) {
