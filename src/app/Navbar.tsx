@@ -1,36 +1,6 @@
 "use client";
 
-// Debug overlay for live measurement display
-function DebugNavOverlay({ nav, logo, links, cta, available, needed, compact, logoRight, firstLinkLeft, overlap }) {
-    if (process.env.NODE_ENV !== "development") return null;
-    return (
-        <div style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            zIndex: 9999,
-            background: "rgba(0,0,0,0.85)",
-            color: "#fff",
-            fontSize: 13,
-            padding: 8,
-            borderBottomRightRadius: 8,
-            pointerEvents: "none",
-            maxWidth: 340,
-        }}>
-            <div><b>Navbar Debug</b></div>
-            <div>nav: {nav?.toFixed(1)}px</div>
-            <div>logo: {logo?.toFixed(1)}px</div>
-            <div>links: {links?.toFixed(1)}px</div>
-            <div>cta: {cta?.toFixed(1)}px</div>
-            <div>available: {available?.toFixed(1)}px</div>
-            <div>needed: {needed?.toFixed(1)}px</div>
-            <div>logoRight: {logoRight?.toFixed(1)}px</div>
-            <div>firstLinkLeft: {firstLinkLeft?.toFixed(1)}px</div>
-            <div>overlap: <b style={{color: overlap ? '#f66' : '#6f6'}}>{overlap ? 'YES' : 'NO'}</b></div>
-            <div>compact: <b style={{color: compact ? '#f66' : '#6f6'}}>{compact ? 'YES' : 'NO'}</b></div>
-        </div>
-    );
-}
+// ...existing code...
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef, useLayoutEffect, useCallback } from "react";
@@ -60,19 +30,7 @@ export default function Navbar() {
     // Ref for the first nav link
     const firstLinkRef = useRef<HTMLAnchorElement | null>(null);
 
-    // Debug state for overlay
-    const [debug, setDebug] = useState({
-        nav: 0,
-        logo: 0,
-        links: 0,
-        cta: 0,
-        available: 0,
-        needed: 0,
-        compact: false,
-        logoRight: 0,
-        firstLinkLeft: 0,
-        overlap: false,
-    });
+    // ...existing code...
 
     // Evaluate whether the nav should be compact by measuring widths.
     // If the total width required by the links is greater than the available
@@ -87,7 +45,6 @@ export default function Navbar() {
         // If any element is missing, optimistically revert to non-compact to allow DOM to update
         if (!nav || !logo || !links || !firstLink) {
             setIsCompact(false);
-            setDebug((d) => ({ ...d, nav: 0, logo: 0, links: 0, cta: 0, available: 0, needed: 0, logoRight: 0, firstLinkLeft: 0, overlap: false, compact: false }));
             return;
         }
 
@@ -107,7 +64,6 @@ export default function Navbar() {
         // If logo or firstLink have zero width/position, optimistically revert to non-compact
         if (logoRect.width === 0 || firstLinkRect.width === 0) {
             setIsCompact(false);
-            setDebug((d) => ({ ...d, nav: navRect.width, logo: logoRect.width, links: linksNeeded, cta: ctaWidth, available: availableForLinks, needed: linksNeeded, logoRight, firstLinkLeft, overlap: false, compact: false }));
             return;
         }
 
@@ -117,18 +73,7 @@ export default function Navbar() {
             if (!shouldCompact) setOpen(false);
             return shouldCompact;
         });
-        setDebug({
-            nav: navRect.width,
-            logo: logoRect.width,
-            links: linksNeeded,
-            cta: ctaWidth,
-            available: availableForLinks,
-            needed: linksNeeded,
-            compact: shouldCompact,
-            logoRight,
-            firstLinkLeft,
-            overlap: isOverlap,
-        });
+        // ...existing code...
     }, []);
 
     useLayoutEffect(() => {
@@ -170,7 +115,6 @@ export default function Navbar() {
 
     return (
         <>
-            <DebugNavOverlay {...debug} />
             {/* Top Info Bar */}
             <div className="w-full bg-[#A6C07A] text-white text-sm">
                 <div className="w-full flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 py-2">
