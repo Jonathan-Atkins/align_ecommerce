@@ -169,7 +169,7 @@ export default function Navbar() {
 
     return (
         <>
-            <DebugNavOverlay {...debug} />
+            {/* <DebugNavOverlay {...debug} /> */}
             {/* Top Info Bar */}
             <div className="w-full bg-[#A6C07A] text-white text-sm">
                 <div className="w-full flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 py-2">
