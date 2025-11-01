@@ -1,6 +1,5 @@
 "use client";
 
-// ...existing code...
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef, useLayoutEffect, useCallback } from "react";
@@ -30,7 +29,9 @@ export default function Navbar() {
     // Ref for the first nav link
     const firstLinkRef = useRef<HTMLAnchorElement | null>(null);
 
-    // ...existing code...
+    // Track failed logo/firstLink measurements
+    const failedMeasureCount = useRef(0);
+    const MAX_FAILED_MEASURES = 10;
 
     // Evaluate whether the nav should be compact by measuring widths.
     // If the total width required by the links is greater than the available
@@ -42,38 +43,36 @@ export default function Navbar() {
         const links = linksRef.current;
         const cta = ctaRef.current;
         const firstLink = firstLinkRef.current;
-        // If any element is missing, optimistically revert to non-compact to allow DOM to update
         if (!nav || !logo || !links || !firstLink) {
             setIsCompact(false);
+            failedMeasureCount.current = 0;
             return;
         }
-
         const navRect = nav.getBoundingClientRect();
         const logoRect = logo.getBoundingClientRect();
         const ctaWidth = cta ? cta.getBoundingClientRect().width : 0;
         const linksNeeded = links.scrollWidth;
         const logoRight = logoRect.right - navRect.left;
         const availableForLinks = navRect.width - logoRight - ctaWidth - 16;
-
-    // Enforce a strict minimum gap between logo and first link
-    const firstLinkRect = firstLink.getBoundingClientRect();
-    const firstLinkLeft = firstLinkRect.left - navRect.left;
-    const gap = firstLinkLeft - logoRight;
-    const isOverlap = gap < MIN_GAP;
-
-        // If logo or firstLink have zero width/position, optimistically revert to non-compact
+        const firstLinkRect = firstLink.getBoundingClientRect();
+        const firstLinkLeft = firstLinkRect.left - navRect.left;
+        const gap = firstLinkLeft - logoRight;
+        const isOverlap = gap < MIN_GAP;
+        // If logo or firstLink have zero width/position, retry measurement after a short delay
         if (logoRect.width === 0 || firstLinkRect.width === 0) {
-            setIsCompact(false);
+            failedMeasureCount.current += 1;
+            setIsCompact(failedMeasureCount.current >= MAX_FAILED_MEASURES);
+            setTimeout(evaluateCompact, 50);
             return;
+        } else {
+            failedMeasureCount.current = 0;
         }
-
         const shouldCompact = isOverlap || linksNeeded > availableForLinks;
         setIsCompact((prev) => {
             if (prev === shouldCompact) return prev;
             if (!shouldCompact) setOpen(false);
             return shouldCompact;
         });
-        // ...existing code...
     }, []);
 
     useLayoutEffect(() => {
@@ -208,8 +207,8 @@ export default function Navbar() {
                             <Image
                                 src="/align_logo.png"
                                 alt="Align ecommerce logo"
-                                width={isCompact ? 220 : 220}
-                                height={isCompact ? 134 : 134}
+                                width={220}
+                                height={134}
                                 priority
                                 className={
                                     'h-full w-auto object-contain block ' +
@@ -217,6 +216,7 @@ export default function Navbar() {
                                         ? 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]'
                                         : 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]')
                                 }
+                                style={{ width: 'auto', height: 'auto' }}
                             />
                         </div>
                     </Link>
@@ -274,38 +274,48 @@ export default function Navbar() {
                                 <div className="space-y-2">
                                     <span
                                         className={
-                                            "block h-1 rounded-full bg-slate-500 transition-transform ease-in-out " +
+                                            "block h-1 rounded-full transition-transform ease-in-out " +
                                             (open ? " translate-y-1 rotate-45 w-10" : " w-10")
                                         }
+                                        style={{ backgroundColor: '#A6C07A' }}
                                     />
                                     <span
                                         className={
-                                            "block h-1 rounded-full bg-orange-500 transition-transform ease-in-out " +
+                                            "block h-1 rounded-full transition-transform ease-in-out " +
                                             (open ? " w-10 -translate-y-1 -rotate-45" : " w-8")
                                         }
+                                        style={{ backgroundColor: '#111' }}
                                     />
                                 </div>
                             </div>
                         </button>
                      )}
  
-                     {/* RIGHT-anchored dropdown when compact + open */}
-                     {isCompact && open && (
-                         <div className="absolute top-full right-0 mt-2 w-64 bg-white border shadow-md z-40 rounded-md origin-top-right">
-                             <nav className="flex flex-col px-2 py-3 gap-1">
-                                 {navLinks.map((link) => (
-                                     <Link
-                                         key={link.name}
-                                         href={link.href}
-                                         onClick={() => setOpen(false)}
-                                         className="block w-full text-left px-3 py-3 font-semibold uppercase text-black hover:text-[#A6C07A]"
-                                     >
-                                         {link.name}
-                                     </Link>
-                                 ))}
-                             </nav>
-                         </div>
-                     )}
+                                                             {/* Animated floating dropdown under hamburger, using navLinks, with fade/slide and floating over navbar */}
+                                                             {isCompact && (
+                                                                 <div
+                                                                     className={`absolute top-full right-0 mt-2 z-50 pointer-events-none`}
+                                                                     style={{ minWidth: '16rem' }}
+                                                                 >
+                                                                     <ul
+                                                                         className={`bg-white shadow-md rounded-lg p-1 space-y-0.5 transition-all duration-300 ease-out transform ${open ? 'opacity-100 translate-y-2 pointer-events-auto' : 'opacity-0 -translate-y-2'} drop-shadow-xl`}
+                                                                         role="menu"
+                                                                         aria-orientation="vertical"
+                                                                     >
+                                                                         {navLinks.map((link) => (
+                                                                             <li key={link.name}>
+                                                                                 <Link
+                                                                                     href={link.href}
+                                                                                     onClick={() => setOpen(false)}
+                                                                                     className="dropdown-item flex items-center gap-x-3.5 py-3 px-6 rounded-lg text-lg font-bold text-black hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors"
+                                                                                 >
+                                                                                     {link.name}
+                                                                                 </Link>
+                                                                             </li>
+                                                                         ))}
+                                                                     </ul>
+                                                                 </div>
+                                                             )}
                  </div>
             </nav>
         </>
