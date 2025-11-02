@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useRef, useLayoutEffect, useCallback } from "react";
+import React, { useState, useRef, useLayoutEffect, useCallback, useEffect } from "react";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -19,6 +19,7 @@ const navLinks = [
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     const [isCompact, setIsCompact] = useState<boolean>(false);
+    const [logoAnimated, setLogoAnimated] = useState(false);
 
     // Refs to measure actual element sizes
     const navRef = useRef<HTMLElement | null>(null);
@@ -28,6 +29,7 @@ export default function Navbar() {
     const ctaRef = useRef<HTMLDivElement | null>(null);
     // Ref for the first nav link
     const firstLinkRef = useRef<HTMLAnchorElement | null>(null);
+    const redBoxRef = useRef<HTMLDivElement | null>(null);
 
     // Track failed logo/firstLink measurements
     const failedMeasureCount = useRef(0);
@@ -112,8 +114,34 @@ export default function Navbar() {
         }
     }, [isCompact, evaluateCompact]);
 
+    useEffect(() => {
+        setLogoAnimated(true);
+    }, []);
+
+    const [redBoxDims, setRedBoxDims] = useState({ width: 0, height: 0 });
+    useLayoutEffect(() => {
+        if (redBoxRef.current) {
+            const rect = redBoxRef.current.getBoundingClientRect();
+            setRedBoxDims({ width: rect.width, height: rect.height });
+        }
+    }, [isCompact]);
+
     return (
         <>
+            <style>{`
+                @keyframes navbar-fadein-left {
+                  from { opacity: 0; transform: translateX(-40px); }
+                  to { opacity: 1; transform: translateX(0); }
+                }
+                .navbar-logo-anim {
+                  opacity: 0;
+                  animation: navbar-fadein-left 1.8s cubic-bezier(0.4,0,0.2,1) 0.2s both;
+                }
+                .shine-text {
+                  color: #fff;
+                  font-weight: 400;
+                }
+            `}</style>
             {/* Top Info Bar */}
             <div className="w-full bg-[#A6C07A] text-white text-sm">
                 <div className="w-full flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 py-2">
@@ -123,6 +151,8 @@ export default function Navbar() {
                             href="mailto:support@alignecommerce.com"
                             className="flex items-center gap-2 hover:underline"
                             aria-label="Email"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <span className="bg-white rounded-full p-1 flex items-center justify-center">
                                 <svg
@@ -166,25 +196,27 @@ export default function Navbar() {
                         </a>
                     </div>
                     {/* Right: Instagram */}
-                    <a
-                        href="https://www.instagram.com/alignecommerce/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                        aria-label="Instagram"
-                    >
-                        {/* hide text on compact — show only icon */}
-                        {!isCompact && <span className="text-white text-sm mr-1">Follow us for more</span>}
-                        <span className="rounded-full p-1 flex items-center justify-center" style={{ background: 'transparent' }}>
-                            <Image
-                                src="/01 Static Glyph/01 Gradient Glyph/Instagram_Glyph_Gradient.svg"
-                                alt="Instagram"
-                                width={28}
-                                height={28}
-                                style={{ display: "block" }}
-                            />
-                        </span>
-                    </a>
+                    <div className="flex items-center">
+                        <a
+                            href="https://www.instagram.com/alignecommerce/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                            aria-label="Instagram"
+                        >
+                            {/* hide text on compact — show only icon */}
+                            {!isCompact && <span className="text-sm mr-1 shine-text">Follow us for more</span>}
+                            <span className="rounded-full p-1 flex items-center justify-center" style={{ background: 'transparent' }}>
+                                <Image
+                                    src="/01 Static Glyph/01 Gradient Glyph/Instagram_Glyph_Gradient.svg"
+                                    alt="Instagram"
+                                    width={28}
+                                    height={28}
+                                    style={{ display: "block" }}
+                                />
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -211,7 +243,8 @@ export default function Navbar() {
                                 height={134}
                                 priority
                                 className={
-                                    'h-full w-auto object-contain block ' +
+                                    (logoAnimated ? 'navbar-logo-anim ' : '') +
+                                    'w-auto object-contain block ' +
                                     (isCompact
                                         ? 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]'
                                         : 'max-w-[140px] sm:max-w-[180px] md:max-w-[220px]')
