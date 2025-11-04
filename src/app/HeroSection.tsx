@@ -132,6 +132,55 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
+      {/* Logo Marquee */}
+      <div className="w-full mt-12 flex flex-col items-center">
+  <div className="text-center text-lg font-semibold tracking-wide mb-10 text-[#E46A5A]">Our Trusted Partners</div>
+        <div className="relative w-full overflow-hidden" style={{height: '90px'}}>
+          <div
+            className="logo-marquee flex items-center gap-8 md:gap-12"
+            style={{
+              whiteSpace: 'nowrap',
+              animation: 'marquee 18s linear infinite',
+              willChange: 'transform',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.animationPlayState = 'paused';
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.animationPlayState = 'running';
+            }}
+          >
+            <img src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            {/* Duplicate for seamless loop */}
+            <img src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <img src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+          </div>
+        </div>
+        <style>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .logo-marquee img {
+            display: inline-block;
+            margin-right: 1.25rem;
+          }
+          @media (max-width: 768px) {
+            .logo-marquee img {
+              height: 24px;
+              width: 100px;
+              margin-right: 0.5rem;
+            }
+          }
+        `}</style>
+      </div>
     </section>
   );
 }
