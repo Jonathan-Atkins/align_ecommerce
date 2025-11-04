@@ -17,6 +17,17 @@ const navLinks = [
 // collapses exactly when the links no longer fit next to the logo/CTA.
 
 export default function Navbar() {
+    // Animate border gradient for 'Lets Connect' button
+    useEffect(() => {
+        const element = document.querySelector('.border-gradient') as HTMLElement | null;
+        if (!element) return;
+        let angle = 0;
+        const interval = setInterval(() => {
+            angle = (angle + 2) % 360;
+            element.style.setProperty('--gradient-angle', angle + 'deg');
+        }, 16); // ~60fps, adjust for desired speed
+        return () => clearInterval(interval);
+    }, []);
     const [open, setOpen] = useState(false);
     const [isCompact, setIsCompact] = useState<boolean>(false);
     const [logoAnimated, setLogoAnimated] = useState(false);
@@ -127,21 +138,63 @@ export default function Navbar() {
     }, [isCompact]);
 
     return (
-        <>
-            <style>{`
-                @keyframes navbar-fadein-left {
-                  from { opacity: 0; transform: translateX(-40px); }
-                  to { opacity: 1; transform: translateX(0); }
-                }
-                .navbar-logo-anim {
-                  opacity: 0;
-                  animation: navbar-fadein-left 1.8s cubic-bezier(0.4,0,0.2,1) 0.2s both;
-                }
-                .shine-text {
-                  color: #fff;
-                  font-weight: 400;
-                }
-            `}</style>
+                <>
+                        <style>{`
+                                @keyframes navbar-fadein-left {
+                                    from { opacity: 0; transform: translateX(-40px); }
+                                    to { opacity: 1; transform: translateX(0); }
+                                }
+                                                                @keyframes lights {
+                                                                    0% {
+                                                                        color: hsl(230, 40%, 80%);
+                                                                        text-shadow:
+                                                                            0 0 1em hsla(320, 100%, 50%, 0.2),
+                                                                            0 0 0.125em hsla(320, 100%, 60%, 0.3),
+                                                                            -1em -0.125em 0.5em hsla(40, 100%, 60%, 0),
+                                                                            1em 0.125em 0.5em hsla(200, 100%, 60%, 0);
+                                                                    }
+                                                                    50% { 
+                                                                        color: hsl(230, 100%, 95%);
+                                                                        text-shadow:
+                                                                            0 0 1em hsla(320, 100%, 50%, 0.5),
+                                                                            0 0 0.125em hsla(320, 100%, 90%, 0.5),
+                                                                            -0.25em -0.125em 0.125em hsla(40, 100%, 60%, 0.2),
+                                                                            0.25em 0.125em 0.125em hsla(200, 100%, 60%, 0.4);
+                                                                    }
+                                                                    100% {
+                                                                        color: hsl(230, 40%, 80%);
+                                                                        text-shadow:
+                                                                            0 0 1em hsla(320, 100%, 50%, 0.2),
+                                                                            0 0 0.125em hsla(320, 100%, 60%, 0.3),
+                                                                            1em -0.125em 0.5em hsla(40, 100%, 60%, 0),
+                                                                            -1em 0.125em 0.5em hsla(200, 100%, 60%, 0);
+                                                                    }
+                                                                }
+                                                                .navbar-logo-anim {
+                                                                        opacity: 0;
+                                                                        animation: navbar-fadein-left 1.8s cubic-bezier(0.4,0,0.2,1) 0.2s both;
+                                                                }
+                                                                .shine-text {
+                                                                        color: #fff;
+                                                                        font-weight: 400;
+                                                                        animation: lights 5s linear infinite;
+                                                                }
+                                .border-gradient {
+                                    --c: #A6C07A;
+                                    --p: 10%;
+                                    background: linear-gradient(var(--c), var(--c)) padding-box,
+                                        conic-gradient(
+                                                from var(--gradient-angle, 0deg),
+                                                transparent,
+                                                #3b82f6 var(--p),
+                                                transparent calc(var(--p) * 2)
+                                        ) border-box;
+                                    border: 2px solid transparent;
+                                    border-radius: 2rem;
+                                    position: relative;
+                                }
+                        `}</style>
+                                    {/* Gradient animation handled by useEffect above */}
             {/* Top Info Bar */}
             <div className="w-full bg-[#A6C07A] text-white text-sm">
                 <div className="w-full flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 py-2">
@@ -289,7 +342,7 @@ export default function Navbar() {
                         <div ref={ctaRef} className="ml-4">
                             <Link
                                 href="/contact"
-                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
+                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
                             >
                                 <span className="inline-block">LETS CONNECT</span>
                                 <span className="ml-2 text-lg font-bold">&#8250;</span>
