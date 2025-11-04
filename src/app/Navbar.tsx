@@ -274,7 +274,7 @@ export default function Navbar() {
             </div>
 
             {/* Navbar */}
-            <nav ref={navRef} className="relative w-full bg-white border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between">
+            <nav ref={navRef} className="sticky top-0 z-50 w-full bg-white border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between">
                 {/* Hamburger (shown when compact) */}
                 {/* (hamburger moved to right-side control container below) */}
 
