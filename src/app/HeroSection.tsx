@@ -1,13 +1,69 @@
-import React from "react";
+'use client';
+
+import React, { useRef, useEffect } from "react";
+import './globals.css';
 
 export default function HeroSection() {
+  const cursorGlowRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const cursorGlow = cursorGlowRef.current;
+    if (!section || !cursorGlow) return;
+
+    function handleMouseMove(e: MouseEvent) {
+      if (!section || !cursorGlow) return;
+      const rect = section.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      cursorGlow.style.left = `${x}px`;
+      cursorGlow.style.top = `${y}px`;
+      cursorGlow.style.opacity = '1';
+    }
+    function handleMouseLeave() {
+      if (!cursorGlow) return;
+      cursorGlow.style.opacity = '0';
+    }
+
+    section.addEventListener('mousemove', handleMouseMove);
+    section.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      section.removeEventListener('mousemove', handleMouseMove);
+      section.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   return (
-    <section className="bg-white dark:bg-gray-900 py-12 md:py-24">
+    <section ref={sectionRef} className="bg-white dark:bg-gray-900 py-12 md:py-24 relative overflow-hidden">
+      {/* Cursor Glow Effect */}
+      <div
+        ref={cursorGlowRef}
+        style={{
+          position: 'absolute',
+          width: 200,
+          height: 200,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(163,198,74,0.18) 0%, rgba(163,198,74,0) 70%)',
+          pointerEvents: 'none',
+          zIndex: 1,
+          transform: 'translate(-50%, -50%)',
+          opacity: 0,
+          transition: 'opacity 0.3s ease',
+          left: 0,
+          top: 0,
+        }}
+      />
       <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 px-2 sm:px-4 md:px-8 lg:px-16">
         {/* Hero Content */}
-  <div className="flex-1 min-w-0 text-center md:text-left">
+        <div className="flex-1 min-w-0 text-center md:text-left">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            High Risk Merchant Account<br />and Payment Processing
+            Align{' '}
+            <span className="glow-text green-pulse">Scales</span>
+            {' '}and Processes High Risk Clients{' '}
+            <span className="glow-text green-pulse">Securely</span>
+            {' '}&{' '}
+            <span className="glow-text green-pulse">Seamlessly</span>
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
             Navigating high-risk industries is challenging, but Align makes it easier with our specialized high-risk merchant account services. Our expert team is dedicated to providing secure and efficient payment processing solutions tailored to your business needs.
