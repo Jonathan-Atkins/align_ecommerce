@@ -17,16 +17,21 @@ const navLinks = [
 // collapses exactly when the links no longer fit next to the logo/CTA.
 
 export default function Navbar() {
-    // Animate border gradient for 'Lets Connect' button
+    // Animate border gradient for 'Lets Connect' button (wall clock time-based, never resets)
     useEffect(() => {
-        const element = document.querySelector('.border-gradient') as HTMLElement | null;
-        if (!element) return;
-        let angle = 0;
-        const interval = setInterval(() => {
-            angle = (angle + 2) % 360;
-            element.style.setProperty('--gradient-angle', angle + 'deg');
-        }, 16); // ~60fps, adjust for desired speed
-        return () => clearInterval(interval);
+        let frameId: number;
+        const speed = 0.12; // degrees per ms (360deg/3000ms = 0.12deg/ms for a 3s loop)
+        function animate() {
+            const element = document.querySelector('.border-gradient') as HTMLElement | null;
+            if (element) {
+                const now = performance.now();
+                const angle = (now * speed) % 360;
+                element.style.setProperty('--gradient-angle', angle + 'deg');
+            }
+            frameId = requestAnimationFrame(animate);
+        }
+        frameId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(frameId);
     }, []);
     const [open, setOpen] = useState(false);
     const [isCompact, setIsCompact] = useState<boolean>(false);
