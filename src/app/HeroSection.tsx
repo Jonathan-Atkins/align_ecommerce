@@ -35,7 +35,14 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-white dark:bg-gray-900 py-12 md:py-24 relative overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="py-12 md:py-24 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)',
+        minHeight: '100vh',
+      }}
+    >
       {/* Cursor Glow Effect */}
       <div
         ref={cursorGlowRef}
