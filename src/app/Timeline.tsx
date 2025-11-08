@@ -41,18 +41,48 @@ export default function Timeline() {
   const [selected, setSelected] = useState(0);
   return (
     <section
-      className="w-full py-16 px-4 flex flex-col items-center relative overflow-hidden"
+      className="w-full py-20 px-4 flex flex-col items-center relative overflow-hidden"
       style={{
         background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)',
-        minHeight: '60vh',
+        minHeight: '65vh',
       }}
     >
-      <h2 className="text-5xl font-bold text-center text-gray-900 dark:text-white font-[Montserrat] mb-12">
+  <h2 className="text-6xl font-bold text-center text-gray-900 dark:text-white font-[Montserrat] mb-10">
         What Align Offers
       </h2>
       {/* Timeline Flexbox */}
-      <div className="w-full max-w-4xl flex flex-col items-center">
-        <div className="relative w-full flex items-center" style={{ minHeight: 80 }}>
+      <div className="w-full max-w-5xl flex flex-col items-center">
+        {/* Headers Row */}
+  <div className="w-full relative" style={{ marginTop: 27, marginBottom: 6, height: 32 }}>
+          {steps.map((step, idx) => {
+            const percent = (idx) / (steps.length - 1) * 100;
+            return (
+              <span
+                key={step.label}
+                className={`block font-bold text-center select-none ${selected === idx ? 'text-[#A3C64A]' : 'text-white'}`}
+                style={{
+                  fontSize: '16px',
+                  position: 'absolute',
+                  left: `calc(${percent}%)`,
+                  top: 0,
+                  transform: 'translateX(-50%)',
+                  minWidth: 0,
+                  maxWidth: 180,
+                  whiteSpace: 'normal',
+                  overflow: 'visible',
+                  textOverflow: 'clip',
+                  margin: 0,
+                  paddingBottom: 0,
+                  lineHeight: 1.1,
+                }}
+                onClick={() => setSelected(idx)}
+              >
+                {step.label}
+              </span>
+            );
+          })}
+        </div>
+        <div className="relative w-full flex items-center" style={{ minHeight: 70 }}>
           {/* Base line with faded edges (single gradient line) */}
           <div
             className="absolute left-0 right-0 top-1/2 h-1"
@@ -86,24 +116,7 @@ export default function Timeline() {
                 onClick={() => setSelected(idx)}
               >
                 <span
-                  className={`block text-xs md:text-sm font-semibold mb-2 text-center select-none truncate ${selected === idx ? 'text-[#A3C64A]' : 'text-gray-100'}`}
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '-3.2rem',
-                    transform: 'translateX(-50%)',
-                    width: 160,
-                    maxWidth: 180,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    lineHeight: 1.1
-                  }}
-                >
-                  {step.label}
-                </span>
-                <span
-                  className={`block w-5 h-5 rounded-full border-2 ${isActive ? 'border-[#A3C64A] bg-[#A3C64A]/30' : 'border-[#444] bg-[#232628]'}`}
+                  className={`block w-7 h-7 rounded-full border-3 ${isActive ? 'border-[#A3C64A] bg-[#A3C64A]/30' : 'border-[#444] bg-[#232628]'}`}
                   style={{
                     transition: 'background 0.2s, border 0.2s',
                     zIndex: 20,
@@ -111,7 +124,7 @@ export default function Timeline() {
                     left: '50%',
                     top: '50%',
                     transform: 'translate(-50%, -50%)',
-                    boxShadow: '0 0 0 3px #232628',
+                    boxShadow: '0 0 0 4px #232628',
                   }}
                 />
               </div>
@@ -119,8 +132,8 @@ export default function Timeline() {
           })}
         </div>
         {/* Event content below timeline */}
-        <div className="mt-12 w-full flex justify-center">
-          <div className="bg-[#232628] text-white rounded-xl px-8 py-6 shadow max-w-lg w-full text-center text-lg min-h-[60px]">
+        <div className="mt-14 w-full flex justify-center">
+          <div className="bg-[#232628] text-white rounded-xl px-10 py-8 shadow max-w-xl w-full text-center text-xl min-h-[70px]">
             {steps[selected].content}
           </div>
         </div>
