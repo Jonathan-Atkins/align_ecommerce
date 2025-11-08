@@ -29,6 +29,13 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+
+## Large Video File (promo2.mp4)
+
+The hero section uses a video file located at `public/promo2.mp4`. This file is not tracked in git (see `.gitignore`) due to its large size. You must manually place `promo2.mp4` in the `public/` directory for the video to display correctly in development and production.
+
+If you ever need to restore the project on a new machine, copy your local backup of `promo2.mp4` into the `public/` folder.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
