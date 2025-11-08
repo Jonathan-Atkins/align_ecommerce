@@ -48,6 +48,12 @@ html,body,#__next {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* Ensure no unexpected page gap at the very top */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 /* helper utilities (optional) */
 .nav-divider {
   background-color: var(--nav-divider);

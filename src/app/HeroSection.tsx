@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useLayoutEffect } from "react";
+import Image from 'next/image';
 import './globals.css';
 
 export default function HeroSection() {
@@ -34,15 +35,102 @@ export default function HeroSection() {
     };
   }, []);
 
+  // Use a single promo video from public/ (no rotation)
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Dynamically overlap the hero under the navbar (video appears behind nav)
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const computeOverlap = () => {
+      // Target the sticky navbar; using class selectors that exist in Navbar
+      const nav = document.querySelector('nav.sticky.top-0') as HTMLElement | null;
+      if (!nav) return;
+      const rect = nav.getBoundingClientRect();
+  // When at page top, rect.bottom approximates the total header height (top bar + nav)
+  // Trim a couple pixels to avoid any bleed above the navbar due to sub-pixel rounding
+  const TRIM_PX = 2; // existing trim to avoid bleed
+  const EXTRA_UNDER_NAV = 32; // desired visual gap below navbar before hero text
+  const headerHeight = Math.max(0, Math.ceil(rect.bottom) - TRIM_PX);
+  section.style.marginTop = `-${headerHeight}px`;
+  // Add extra space so content starts lower (does not affect overlap amount for video)
+  section.style.paddingTop = `${headerHeight + EXTRA_UNDER_NAV}px`;
+    };
+
+    // Initial compute and on resize/changes
+    computeOverlap();
+    const ro = new ResizeObserver(() => computeOverlap());
+    const navEl = document.querySelector('nav') as HTMLElement | null;
+    if (navEl) ro.observe(navEl);
+    window.addEventListener('resize', computeOverlap);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', computeOverlap);
+    };
+  }, []);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+  v.src = '/promo2.mp4';
+    v.muted = true;
+    v.preload = 'auto';
+    v.loop = true;
+    try {
+      v.currentTime = 0;
+    } catch {
+      // ignore seek errors (video may not be ready)
+    }
+    const p = v.play();
+    if (p && typeof p.then === 'function') p.catch(() => {});
+
+    // Ensure the video never stops: handle ended, paused, and tab visibility
+    const ensurePlay = () => {
+      if (!v) return;
+      if (v.paused || v.ended) {
+        const pp = v.play();
+        if (pp && typeof pp.then === 'function') pp.catch(() => {});
+      }
+    };
+    const onEnded = () => {
+      if (!v) return;
+      v.currentTime = 0;
+      ensurePlay();
+    };
+    const onPause = () => ensurePlay();
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') ensurePlay();
+    };
+
+    v.addEventListener('ended', onEnded);
+    v.addEventListener('pause', onPause);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      v.removeEventListener('ended', onEnded);
+      v.removeEventListener('pause', onPause);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
   return (
     <section
       ref={sectionRef}
-      className="py-12 md:py-24 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)',
-        minHeight: '100vh',
-      }}
+      className="pb-8 md:pb-16 relative overflow-hidden min-h-[78vh] md:min-h-[85vh] lg:min-h-[90vh]"
     >
+      {/* Single video element for rotation (no transitions) */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ pointerEvents: 'none', zIndex: 0 }}
+      />
       {/* Cursor Glow Effect */}
       <div
         ref={cursorGlowRef}
@@ -56,14 +144,13 @@ export default function HeroSection() {
           zIndex: 1,
           transform: 'translate(-50%, -50%)',
           opacity: 0,
-          transition: 'opacity 0.3s ease',
           left: 0,
           top: 0,
         }}
       />
-      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 px-2 sm:px-4 md:px-8 lg:px-16">
+      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 px-2 sm:px-4 md:px-8 lg:px-16 relative z-10">
         {/* Hero Content */}
-        <div className="flex-1 min-w-0 text-center md:text-left">
+  <div className="flex-1 min-w-0 text-center md:text-left" style={{ marginTop: 45 }}>
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Align{' '}
             <span className="glow-text green-pulse">Scales</span>
@@ -157,17 +244,17 @@ export default function HeroSection() {
               (e.currentTarget as HTMLElement).style.animationPlayState = 'running';
             }}
           >
-            <img src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             {/* Duplicate for seamless loop */}
-            <img src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <img src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
           </div>
         </div>
         <style>{`
