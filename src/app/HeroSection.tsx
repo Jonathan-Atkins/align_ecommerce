@@ -119,8 +119,8 @@ export default function HeroSection() {
             {' '}&{' '}
             <span className="glow-text green-pulse">Seamlessly</span>
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-            Navigating high-risk industries is challenging, but Align makes it easier with our specialized high-risk merchant account services. Our expert team is dedicated to providing secure and efficient payment processing solutions tailored to your business needs.
+          <p className="text-lg text-white mb-8" style={{ color: '#fff' }}>
+            Navigating high-risk industries is challenging, but <span className="glow-text" style={{ color: '#A3C64A', textShadow: '0 0 20px #A3C64A, 0 0 30px #7C8F5A' }}>Align</span> makes it easier with our specialized high-risk merchant account services. Our expert team is dedicated to providing secure and efficient payment processing solutions tailored to your business needs.
           </p>
           <div className="grid grid-cols-2 gap-4 max-w-md">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
@@ -209,12 +209,14 @@ export default function HeroSection() {
             <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/zouk_logo.png" alt="Zouk Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             {/* Duplicate for seamless loop */}
             <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
             <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            <Image src="/zouk_logo.png" alt="Zouk Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
           </div>
         </div>
         <style>{`
