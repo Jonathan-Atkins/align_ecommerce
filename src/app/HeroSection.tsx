@@ -188,7 +188,7 @@ export default function HeroSection() {
       </div>
       {/* Logo Marquee */}
       <div className="w-full mt-12 flex flex-col items-center">
-  <div className="text-center text-lg font-semibold tracking-wide mb-10 text-[#E46A5A]">Our Trusted Partners</div>
+        <div className="text-center text-lg font-semibold tracking-wide mb-10 text-[#E46A5A]">Our Trusted Partners</div>
         <div className="relative w-full overflow-hidden" style={{height: '90px'}}>
           <div
             className="logo-marquee flex items-center gap-8 md:gap-12"
@@ -204,19 +204,20 @@ export default function HeroSection() {
               (e.currentTarget as HTMLElement).style.animationPlayState = 'running';
             }}
           >
-            <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/zouk_logo.png" alt="Zouk Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            {/* Duplicate for seamless loop */}
-            <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/zouk_logo.png" alt="Zouk Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            {(() => {
+              const logos = [
+                { src: '/partners/NMI_White_Logo_Small.png', alt: 'NMI White Logo' },
+                { src: '/partners/cyber_source.png', alt: 'CyberSource' },
+                { src: '/partners/logo_authorize.png', alt: 'Authorize.Net' },
+                { src: '/partners/tmpgwb9gjpg.png', alt: 'Partner Logo' },
+                { src: '/partners/valor_pay.png', alt: 'Valor Pay' },
+                { src: '/partners/zouk_logo.png', alt: 'Zouk Logo' },
+              ];
+              // Render the list twice for seamless looping
+              return [...logos, ...logos].map((logo, i) => (
+                <Image key={logo.src + '-' + i} src={logo.src} alt={logo.alt} width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+              ));
+            })()}
           </div>
         </div>
         <style>{`
