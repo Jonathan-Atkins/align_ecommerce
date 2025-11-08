@@ -8,15 +8,7 @@
   --font-global: 'Montserrat', sans-serif;
 }
 
-/* Light defaults */
-:root{
-  --bg: #ffffff;
-  --text: #111827;
-  --muted: #6b7280;
-  --card: #f8fafc;
-  --nav-divider: #e6eddc;
-  --nav-button-bg: #95B75D;
-}
+
 
 /* Dark mode when .dark class present */
 .dark {
@@ -42,6 +34,8 @@
 
 
 /* Ensure no unexpected page gap at the very top */
+
+/* Ensure no unexpected page gap at the very top */
 html, body {
   margin: 0;
   padding: 0;
@@ -56,12 +50,7 @@ html, body {
   color: white;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -77,6 +66,10 @@ html, body {
 html, body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
+}
+/* Remove global background color */
+html, body, #__next {
+  background: none;
 }
 
 b, strong {
