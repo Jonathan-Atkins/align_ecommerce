@@ -88,20 +88,9 @@ export default function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="pb-8 md:pb-16 relative overflow-hidden min-h-[78vh] md:min-h-[85vh] lg:min-h-[90vh]"
+      className="pb-8 md:pb-16 relative overflow-hidden min-h-[78vh] md:min-h-[85vh] lg:min-h-[90vh] pt-20"
     >
-      {/* Single video element for rotation (no transitions) */}
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ pointerEvents: 'none', zIndex: 0 }}
-        src="/promo2.mp4"
-      />
+
       {/* Cursor Glow Effect */}
       <div
         ref={cursorGlowRef}

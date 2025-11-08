@@ -28,9 +28,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* Only keep the correct info bar above Navbar */}
+        {/* Video background sits behind everything except the green info bar */}
+        <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
+          <video
+            src="/promo2.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover"
+            style={{ position: 'absolute', inset: 0 }}
+          />
+        </div>
         <Navbar />
-  <main className="w-full min-h-screen flex flex-col">{children}</main>
+        <main className="w-full min-h-screen flex flex-col">{children}</main>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>

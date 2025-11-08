@@ -42,11 +42,7 @@
 
 /* Apply variables globally */
 
-html,body,#__next {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: 'Montserrat', sans-serif;
-}
+
 
 /* Ensure no unexpected page gap at the very top */
 html, body {
@@ -78,11 +74,7 @@ html, body {
 }
 
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Montserrat', sans-serif;
-}
+
 
 
 html, body {
