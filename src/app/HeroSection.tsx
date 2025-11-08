@@ -44,7 +44,7 @@ export default function HeroSection() {
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-  // v.src = '/promo2.mp4';
+  v.src = '/promo2.mp4';
     v.muted = true;
     v.preload = 'auto';
     v.loop = true;
