@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useLayoutEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import Image from 'next/image';
 import './globals.css';
 
@@ -38,43 +38,13 @@ export default function HeroSection() {
   // Use a single promo video from public/ (no rotation)
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Dynamically overlap the hero under the navbar (video appears behind nav)
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
 
-    const computeOverlap = () => {
-      // Target the sticky navbar; using class selectors that exist in Navbar
-      const nav = document.querySelector('nav.sticky.top-0') as HTMLElement | null;
-      if (!nav) return;
-      const rect = nav.getBoundingClientRect();
-  // When at page top, rect.bottom approximates the total header height (top bar + nav)
-  // Trim a couple pixels to avoid any bleed above the navbar due to sub-pixel rounding
-  const TRIM_PX = 2; // existing trim to avoid bleed
-  const EXTRA_UNDER_NAV = 32; // desired visual gap below navbar before hero text
-  const headerHeight = Math.max(0, Math.ceil(rect.bottom) - TRIM_PX);
-  section.style.marginTop = `-${headerHeight}px`;
-  // Add extra space so content starts lower (does not affect overlap amount for video)
-  section.style.paddingTop = `${headerHeight + EXTRA_UNDER_NAV}px`;
-    };
-
-    // Initial compute and on resize/changes
-    computeOverlap();
-    const ro = new ResizeObserver(() => computeOverlap());
-    const navEl = document.querySelector('nav') as HTMLElement | null;
-    if (navEl) ro.observe(navEl);
-    window.addEventListener('resize', computeOverlap);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', computeOverlap);
-    };
-  }, []);
+  // Remove overlap logic: hero section should not overlap navbar
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-  v.src = '/promo2.mp4';
+  // v.src = '/promo2.mp4';
     v.muted = true;
     v.preload = 'auto';
     v.loop = true;
@@ -130,6 +100,7 @@ export default function HeroSection() {
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ pointerEvents: 'none', zIndex: 0 }}
+        src="/promo2.mp4"
       />
       {/* Cursor Glow Effect */}
       <div
