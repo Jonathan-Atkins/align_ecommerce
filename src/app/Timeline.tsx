@@ -2,7 +2,47 @@
 'use client';
 
 'use client';
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, ReactNode } from "react";
+import { GlowAlignText } from "./GlowAlignText";
+// FadeContent component for fade-in effect on content change
+interface FadeContentProps {
+  children: ReactNode;
+  blur?: boolean;
+  duration?: number;
+  easing?: string;
+  delay?: number;
+  initialOpacity?: number;
+  className?: string;
+}
+
+const FadeContent: React.FC<FadeContentProps> = ({
+  children,
+  blur = false,
+  duration = 1000,
+  easing = 'ease-out',
+  delay = 0,
+  initialOpacity = 0,
+  className = ''
+}) => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    setVisible(false);
+    const timeout = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timeout);
+  }, [children, delay]);
+  return (
+    <div
+      className={className}
+      style={{
+        opacity: visible ? 1 : initialOpacity,
+        transition: `opacity ${duration}ms ${easing}, filter ${duration}ms ${easing}`,
+        filter: blur ? (visible ? 'blur(0px)' : 'blur(10px)') : 'none'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const steps = [
   {
@@ -133,9 +173,17 @@ export default function Timeline() {
         </div>
         {/* Event content below timeline */}
         <div className="mt-14 w-full flex justify-center">
-          <div className="bg-[#232628] text-white rounded-xl px-10 py-8 shadow max-w-xl w-full text-center text-xl min-h-[70px]">
-            {steps[selected].content}
-          </div>
+          <FadeContent
+            key={selected} // Keyed by selected to retrigger animation
+            blur={true}
+            duration={1000}
+            easing="ease-out"
+            initialOpacity={0}
+          >
+            <div className="bg-[#232628] text-white rounded-xl px-10 py-8 shadow max-w-xl w-full text-center text-xl min-h-[70px]">
+              <GlowAlignText>{steps[selected].content}</GlowAlignText>
+            </div>
+          </FadeContent>
         </div>
       </div>
     </section>
