@@ -48,8 +48,8 @@ export default function Timeline() {
       }}
     >
   <h2 className="text-6xl font-bold text-center text-gray-900 dark:text-white font-[Montserrat] mb-10">
-        What Align Offers
-      </h2>
+  What <span className="green-pulse">Align</span> Offers
+  </h2>
       {/* Timeline Flexbox */}
       <div className="w-full max-w-5xl flex flex-col items-center">
         {/* Headers Row */}
