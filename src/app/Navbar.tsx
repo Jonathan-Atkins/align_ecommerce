@@ -321,16 +321,12 @@ export default function Navbar() {
                                 <Link
                                     ref={idx === 0 ? firstLinkRef : undefined}
                                     href={link.href}
-                                    className={`px-3 text-[14px] font-semibold transition-colors uppercase whitespace-nowrap ${
-                                        link.name === "Home"
-                                            ? "text-[#A6C07A]"
-                                            : "text-black hover:text-[#A6C07A]"
-                                    }`}
+                                    className={`px-3 text-[14px] font-semibold transition-colors uppercase whitespace-nowrap text-white hover:text-[#A6C07A]`}
                                 >
                                     {link.name}
                                 </Link>
                                 {idx < navLinks.length - 1 && (
-                                    <div className="h-6 w-px bg-[#E6EDD6]" />
+                                    <div className="h-6 w-px" style={{ backgroundColor: '#A6C07A' }} />
                                 )}
                             </React.Fragment>
                         ))}
