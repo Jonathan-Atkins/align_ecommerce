@@ -12,8 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "@next/font": "^14.2.15",
     "@prisma/client": "^6.17.1",
-    "bcryptjs": "^3.0.2",
-  "jsonwebtoken": "^9.0.0",
+  "bcryptjs": "^3.0.2",
     "next": "15.5.5",
     "react": "19.1.0",
     "react-dom": "19.1.0"
