@@ -1,1 +1,1 @@
-export { GET, POST } from '../../../auth/login/route';
+export { POST } from '../../../auth/login/route';
