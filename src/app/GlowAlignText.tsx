@@ -29,11 +29,14 @@ export function GlowAlignText({ children }: { children: React.ReactNode }) {
       return parts.length > 0 ? parts : node;
     } else if (Array.isArray(node)) {
       return node.map(process);
-    } else if (React.isValidElement(node) && node.props.children) {
-      return React.cloneElement(node, {
-        ...node.props,
-        children: process(node.props.children),
-      });
+    } else if (React.isValidElement(node)) {
+      // TypeScript: narrow to ReactElement and safely type props without `any`
+      const element = node as React.ReactElement;
+      const props = element.props as Record<string, unknown> & { children?: React.ReactNode };
+      if (props && props.children) {
+        // keep existing props, replace children by passing them as the 3rd argument
+        return React.cloneElement(element, undefined, process(props.children as React.ReactNode));
+      }
     }
     return node;
   }

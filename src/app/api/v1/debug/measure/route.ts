@@ -1,1 +1,1 @@
-export { GET, POST } from '../../../../debug/measure/route';
+export { POST } from '../../../debug/measure/route';
