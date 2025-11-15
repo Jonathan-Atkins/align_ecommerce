@@ -7,9 +7,10 @@ const S3_REGION = process.env.AWS_REGION;
 const S3_BUCKET = process.env.S3_BUCKET;
 const s3 = new S3Client({ region: S3_REGION });
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, ctx: unknown) {
   try {
-    const id = Number(params.id);
+  const params = (ctx as { params?: { id: string } } | undefined)?.params;
+    const id = Number(params?.id);
     const post = await prisma.post.findUnique({ where: { id }, include: { author: { select: { id: true, email: true } } } });
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });
     return NextResponse.json(post);
@@ -19,9 +20,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, ctx: unknown) {
   try {
-    const id = Number(params.id);
+  const params = (ctx as { params?: { id: string } } | undefined)?.params;
+    const id = Number(params?.id);
     const body = await req.json();
     const { title, content, imageUrl, status } = body as { title?: string; content?: string; imageUrl?: string | null; status?: PostStatus | string };
 
@@ -53,16 +55,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         }
       } catch (s3err) {
         // log and continue; don't fail the whole request because of S3 delete issues
-        // eslint-disable-next-line no-console
         console.error('Failed to delete old S3 object:', s3err);
       }
 
       return NextResponse.json(post);
     } catch (e: unknown) {
       // Prisma not found error
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const errAny = e as any;
-      if (errAny?.code === 'P2025') {
+      const errObj = e as { code?: string };
+      if (errObj?.code === 'P2025') {
         return NextResponse.json({ error: 'Post not found' }, { status: 404 });
       }
       throw e;
@@ -73,9 +73,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, ctx: unknown) {
   try {
-    const id = Number(params.id);
+  const params = (ctx as { params?: { id: string } } | undefined)?.params;
+    const id = Number(params?.id);
     // Find post to see if it has an image to delete
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -91,7 +92,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       }
     } catch (s3err) {
       // log and continue
-      // eslint-disable-next-line no-console
       console.error('Failed to delete S3 object during post delete:', s3err);
     }
 
@@ -103,9 +103,10 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, ctx: unknown) {
   try {
-    const id = Number(params.id);
+  const params = (ctx as { params?: { id: string } } | undefined)?.params;
+    const id = Number(params?.id);
     const body = await req.json();
     const action = body?.action as string | undefined;
     const delta = typeof body?.delta === 'number' ? body.delta : 1;
@@ -116,12 +117,15 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ error: 'unknown action' }, { status: 400 });
     }
 
-    // atomic increment
-    const field = action === 'view' ? 'views' : action === 'like' ? 'likes' : 'commentsCount';
-
-    // Use Prisma's increment
-    // @ts-ignore dynamic key
-    const updated = await prisma.post.update({ where: { id }, data: { [field]: { increment: delta } } as any });
+    // atomic increment: use raw SQL to avoid depending on a generated Prisma client that may be out-of-sync
+    if (action === 'view') {
+      await prisma.$executeRaw`UPDATE "Post" SET "views" = COALESCE("views", 0) + ${delta} WHERE id = ${id}`;
+    } else if (action === 'like') {
+      await prisma.$executeRaw`UPDATE "Post" SET "likes" = COALESCE("likes", 0) + ${delta} WHERE id = ${id}`;
+    } else {
+      await prisma.$executeRaw`UPDATE "Post" SET "commentsCount" = COALESCE("commentsCount", 0) + ${delta} WHERE id = ${id}`;
+    }
+    const updated = await prisma.post.findUnique({ where: { id } });
     return NextResponse.json(updated);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);

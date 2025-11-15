@@ -27,8 +27,8 @@ export async function GET(req: NextRequest) {
 
     // If we have S3 configured, generate a presigned GET to use for display
     const enhanced = await Promise.all(posts.map(async (p) => {
-      // copy base post
-      const out: any = { ...p };
+      // copy base post into a flexible record so we can optionally add displayImageUrl
+      let out: Record<string, unknown> = { ...p };
       try {
         if (p.imageUrl && s3 && S3_BUCKET && S3_REGION) {
           const prefix = `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/`;
@@ -38,12 +38,11 @@ export async function GET(req: NextRequest) {
             // 7 days max for sigv4
             const expiresIn = 7 * 24 * 60 * 60;
             const presigned = await getSignedUrl(s3, getCmd, { expiresIn });
-            out.displayImageUrl = presigned;
+            out = { ...out, displayImageUrl: presigned };
           }
         }
       } catch (err) {
         // don't break listing if presign fails
-        // eslint-disable-next-line no-console
         console.error('Failed to generate presigned GET for post', p.id, err);
       }
       return out;

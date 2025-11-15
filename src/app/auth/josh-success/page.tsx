@@ -259,8 +259,7 @@ function DraftsSection({ savedDrafts, setSavedDrafts, onEditDraft }: { savedDraf
           <article key={d.id} className="bg-zinc-900 p-4 rounded flex items-start gap-6">
             <div style={{ width: 240, height: 160, background: '#111', flexShrink: 0 }}>
               {d.imageUrl || d.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={d.imageUrl ?? d.image} alt="preview" style={{ width: '240px', height: '160px', objectFit: 'cover' }} />
+                <img src={(d.imageUrl ?? d.image) ?? undefined} alt="preview" style={{ width: '240px', height: '160px', objectFit: 'cover' }} />
               ) : null}
             </div>
             <div className="flex-1">
@@ -649,11 +648,9 @@ function EditSection() {
             <label className="block text-sm mb-1 text-white">Image</label>
             <div className="flex items-center gap-4">
               {replacePreviewUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={replacePreviewUrl} alt="replacement preview" style={{ width: 160, height: 120, objectFit: 'cover' }} />
+                <img src={replacePreviewUrl ?? undefined} alt="replacement preview" style={{ width: 160, height: 120, objectFit: 'cover' }} />
               ) : editing.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={editing.image} alt="current" style={{ width: 160, height: 120, objectFit: 'cover' }} />
+                <img src={editing.image ?? undefined} alt="current" style={{ width: 160, height: 120, objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: 160, height: 120, background: '#111' }} />
               )}
