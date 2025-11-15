@@ -185,7 +185,7 @@ export default function Navbar() {
                                                                         animation: lights 5s linear infinite;
                                                                 }
                                 .border-gradient {
-                                    --c: #A6C07A;
+                                    --c: #95B75D;
                                     --p: 10%;
                                     background: linear-gradient(var(--c), var(--c)) padding-box,
                                         conic-gradient(
@@ -343,7 +343,7 @@ export default function Navbar() {
                         <div ref={ctaRef} className="ml-4">
                             <Link
                                 href="/contact"
-                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
+                                className="bg-[#95B75D] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
                             >
                                 <span className="inline-block">LETS CONNECT</span>
                                 <span className="ml-2 text-lg font-bold">&#8250;</span>

@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +20,13 @@ export default function AuthPage() {
     });
     const data = await res.json();
     if (res.ok) {
-      setMessage(isLogin ? "Login successful!" : "Signup successful!");
+      // Redirect browser to a simple blank success page when logging in.
+      if (isLogin) {
+        // Navigate to the success page which will show the header and otherwise be blank.
+        router.push('/auth/josh-success');
+        return;
+      }
+      setMessage("Signup successful!");
     } else {
       setMessage(data.error || "Something went wrong");
     }
