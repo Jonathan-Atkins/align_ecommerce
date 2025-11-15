@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient, type PostStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 const prisma = new PrismaClient();
@@ -25,13 +25,13 @@ export async function PUT(req: NextRequest, ctx: unknown) {
   const params = (ctx as { params?: { id: string } } | undefined)?.params;
     const id = Number(params?.id);
     const body = await req.json();
-    const { title, content, imageUrl, status } = body as { title?: string; content?: string; imageUrl?: string | null; status?: PostStatus | string };
+  const { title, content, imageUrl, status } = body as { title?: string; content?: string; imageUrl?: string | null; status?: string };
 
     const data: Record<string, unknown> = {};
     if (title !== undefined) data.title = title;
     if (content !== undefined) data.content = content;
     if (imageUrl !== undefined) data.imageUrl = imageUrl;
-    if (status !== undefined) data.status = status as PostStatus;
+  if (status !== undefined) data.status = status as unknown as string;
 
     if (Object.keys(data).length === 0) {
       return NextResponse.json({ error: 'No fields to update' }, { status: 400 });

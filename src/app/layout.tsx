@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import VideoBackground from "../components/VideoBackground";
+import PageLoader from "../components/PageLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,9 +31,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Video background sits behind everything except the green info bar */}
-        <VideoBackground />
-        <Navbar />
-        <main className="w-full min-h-screen flex flex-col">{children}</main>
+  <VideoBackground />
+  <Navbar />
+  <main className="w-full min-h-screen flex flex-col">{children}</main>
+  {/* Global page loader for route transitions */}
+  <PageLoader />
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>
