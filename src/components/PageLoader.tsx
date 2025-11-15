@@ -107,13 +107,17 @@ export default function PageLoader() {
         // ignore
       }
     };
-    // wrap native history methods to detect programmatic navigation
-    (history as any).pushState = function (...args: Parameters<typeof history.pushState>) {
+    // Create a typed wrapper to avoid using `any` and satisfy linters
+    const h = history as unknown as {
+      pushState: (...args: Parameters<typeof history.pushState>) => unknown;
+      replaceState: (...args: Parameters<typeof history.replaceState>) => unknown;
+    };
+    h.pushState = function (...args: Parameters<typeof history.pushState>) {
       const res = (origPush as unknown as (...u: unknown[]) => unknown).apply(this, args as unknown as unknown[]);
       dispatchHistoryEvent("next-route-start");
       return res;
     };
-    (history as any).replaceState = function (...args: Parameters<typeof history.replaceState>) {
+    h.replaceState = function (...args: Parameters<typeof history.replaceState>) {
       const res = (origReplace as unknown as (...u: unknown[]) => unknown).apply(this, args as unknown as unknown[]);
       dispatchHistoryEvent("next-route-start");
       return res;
@@ -144,12 +148,16 @@ export default function PageLoader() {
     window.removeEventListener("visibilitychange", hide as EventListener);
       window.removeEventListener("next-route-start", onHistoryStart);
       // restore history methods
-    (history as any).pushState = origPush;
-    (history as any).replaceState = origReplace;
+      const hRestore = history as unknown as {
+        pushState: (...args: Parameters<typeof history.pushState>) => unknown;
+        replaceState: (...args: Parameters<typeof history.replaceState>) => unknown;
+      };
+      hRestore.pushState = origPush;
+      hRestore.replaceState = origReplace;
   if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
   window.clearInterval(failSafe);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   // Keep overlay mounted while we animate fade-out. When not mounted, render nothing.
