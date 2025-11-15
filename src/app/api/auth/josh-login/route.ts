@@ -16,5 +16,8 @@ export async function POST(req: NextRequest) {
   }
   const user = await authCheck(email, password);
   if (!user) return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
-  return NextResponse.json(user);
+
+  // On successful auth, redirect the browser to a blank success page.
+  const base = new URL(req.url).origin;
+  return NextResponse.redirect(`${base}/auth/josh-success`);
 }
