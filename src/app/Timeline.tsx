@@ -2,7 +2,7 @@
 'use client';
 
 'use client';
-import React, { useState, useRef, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { GlowAlignText } from "./GlowAlignText";
 // FadeContent component for fade-in effect on content change
 interface FadeContentProps {

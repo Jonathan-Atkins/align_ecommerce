@@ -14,4 +14,27 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  posts     Post[]
+}
+
+model Post {
+  id            Int        @id @default(autoincrement())
+  title         String
+  content       String
+  imageUrl      String? // store S3 URL
+  // Counters for UX (persisted so they survive restarts)
+  views         Int        @default(0)
+  likes         Int        @default(0)
+  commentsCount Int        @default(0)
+  status        PostStatus @default(DRAFT)
+  author        User       @relation(fields: [authorId], references: [id])
+  authorId      Int
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  publishedAt   DateTime?
+}
+
+enum PostStatus {
+  DRAFT
+  SUBMITTED
 }
