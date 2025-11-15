@@ -25,6 +25,19 @@ export default function PageLoader() {
 
   // Keep overlay mounted so we can animate its fade-out.
   useEffect(() => {
+    // If we're on the home page and the document hasn't fully loaded yet,
+    // show the loader overlay immediately and hide it when the window 'load'
+    // event fires. This makes the loader the first visible thing on initial
+    // navigation to the home page until all assets are ready.
+    if (pathname === '/' && typeof window !== 'undefined' && document.readyState !== 'complete') {
+      setMounted(true);
+      setIsLoading(true);
+      const onLoad = () => {
+        setIsLoading(false);
+      };
+      window.addEventListener('load', onLoad, { once: true });
+      return () => window.removeEventListener('load', onLoad);
+    }
     const root = typeof document !== "undefined" ? document.getElementById("__next") : null;
     if (isLoading) {
       // show overlay and hide content immediately
@@ -50,7 +63,14 @@ export default function PageLoader() {
     // Hide loader when pathname changes (client navigation finished)
     if (prevPathRef.current === null) {
       prevPathRef.current = pathname;
-      // ensure not stuck on initial mount
+      // On initial mount we normally ensure the loader is not stuck. However,
+      // if this is the home page and the document hasn't finished loading yet,
+      // we want the loader to remain visible until the window 'load' event.
+      if (pathname === '/' && typeof document !== 'undefined' && document.readyState !== 'complete') {
+        // keep loader visible until load event (handled below)
+        return;
+      }
+      // otherwise ensure not stuck on initial mount
       setIsLoading(false);
       return;
     }
