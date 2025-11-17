@@ -7,18 +7,19 @@ export default function VideoBackground() {
 
   // Do not render the promo video on the josh-success page so it appears black.
   if (pathname && pathname.startsWith("/auth/josh-success")) return null;
+  const srcUrl = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
 
   return (
     <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
       <video
-        src="/promo2.mp4"
+        src={srcUrl}
         autoPlay
         muted
         loop
         playsInline
         preload="auto"
         className="w-full h-full object-cover"
-        style={{ position: "absolute", inset: 0 }}
+        style={{ position: 'absolute', inset: 0 }}
       />
     </div>
   );
