@@ -12,6 +12,7 @@ export default function VideoBackground() {
   return (
     <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
       <video
+        id="promo-video"
         src={srcUrl}
         autoPlay
         muted

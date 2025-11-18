@@ -263,3 +263,47 @@ b, strong {
   white-space: nowrap;
   pointer-events: none; /* clicks should hit the heart/button, not the text */
 }
+
+/* Global page loader overlay styles */
+.page-loader-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000; /* solid cloak so navbar/content cannot be seen */
+  z-index: 99999;
+  transition: opacity 700ms ease, visibility 700ms ease;
+  opacity: 1;
+  pointer-events: auto;
+}
+.page-loader-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* When this class is applied to the page root, help ensure background content
+   is not visible (defense-in-depth). The overlay itself sits above everything
+   and will prevent interaction while visible. */
+.page-loader-hidden {
+  visibility: hidden !important;
+}
+
+/* Triangle SVG loader animation (neon) */
+.loader-triangle-7 {
+  width: 120px;
+  height: 120px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader-triangle-7 #Artboard {
+  stroke-dasharray: 0 226;
+  animation: anm-tr7-dash 2s ease-in-out alternate infinite;
+  filter: drop-shadow(0 0 12px #39FF14) drop-shadow(0 0 25px #39FF14);
+}
+
+@keyframes anm-tr7-dash {
+  from { stroke-dasharray: 0 226; }
+  to { stroke-dasharray: 226 0; }
+}
