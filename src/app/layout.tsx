@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./Navbar";
 import VideoBackground from "../components/VideoBackground";
 import PageLoader from "../components/PageLoader";
+import ClientLoader from "../components/ClientLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +28,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* Video background sits behind everything except the green info bar */}
-  <VideoBackground />
-  <Navbar />
-  <main className="w-full min-h-screen flex flex-col">{children}</main>
-  {/* Global page loader for route transitions */}
-  <PageLoader />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ClientLoader waitForVideo={true}>
+          {/* Video background sits behind everything except the green info bar */}
+          <VideoBackground />
+          <Navbar />
+          <main className="w-full min-h-screen flex flex-col">{children}</main>
+          {/* Global page loader for route transitions */}
+          <PageLoader />
+        </ClientLoader>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>
