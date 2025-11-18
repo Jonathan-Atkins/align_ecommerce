@@ -30,12 +30,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* Video background sits behind everything except the green info bar */}
-  <VideoBackground />
-  <Navbar />
-  <main className="w-full min-h-screen flex flex-col">{children}</main>
-  {/* Global page loader for route transitions */}
+        {/* Global page loader for route transitions */}
   <PageLoader />
+  {/* Cloak wrapper: initially hidden server-side to prevent content flash.*/}
+  <div id="page-cloak" className="page-loader-hidden">
+    {/* Video background sits behind everything except the green info bar */}
+    <VideoBackground />
+    <Navbar />
+    <main className="w-full min-h-screen flex flex-col">{children}</main>
+  </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>

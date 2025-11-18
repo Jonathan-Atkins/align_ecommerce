@@ -19,26 +19,66 @@ export default function PageLoader() {
   // fadingOut indicates the overlay is currently fading out
   const [fadingOut, setFadingOut] = useState(false);
   const timeoutRef = useRef<number | null>(null);
+  const loadTimerRef = useRef<number | null>(null);
   const pathname = usePathname();
   const prevPathRef = useRef<string | null>(null);
-  const FADE_DURATION = 700; // ms - should match CSS transition duration
+  // Configurable timing constants (easy to tune)
+  const POST_LOAD_MS = 3000; // wait 3s after page+video ready before hiding overlay
+  const FADE_DURATION = 700; // ms - fade duration (matches CSS)
+  const FAILSAFE_BUFFER_MS = 7000; // additional buffer added to POST_LOAD_MS for a safety timeout
 
   // Keep overlay mounted so we can animate its fade-out.
   useEffect(() => {
-    // If we're on the home page and the document hasn't fully loaded yet,
-    // show the loader overlay immediately and hide it when the window 'load'
-    // event fires. This makes the loader the first visible thing on initial
-    // navigation to the home page until all assets are ready.
+    // Initial-page load behavior for root path: keep the overlay until
+    // both the window 'load' event and the background video are ready.
     if (pathname === '/' && typeof window !== 'undefined' && document.readyState !== 'complete') {
       setMounted(true);
       setIsLoading(true);
-      const onLoad = () => {
-        setIsLoading(false);
+
+      let windowLoaded = false;
+      let videoReady = false;
+
+      const tryFinish = () => {
+        if (windowLoaded && videoReady) {
+          // After both signals, wait the configured post-load delay, then hide overlay
+          if (loadTimerRef.current) window.clearTimeout(loadTimerRef.current);
+          loadTimerRef.current = window.setTimeout(() => setIsLoading(false), POST_LOAD_MS);
+        }
       };
-      window.addEventListener('load', onLoad, { once: true });
-      return () => window.removeEventListener('load', onLoad);
+
+      const onWindowLoad = () => {
+        windowLoaded = true;
+        tryFinish();
+      };
+
+      window.addEventListener('load', onWindowLoad, { once: true });
+
+      // Listen for the page background video readiness. Query the page video element.
+      // Prefer an explicitly identified promo video element to avoid ambiguity
+      const videoEl = document.getElementById('promo-video') || document.querySelector('video');
+      if (videoEl) {
+        const onVideoReady = () => {
+          videoReady = true;
+          tryFinish();
+        };
+        // canplaythrough is a good indicator the video can play without buffering
+        videoEl.addEventListener('canplaythrough', onVideoReady, { once: true });
+        // fallback: loadeddata
+        videoEl.addEventListener('loadeddata', onVideoReady, { once: true });
+      } else {
+        // If no video element found, treat video as ready so loader relies solely on window load
+        videoReady = true;
+      }
+
+      return () => {
+        window.removeEventListener('load', onWindowLoad);
+        if (loadTimerRef.current) {
+          window.clearTimeout(loadTimerRef.current);
+          loadTimerRef.current = null;
+        }
+      };
     }
-    const root = typeof document !== "undefined" ? document.getElementById("__next") : null;
+    const root = typeof document !== "undefined" ? document.getElementById("page-cloak") : null;
     if (isLoading) {
       // show overlay and hide content immediately
       setFadingOut(false);
@@ -57,7 +97,7 @@ export default function PageLoader() {
       }, FADE_DURATION);
       return () => window.clearTimeout(t);
     }
-  }, [isLoading, mounted]);
+  }, [isLoading, mounted, pathname]);
 
   useEffect(() => {
     // Hide loader when pathname changes (client navigation finished)
@@ -156,10 +196,11 @@ export default function PageLoader() {
     });
     window.addEventListener("next-route-start", onHistoryStart);
 
-    // Failsafe: hide after 8s to prevent stuck loader
-    const failSafe = window.setInterval(() => {
-      setIsLoading(false);
-    }, 8000);
+    // Failsafe: ensure loader doesn't stay forever. Use a single timeout at
+    // POST_LOAD_MS + FAILSAFE_BUFFER_MS so it won't prematurely hide the initial overlay.
+    const FAILSAFE_MS = POST_LOAD_MS + FAILSAFE_BUFFER_MS;
+    let failTimeout: number | null = null;
+    failTimeout = window.setTimeout(() => setIsLoading(false), FAILSAFE_MS);
 
     return () => {
       window.removeEventListener("click", onClick, true);
@@ -175,7 +216,7 @@ export default function PageLoader() {
       hRestore.pushState = origPush;
       hRestore.replaceState = origReplace;
   if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-  window.clearInterval(failSafe);
+  if (failTimeout) window.clearTimeout(failTimeout);
     };
     
   }, []);
@@ -189,17 +230,17 @@ export default function PageLoader() {
       role="status"
       aria-live="polite"
     >
-      <ul className="loader" aria-hidden="true">
-        <li className="center" />
-        <li className="item item-1" />
-        <li className="item item-2" />
-        <li className="item item-3" />
-        <li className="item item-4" />
-        <li className="item item-5" />
-        <li className="item item-6" />
-        <li className="item item-7" />
-        <li className="item item-8" />
-      </ul>
+      <div className="loader-triangle-7" aria-hidden="true">
+        <svg width="56px" height="50px" viewBox="0 0 226 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+          <g id="Page-1" stroke="none" strokeWidth="2" fill="none" fillRule="evenodd">
+            <g id="Artboard" fillRule="nonzero" stroke="#39FF14" strokeWidth="10">
+              <g id="white-bg-logo">
+                <path d="M113,5.08219117 L4.28393801,197.5 L221.716062,197.5 L113,5.08219117 Z" id="Triangle-3-Copy" />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
     </div>
   );
 }
