@@ -298,6 +298,7 @@ b, strong {
   align-items: center;
   justify-content: center;
   background: transparent;
+  --tr-duration: 3s; /* slightly faster than 4s for a snappier feel */
 }
 
 .loader-triangle-7 svg {
@@ -307,8 +308,8 @@ b, strong {
 
 .loader-triangle-7 path.triangle-path {
   stroke-dasharray: 0 226;
-  animation: anm-tr7-dash 2s ease-in-out alternate infinite;
-  stroke: #39FF14;
+  animation: anm-tr7-dash var(--tr-duration) ease-in-out alternate infinite;
+  stroke: #66FF00;
   stroke-width: 10;
   stroke-linejoin: round;
   stroke-linecap: round;
