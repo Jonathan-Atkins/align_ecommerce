@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
 @import "tailwindcss";
 
 
@@ -271,7 +272,7 @@ b, strong {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000; /* solid cloak so navbar/content cannot be seen */
+  background: rgba(0,0,0,0.98); /* slightly translucent to better blend with video */
   z-index: 99999;
   transition: opacity 700ms ease, visibility 700ms ease;
   opacity: 1;
@@ -291,19 +292,183 @@ b, strong {
 
 /* Triangle SVG loader animation (neon) */
 .loader-triangle-7 {
-  width: 120px;
-  height: 120px;
+  width: 320px;
+  height: 320px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
+  --tr-duration: 3s; /* slightly faster than 4s for a snappier feel */
 }
-.loader-triangle-7 #Artboard {
+
+.loader-triangle-7 svg {
+  overflow: visible; /* ensure glow isn't clipped */
+  display: block;
+}
+
+.loader-triangle-7 path.triangle-path {
   stroke-dasharray: 0 226;
-  animation: anm-tr7-dash 2s ease-in-out alternate infinite;
-  filter: drop-shadow(0 0 12px #39FF14) drop-shadow(0 0 25px #39FF14);
+  animation: anm-tr7-dash var(--tr-duration) ease-in-out alternate infinite;
+  stroke: #66FF00;
+  stroke-width: 10;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-opacity: 0.98;
+  filter: drop-shadow(0 0 8px rgba(57,255,20,0.45)) drop-shadow(0 0 18px rgba(57,255,20,0.18));
 }
 
 @keyframes anm-tr7-dash {
   from { stroke-dasharray: 0 226; }
   to { stroke-dasharray: 226 0; }
+}
+
+/* One-time fade-in for side words and 'ed' tail. They should play once when overlay mounts. */
+@keyframes loader-word-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.loader-word {
+  position: absolute;
+  font-family: var(--font-global);
+  font-weight: 700;
+  color: #fff;
+  user-select: none;
+  pointer-events: none;
+  font-size: 44px; /* match size and make visually prominent */
+  line-height: 1;
+  transform-origin: center center;
+  opacity: 0; /* start hidden, animate to visible once */
+}
+.loader-word-left {
+  left: calc(50% - 40px); /* bring closer to center */
+  top: calc(50% - 150px);
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: 100001;
+  animation: loader-word-in 1400ms cubic-bezier(.2,.8,.2,1) 0ms 1 forwards; /* slower */
+}
+.loader-word-right {
+  left: calc(50% + 40px); /* bring closer to center */
+  top: calc(50% - 150px);
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: 100001;
+  animation: loader-word-in 1400ms cubic-bezier(.2,.8,.2,1) 1400ms 1 forwards; /* delayed to follow 'We' */
+}
+
+/* New: centered phrase container for 'We' + 'Are' to keep them level and evenly spaced */
+.loader-phrase {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 220px); /* moved slightly closer to triangle */
+  transform: translateX(-50%);
+  display: flex;
+  gap: 48px; /* increased separation between We and Are */
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 100001;
+}
+
+.loader-phrase .phrase-word {
+  font-family: 'Gruppo', var(--font-global);
+  font-weight: 700;
+  color: #fff;
+  user-select: none;
+  pointer-events: none;
+  font-size: 44px; /* match Align size */
+  line-height: 1;
+  transform-origin: center center;
+  opacity: 0;
+  /* use the loader-word-in one-shot fade; make it slow */
+  animation: loader-word-in 1600ms cubic-bezier(.2,.8,.2,1) 0ms 1 forwards;
+}
+
+.loader-phrase .phrase-word:nth-child(1) {
+  animation-delay: 1300ms; /* 'We' fades in at 1.3s */
+}
+.loader-phrase .phrase-word:nth-child(2) {
+  animation-delay: 1800ms; /* 'Are' fades in at 1.8s */
+}
+
+/* Center label 'Align' and trailing 'ed' which appears after 'Are' */
+.loader-centered-label {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 150px); /* more space below triangle */
+  transform: translateX(-50%);
+  pointer-events: none;
+  text-align: center;
+  display: inline-flex; /* ensure combined word centers exactly */
+  gap: 0; /* no gap between parts */
+  align-items: center;
+  justify-content: center;
+}
+.loader-centered-label .loader-align,
+.loader-centered-label .loader-ed {
+  font-family: 'Gruppo', var(--font-global);
+  font-weight: 700;
+  font-size: 44px;
+  display: inline-block;
+  opacity: 0;
+  animation: loader-word-in 1200ms ease 3000ms 1 forwards; /* both fade in together after words */
+}
+
+/* Apply user-provided palette: 'Align' uses yellow palette (x-sign:nth-of-type(2)) */
+.loader-centered-label .loader-align {
+  color: #66FF00;
+  --color1: goldenrod;
+  --color2: #39FF14;
+  --color3: white;
+  --color4: #39FF14;
+  text-shadow:
+    0 0 10px var(--color1),
+    0 0 20px var(--color2),
+    0 0 40px var(--color3);
+  margin-right: 6px;
+  /* remove greenGlowPulse; keep only the one-shot fade */
+  animation-name: loader-word-in;
+  animation-iteration-count: 1;
+}
+
+/* 'ed' and phrase words use the white/orangered/mediumblue/purple palette (x-sign:nth-of-type(1)) */
+.loader-centered-label .loader-ed,
+.loader-phrase .phrase-word {
+  color: white;
+  --color1: #FAF9F6;
+  --color2: orangered;
+  --color3: mediumblue;
+  --color4: purple;
+  text-shadow:
+    0 0 10px var(--color1),
+    0 0 20px var(--color2),
+    0 0 40px var(--color3);
+}
+
+.loader-centered-label .loader-ed { margin-left: 0; }
+
+/* Tighten the visible join between 'Align' and 'ed' */
+.loader-centered-label .loader-ed {
+  display: inline-block;
+  margin-left: 0;
+  transform: translateX(-2px); /* nudge left slightly, adjust -1px..-3px if needed */
+  letter-spacing: -0.02em;    /* tighten between letters for better visual join */
+}
+
+/* Soften the white 'ed' glow so the green 'Align' halo blends better */
+.loader-centered-label .loader-ed {
+  /* reduced radii for text-shadow to avoid a visible gap */
+  text-shadow: 0 0 4px var(--color1), 0 0 8px var(--color2), 0 0 12px var(--color3);
+}
+
+@media (max-width: 640px) {
+  .loader-word { font-size: 28px; }
+  .loader-word-left, .loader-word-right { left: calc(50% - 90px); top: calc(50% - 60px); }
+  .loader-centered-label .loader-align, .loader-centered-label .loader-ed { font-size: 24px; }
+  .loader-centered-label { top: calc(20% + 70px); }
+  /* Mobile adjustments for centered phrase */
+  .loader-phrase {
+    top: calc(50% - 100px);
+    gap: 16px;
+  }
+  .loader-phrase .phrase-word { font-size: 28px; }
 }
