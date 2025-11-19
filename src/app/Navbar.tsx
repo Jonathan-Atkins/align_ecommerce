@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef, useLayoutEffect, useCallback, useEffect } from "react";
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -142,6 +143,23 @@ export default function Navbar() {
         }
     }, [isCompact]);
 
+    // Make navbar background deep black on the Blog page when at top, and
+    // transition to transparent as the user scrolls. We detect the pathname
+    // and add a small scroll listener.
+    const pathname = usePathname();
+    const isBlogPage = typeof pathname === 'string' && pathname.startsWith('/blog');
+    const [scrolled, setScrolled] = useState(false);
+    useEffect(() => {
+        function onScroll() {
+            // increase threshold to 40px to avoid early transitions
+            setScrolled(window.scrollY > 40);
+        }
+        // only attach when in browser
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [pathname]);
+
     return (
                 <>
                         <style>{`
@@ -185,7 +203,7 @@ export default function Navbar() {
                                                                         animation: lights 5s linear infinite;
                                                                 }
                                 .border-gradient {
-                                    --c: #A6C07A;
+                                    --c: #95B75D;
                                     --p: 10%;
                                     background: linear-gradient(var(--c), var(--c)) padding-box,
                                         conic-gradient(
@@ -279,7 +297,11 @@ export default function Navbar() {
             </div>
 
             {/* Navbar */}
-            <nav ref={navRef} className="sticky top-0 z-50 w-full bg-transparent backdrop-blur-md border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between">
+            { /* compute background class: deep black for blog top, transparent otherwise (with subtle blur when scrolled) */ }
+            <nav
+                ref={navRef}
+                className={`sticky top-0 z-50 w-full ${isBlogPage ? (!scrolled ? 'bg-[#030303]' : 'bg-black/10') : 'bg-transparent'} backdrop-blur-md border-b-4 border-[#7C8F5A] px-2 sm:px-4 md:px-8 py-4 flex items-center justify-between transition-colors duration-300`}
+            >
                 {/* Hamburger (shown when compact) */}
                 {/* (hamburger moved to right-side control container below) */}
 
@@ -321,16 +343,12 @@ export default function Navbar() {
                                 <Link
                                     ref={idx === 0 ? firstLinkRef : undefined}
                                     href={link.href}
-                                    className={`px-3 text-[14px] font-semibold transition-colors uppercase whitespace-nowrap ${
-                                        link.name === "Home"
-                                            ? "text-[#A6C07A]"
-                                            : "text-black hover:text-[#A6C07A]"
-                                    }`}
+                                    className={`px-3 text-[14px] font-semibold transition-colors uppercase whitespace-nowrap text-white hover:text-[#A6C07A]`}
                                 >
                                     {link.name}
                                 </Link>
                                 {idx < navLinks.length - 1 && (
-                                    <div className="h-6 w-px bg-[#E6EDD6]" />
+                                    <div className="h-6 w-px" style={{ backgroundColor: '#A6C07A' }} />
                                 )}
                             </React.Fragment>
                         ))}
@@ -347,7 +365,7 @@ export default function Navbar() {
                         <div ref={ctaRef} className="ml-4">
                             <Link
                                 href="/contact"
-                                className="bg-[#A6C07A] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
+                                className="bg-[#95B75D] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
                             >
                                 <span className="inline-block">LETS CONNECT</span>
                                 <span className="ml-2 text-lg font-bold">&#8250;</span>

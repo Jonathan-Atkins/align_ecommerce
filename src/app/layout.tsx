@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
+import VideoBackground from "../components/VideoBackground";
+import PageLoader from "../components/PageLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,21 +30,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* Video background sits behind everything except the green info bar */}
-        <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none">
-          <video
-            src="/promo2.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover"
-            style={{ position: 'absolute', inset: 0 }}
-          />
-        </div>
-        <Navbar />
-        <main className="w-full min-h-screen flex flex-col">{children}</main>
+        {/* Global page loader for route transitions */}
+  <PageLoader />
+  {/* Cloak wrapper: initially hidden server-side to prevent content flash.*/}
+  <div id="page-cloak" className="page-loader-hidden">
+    {/* Video background sits behind everything except the green info bar */}
+    <VideoBackground />
+    <Navbar />
+    <main className="w-full min-h-screen flex flex-col">{children}</main>
+  </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>

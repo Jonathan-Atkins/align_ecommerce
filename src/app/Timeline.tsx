@@ -1,8 +1,47 @@
+"use client";
 
-'use client';
+import React, { useState, useEffect, ReactNode } from "react";
+import { GlowAlignText } from "./GlowAlignText";
 
-'use client';
-import React, { useState, useRef, useEffect } from "react";
+// FadeContent component for fade-in effect on content change
+interface FadeContentProps {
+  children: ReactNode;
+  blur?: boolean;
+  duration?: number;
+  easing?: string;
+  delay?: number;
+  initialOpacity?: number;
+  className?: string;
+}
+
+const FadeContent: React.FC<FadeContentProps> = ({
+  children,
+  blur = false,
+  duration = 1000,
+  easing = 'ease-out',
+  delay = 0,
+  initialOpacity = 0,
+  className = ''
+}) => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    setVisible(false);
+    const timeout = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timeout);
+  }, [children, delay]);
+  return (
+    <div
+      className={className}
+      style={{
+        opacity: visible ? 1 : initialOpacity,
+        transition: `opacity ${duration}ms ${easing}, filter ${duration}ms ${easing}`,
+        filter: blur ? (visible ? 'blur(0px)' : 'blur(10px)') : 'none'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const steps = [
   {
@@ -47,13 +86,16 @@ export default function Timeline() {
         minHeight: '65vh',
       }}
     >
-  <h2 className="text-6xl font-bold text-center text-gray-900 dark:text-white font-[Montserrat] mb-10">
-  What <span className="green-pulse">Align</span> Offers
-  </h2>
+      <h2 className="text-6xl font-bold text-center text-gray-900 dark:text-white font-[Montserrat] mb-10">
+        What <span className="green-pulse">Align</span> Offers
+      </h2>
+      <div className="flex justify-center items-center mb-6">
+        <span className="text-lg text-gray-400 italic">(click dots for more!)</span>
+      </div>
       {/* Timeline Flexbox */}
       <div className="w-full max-w-5xl flex flex-col items-center">
         {/* Headers Row */}
-  <div className="w-full relative" style={{ marginTop: 27, marginBottom: 6, height: 32 }}>
+        <div className="w-full relative" style={{ marginTop: 27, marginBottom: 6, height: 32 }}>
           {steps.map((step, idx) => {
             const percent = (idx) / (steps.length - 1) * 100;
             return (
@@ -133,9 +175,17 @@ export default function Timeline() {
         </div>
         {/* Event content below timeline */}
         <div className="mt-14 w-full flex justify-center">
-          <div className="bg-[#232628] text-white rounded-xl px-10 py-8 shadow max-w-xl w-full text-center text-xl min-h-[70px]">
-            {steps[selected].content}
-          </div>
+          <FadeContent
+            key={selected} // Keyed by selected to retrigger animation
+            blur={true}
+            duration={1000}
+            easing="ease-out"
+            initialOpacity={0}
+          >
+            <div className="bg-[#232628] text-white rounded-xl px-10 py-8 shadow max-w-xl w-full text-center text-xl min-h-[70px]">
+              <GlowAlignText>{steps[selected].content}</GlowAlignText>
+            </div>
+          </FadeContent>
         </div>
       </div>
     </section>

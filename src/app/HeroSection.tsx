@@ -124,19 +124,19 @@ export default function HeroSection() {
           </p>
           <div className="grid grid-cols-2 gap-4 max-w-md">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
-              <span className="font-semibold text-[#7C8F5A] glow-text green-pulse">99% Approval Rate</span>
+              <span className="font-semibold text-[#A6C07A] glow-text green-pulse">99% Approval Rate</span>
               <div className="text-xs text-gray-500 dark:text-gray-400">Industry-leading acceptance</div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
-              <span className="font-semibold text-[#7C8F5A] glow-text green-pulse">No Setup Fee</span>
+              <span className="font-semibold text-[#A6C07A] glow-text green-pulse">No Setup Fee</span>
               <div className="text-xs text-gray-500 dark:text-gray-400">Start processing immediately</div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
-              <span className="font-semibold text-[#7C8F5A] glow-text green-pulse">Chargeback Protection</span>
+              <span className="font-semibold text-[#A6C07A] glow-text green-pulse">Chargeback Protection</span>
               <div className="text-xs text-gray-500 dark:text-gray-400">Advance security features</div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
-              <span className="font-semibold text-[#7C8F5A] glow-text green-pulse">24 Hour Approval</span>
+              <span className="font-semibold text-[#A6C07A] glow-text green-pulse">24 Hour Approval</span>
               <div className="text-xs text-gray-500 dark:text-gray-400">Quick application process</div>
             </div>
           </div>
