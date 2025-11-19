@@ -108,7 +108,7 @@ export default function HeroSection() {
           top: 0,
         }}
       />
-      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 px-2 sm:px-4 md:px-8 lg:px-16 relative z-10">
+      <div className="w-full flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-12 px-2 sm:px-4 md:px-8 lg:px-16 relative z-10">
         {/* Hero Content */}
   <div className="flex-1 min-w-0 text-center md:text-left" style={{ marginTop: 45 }}>
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
@@ -119,9 +119,11 @@ export default function HeroSection() {
             {' '}&{' '}
             <span className="glow-text green-pulse">Seamlessly</span>
           </h1>
-          <p className="text-lg text-white mb-8" style={{ color: '#fff' }}>
-            Navigating high-risk industries is challenging, but <span className="glow-text" style={{ color: '#A3C64A', textShadow: '0 0 20px #A3C64A, 0 0 30px #7C8F5A' }}>Align</span> makes it easier with our specialized high-risk merchant account services. Our expert team is dedicated to providing secure and efficient payment processing solutions tailored to your business needs.
-          </p>
+          <div className="mb-8 max-w-2xl bg-white/5 dark:bg-black/20 border border-gray-200/20 dark:border-white/5 rounded-xl p-6 md:p-8 backdrop-blur-sm shadow-none">
+            <p className="text-lg text-white m-0" style={{ color: '#fff' }}>
+              Navigating high-risk industries is challenging, but <span className="glow-text font-bold" style={{ color: '#A3C64A', textShadow: '0 0 20px #A3C64A, 0 0 30px #7C8F5A' }}>Align</span> makes it easier with our specialized high-risk merchant account services. Our expert team is dedicated to providing secure and efficient payment processing solutions tailored to your business needs.
+            </p>
+          </div>
           <div className="grid grid-cols-2 gap-4 max-w-md">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
               <span className="font-semibold text-[#A6C07A] glow-text green-pulse">99% Approval Rate</span>
@@ -142,7 +144,7 @@ export default function HeroSection() {
           </div>
         </div>
         {/* Form Section */}
-        <div className="flex-1 max-w-md w-full min-w-0">
+        <div className="flex-1 max-w-md w-full min-w-0 mt-0 md:mt-12 lg:mt-10">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 md:p-8">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white text-center">Get Started Today!</h2>
             <form className="space-y-4">
@@ -181,14 +183,14 @@ export default function HeroSection() {
               </button>
             </form>
             <div className="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">
-              Already filled out a form? <a href="/auth" className="text-[#7C8F5A] underline">Login</a>
+              {/* Already filled out a form? <a href="/auth" className="text-[#7C8F5A] underline">Login</a> */}
             </div>
           </div>
         </div>
       </div>
       {/* Logo Marquee */}
       <div className="w-full mt-12 flex flex-col items-center">
-  <div className="text-center text-lg font-semibold tracking-wide mb-10 text-[#E46A5A]">Our Trusted Partners</div>
+        <div className="text-center text-lg font-semibold tracking-wide mb-10 text-[#E46A5A]">Our Trusted Partners</div>
         <div className="relative w-full overflow-hidden" style={{height: '90px'}}>
           <div
             className="logo-marquee flex items-center gap-8 md:gap-12"
@@ -204,19 +206,20 @@ export default function HeroSection() {
               (e.currentTarget as HTMLElement).style.animationPlayState = 'running';
             }}
           >
-            <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/zouk_logo.png" alt="Zouk Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            {/* Duplicate for seamless loop */}
-            <Image src="/partners/first.png" alt="First Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_authorize-net.png" alt="Authorize.Net" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/logo_valorpay.png" alt="Valor Paytech" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/NMI_White_Logo_Small.png" alt="NMI White Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/partners/tmpgwb9gjpg.png" alt="Partner Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
-            <Image src="/zouk_logo.png" alt="Zouk Logo" width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+            {(() => {
+              const logos = [
+                { src: '/partners/NMI_White_Logo_Small.png', alt: 'NMI White Logo' },
+                { src: '/partners/cyber_source.png', alt: 'CyberSource' },
+                { src: '/partners/logo_authorize.png', alt: 'Authorize.Net' },
+                { src: '/partners/tmpgwb9gjpg.png', alt: 'Partner Logo' },
+                { src: '/partners/valor_pay.png', alt: 'Valor Pay' },
+                { src: '/partners/zouk_logo.png', alt: 'Zouk Logo' },
+              ];
+              // Render the list twice for seamless looping
+              return [...logos, ...logos].map((logo, i) => (
+                <Image key={logo.src + '-' + i} src={logo.src} alt={logo.alt} width={200} height={34} style={{height: '34px', width: '200px', objectFit: 'contain'}} />
+              ));
+            })()}
           </div>
         </div>
         <style>{`
