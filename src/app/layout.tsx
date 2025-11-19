@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./Navbar";
 import VideoBackground from "../components/VideoBackground";
 import PageLoader from "../components/PageLoader";
+import CursorGlow from "../components/CursorGlow";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,8 @@ export default function RootLayout({
     <VideoBackground />
     <Navbar />
     <main className="w-full min-h-screen flex flex-col">{children}</main>
+    {/* Cursor glow: mounted here so it covers navbar, hero, timeline only on landing page */}
+    <CursorGlow />
   </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>

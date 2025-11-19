@@ -472,3 +472,27 @@ b, strong {
   }
   .loader-phrase .phrase-word { font-size: 28px; }
 }
+
+/* Cursor glow used across landing page. Size kept same; intensity increased here. */
+.cursor-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100px; /* visible size — center offset in JS uses 50px */
+  height: 100px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2147483647; /* extremely high so it's above landing page content */
+  transform: translate(-9999px, -9999px); /* hide until pointer moves */
+  will-change: transform;
+  mix-blend-mode: screen;
+  /* KEEP COLOR: center color uses app green. INTENSITY increased here from 0.18 -> 0.28 */
+  background: radial-gradient(circle at center, rgba(163,198,74,0.28) 0%, rgba(163,198,74,0.10) 30%, rgba(163,198,74,0.04) 55%, transparent 75%);
+  /* No transitions — we update transform directly for zero-lag tracking */
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+  /* Hide on mobile/coarse pointers */
+  .cursor-glow { display: none !important; }
+}
+
