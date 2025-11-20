@@ -31,21 +31,28 @@ export default function VideoBackground() {
     videoEl.setAttribute('autoplay', '');
     videoEl.preload = 'auto';
     // reload so attributes take effect if needed
-    try { videoEl.load(); } catch (e) {}
+    try { videoEl.load(); } catch {
+      // ignore
+    }
 
     let mounted = true;
     let touchHandler: (() => void) | null = null;
 
     const resumeAudioContext = async () => {
       try {
-        const Ctx = (window as any).AudioContext || (window as any).webkitAudioContext;
+        type WinWithAudio = Window & { webkitAudioContext?: typeof AudioContext };
+        const win = window as WinWithAudio;
+        const globalWithAudio = globalThis as unknown as { AudioContext?: typeof AudioContext };
+        const Ctx = globalWithAudio.AudioContext || win.webkitAudioContext;
         if (Ctx) {
           const ctx = new Ctx();
           if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
             await ctx.resume();
           }
         }
-      } catch (e) {}
+      } catch {
+        // ignore
+      }
     };
 
     const attemptPlay = async (): Promise<boolean> => {
@@ -53,7 +60,7 @@ export default function VideoBackground() {
         await resumeAudioContext();
         await videoEl.play();
         return true;
-      } catch (err) {
+      } catch {
         return false;
       }
     };
@@ -71,14 +78,18 @@ export default function VideoBackground() {
 
     // Also try when video is ready to play
     const onCanPlay = () => {
-      attemptPlay().catch(() => {});
+      attemptPlay().catch(() => {
+        // ignore
+      });
       videoEl.removeEventListener('canplay', onCanPlay);
     };
     videoEl.addEventListener('canplay', onCanPlay);
 
     // If still blocked, fallback to first touch
     touchHandler = () => {
-      attemptPlay().catch(() => {});
+      attemptPlay().catch(() => {
+        // ignore
+      });
       if (touchHandler) {
         window.removeEventListener('touchstart', touchHandler);
         touchHandler = null;
@@ -88,7 +99,9 @@ export default function VideoBackground() {
 
     return () => {
       mounted = false;
-      try { videoEl.removeEventListener('canplay', onCanPlay); } catch (e) {}
+      try { videoEl.removeEventListener('canplay', onCanPlay); } catch {
+        // ignore
+      }
       if (touchHandler) {
         window.removeEventListener('touchstart', touchHandler);
         touchHandler = null;
