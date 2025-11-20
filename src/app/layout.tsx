@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import VideoBackground from "../components/VideoBackground";
 import PageLoader from "../components/PageLoader";
 import CursorGlow from "../components/CursorGlow";
+import PageCloakController from "../components/PageCloakController";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +32,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* Global page loader for route transitions */}
-  <PageLoader />
+          {/* Global page loader for route transitions */}
+        {/* Controller to ensure the server-side cloak is removed on non-landing routes */}
+        <PageCloakController />
+        <PageLoader />
   {/* Cloak wrapper: initially hidden server-side to prevent content flash.*/}
   <div id="page-cloak" className="page-loader-hidden">
     {/* Video background sits behind everything except the green info bar */}
