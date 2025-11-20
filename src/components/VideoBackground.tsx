@@ -17,21 +17,96 @@ export default function VideoBackground() {
 
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
     if (!isMobile) return;
+    // Strengthen autoplay attempt:
+    // - Ensure attributes are set (muted, playsInline, autoplay)
+    // - Try to resume an AudioContext (may help unlocking playback on some platforms)
+    // - Retry play() a few times and also try on 'canplay' event
+    // - Keep a touchstart fallback
 
-    // Try to programmatically play. If autoplay is blocked, wait for the first touch to play.
-    const tryPlay = async () => {
+    videoEl.muted = true;
+    videoEl.setAttribute('muted', '');
+    videoEl.playsInline = true;
+    videoEl.setAttribute('playsinline', '');
+    videoEl.autoplay = true;
+    videoEl.setAttribute('autoplay', '');
+    videoEl.preload = 'auto';
+    // reload so attributes take effect if needed
+    try { videoEl.load(); } catch {
+      // ignore
+    }
+
+    let mounted = true;
+    let touchHandler: (() => void) | null = null;
+
+    const resumeAudioContext = async () => {
       try {
-        await videoEl.play();
-      } catch (err) {
-        const onFirstTouch = () => {
-          videoEl.play().catch(() => {});
-          window.removeEventListener('touchstart', onFirstTouch);
-        };
-        window.addEventListener('touchstart', onFirstTouch, { passive: true, once: true });
+        type WinWithAudio = Window & { webkitAudioContext?: typeof AudioContext };
+        const win = window as WinWithAudio;
+        const globalWithAudio = globalThis as unknown as { AudioContext?: typeof AudioContext };
+        const Ctx = globalWithAudio.AudioContext || win.webkitAudioContext;
+        if (Ctx) {
+          const ctx = new Ctx();
+          if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
+            await ctx.resume();
+          }
+        }
+      } catch {
+        // ignore
       }
     };
 
-    tryPlay();
+    const attemptPlay = async (): Promise<boolean> => {
+      try {
+        await resumeAudioContext();
+        await videoEl.play();
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    // Try a few times with short delays (helps if network/load timing is the issue)
+    (async () => {
+      const maxAttempts = 6;
+      for (let i = 0; i < maxAttempts && mounted; i++) {
+        const ok = await attemptPlay();
+        if (ok) return;
+        // wait a bit before retrying
+        await new Promise((res) => setTimeout(res, 300 + i * 100));
+      }
+    })();
+
+    // Also try when video is ready to play
+    const onCanPlay = () => {
+      attemptPlay().catch(() => {
+        // ignore
+      });
+      videoEl.removeEventListener('canplay', onCanPlay);
+    };
+    videoEl.addEventListener('canplay', onCanPlay);
+
+    // If still blocked, fallback to first touch
+    touchHandler = () => {
+      attemptPlay().catch(() => {
+        // ignore
+      });
+      if (touchHandler) {
+        window.removeEventListener('touchstart', touchHandler);
+        touchHandler = null;
+      }
+    };
+    window.addEventListener('touchstart', touchHandler, { passive: true, once: true });
+
+    return () => {
+      mounted = false;
+      try { videoEl.removeEventListener('canplay', onCanPlay); } catch {
+        // ignore
+      }
+      if (touchHandler) {
+        window.removeEventListener('touchstart', touchHandler);
+        touchHandler = null;
+      }
+    };
   }, [pathname]);
 
   // Do not render the promo video on the josh-success page so it appears black.
