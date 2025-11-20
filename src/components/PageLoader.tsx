@@ -3,6 +3,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
+declare global {
+  interface Window {
+    __alignPageLoaderShown?: boolean;
+  }
+}
+
 function findAnchor(el: Element | null): HTMLAnchorElement | null {
   while (el) {
     if (el instanceof HTMLAnchorElement) return el;
@@ -66,6 +72,7 @@ export default function PageLoader() {
   }, [isLoading]);
 
   useEffect(() => {
+    // Only run on the landing path and only once per browser tab session.
     if (
       pathname !== LANDING_PATH ||
       typeof window === "undefined" ||
@@ -74,6 +81,14 @@ export default function PageLoader() {
     ) {
       return;
     }
+
+    // If we've already shown the loader in this tab (memory flag), don't run again
+    // Note: we intentionally use an in-memory window flag so a full page refresh
+    // will still show the loader again (the flag is cleared on refresh).
+    if (window.__alignPageLoaderShown) return;
+
+    // Mark as shown for this session/tab immediately so navigations don't re-trigger
+    window.__alignPageLoaderShown = true;
 
     setMounted(true);
     setIsLoading(true);
@@ -209,6 +224,15 @@ export default function PageLoader() {
         return;
       }
 
+      // Only trigger the page loader for navigations that start on the landing
+      // page and only if we haven't already shown it in this tab session.
+      try {
+        if (window.location.pathname !== LANDING_PATH) return;
+        if (window.__alignPageLoaderShown) return;
+      } catch {
+        return;
+      }
+
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
       timeoutRef.current = window.setTimeout(() => setIsLoading(true), 80);
     };
@@ -256,6 +280,13 @@ export default function PageLoader() {
     };
 
     const onHistoryStart = () => {
+      try {
+        if (window.location.pathname !== LANDING_PATH) return;
+        if (window.__alignPageLoaderShown) return;
+      } catch {
+        return;
+      }
+
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
       timeoutRef.current = window.setTimeout(() => setIsLoading(true), 40);
     };

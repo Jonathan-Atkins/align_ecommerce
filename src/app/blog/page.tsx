@@ -185,6 +185,27 @@ export default function BlogListingPage() {
       <main className="container mx-auto px-4 py-8">
         {loading ? <div className="text-white/60">Loading...</div> : null}
 
+        {/* Empty state: show typewriter animation when there are no posts */}
+        {!loading && posts.length === 0 && (
+          <div className="flex flex-col items-center justify-start typewriter-wrapper w-full">
+            <h3 className="text-white/90 text-2xl md:text-3xl font-semibold mb-6">No Blog Posts Yet!</h3>
+            <div className="typewriter" aria-hidden="true">
+              <div className="slide"><i></i></div>
+              <div className="paper"></div>
+              <div className="keyboard"></div>
+            </div>
+
+            {/* dribbble link: external image used for attribution. If it fails to load, hide it gracefully. */}
+            <a className="dribbble" href="https://dribbble.com/shots/8184246-Typewriter" target="_blank" rel="noreferrer">
+              <img
+                src="https://cdn.dribbble.com/assets/dribbble-ball-mark-2bd45f09c2fb58dbbfb44766d5d1d07c5a12972d602ef8b32204d28fa3dda554.svg"
+                alt="dribbble"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+            </a>
+          </div>
+        )}
+
   {/* Stack posts vertically. Each post is a flex container with two equal children (image / content). */}
   {/* Increased gap between posts for more breathing room */}
   <div className="flex flex-col blog-list">
