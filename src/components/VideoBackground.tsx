@@ -47,6 +47,19 @@ export default function VideoBackground() {
         if (Ctx) {
           const ctx = new Ctx();
           if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
+            // Try a silent oscillator to unlock audio/video autoplay on some mobile browsers.
+            try {
+              const gain = ctx.createGain();
+              gain.gain.value = 0;
+              const osc = ctx.createOscillator();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              // start and stop quickly
+              osc.start();
+              osc.stop(ctx.currentTime + 0.05);
+            } catch {
+              // if oscillator isn't allowed, ignore
+            }
             await ctx.resume();
           }
         }
@@ -67,12 +80,16 @@ export default function VideoBackground() {
 
     // Try a few times with short delays (helps if network/load timing is the issue)
     (async () => {
-      const maxAttempts = 6;
+      const maxAttempts = 10;
       for (let i = 0; i < maxAttempts && mounted; i++) {
+        // reset to start in case buffering left it paused
+        try { videoEl.currentTime = 0; } catch {
+          /* ignore */
+        }
         const ok = await attemptPlay();
         if (ok) return;
         // wait a bit before retrying
-        await new Promise((res) => setTimeout(res, 300 + i * 100));
+        await new Promise((res) => setTimeout(res, 200 + i * 100));
       }
     })();
 
