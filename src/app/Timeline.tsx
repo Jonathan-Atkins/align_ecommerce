@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode, useRef } from "react";
 import { GlowAlignText } from "./GlowAlignText";
 
 // FadeContent component for fade-in effect on content change
@@ -78,6 +78,58 @@ const steps = [
 
 export default function Timeline() {
   const [selected, setSelected] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchDeltaX = useRef<number>(0);
+  const stepsLen = steps.length;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 640px)');
+    // set initial
+    setIsMobile(mq.matches);
+    const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    // prefer modern addEventListener API
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', listener);
+      return () => { try { mq.removeEventListener('change', listener); } catch {} };
+    }
+    // fallback for older browsers
+    type LegacyMQL = { addListener: (l: (e: MediaQueryListEvent) => void) => void; removeListener: (l: (e: MediaQueryListEvent) => void) => void };
+    const legacy = mq as unknown as LegacyMQL;
+    if (typeof legacy.addListener === 'function') {
+      legacy.addListener(listener);
+      return () => { try { legacy.removeListener(listener); } catch {} };
+    }
+    return undefined;
+  }, []);
+
+  const prevIndex = () => (selected - 1 + stepsLen) % stepsLen;
+  const nextIndex = () => (selected + 1) % stepsLen;
+
+  const goPrev = () => setSelected(prevIndex());
+  const goNext = () => setSelected(nextIndex());
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+    touchDeltaX.current = 0;
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (touchStartX.current == null) return;
+    touchDeltaX.current = e.touches[0].clientX - touchStartX.current;
+  };
+  const onTouchEnd = () => {
+    if (touchStartX.current == null) return;
+    const delta = touchDeltaX.current;
+    const threshold = 30; // swipe threshold px
+    if (delta > threshold) {
+      goPrev();
+    } else if (delta < -threshold) {
+      goNext();
+    }
+    touchStartX.current = null;
+    touchDeltaX.current = 0;
+  };
   return (
     <section
       className="w-full py-20 px-4 flex flex-col items-center relative overflow-hidden"
@@ -90,40 +142,119 @@ export default function Timeline() {
         What <span className="green-pulse">Align</span> Offers
       </h2>
       <div className="flex justify-center items-center mb-6">
-        <span className="text-lg text-gray-400 italic">(click dots for more!)</span>
+        {/* <span className="text-lg text-gray-400 italic">(click dots for more!)</span> */}
       </div>
       {/* Timeline Flexbox */}
       <div className="w-full max-w-5xl flex flex-col items-center">
-        {/* Headers Row */}
-        <div className="w-full relative" style={{ marginTop: 27, marginBottom: 6, height: 32 }}>
-          {steps.map((step, idx) => {
-            const percent = (idx) / (steps.length - 1) * 100;
-            return (
-              <span
-                key={step.label}
-                className={`block font-bold text-center select-none ${selected === idx ? 'text-[#A3C64A]' : 'text-white'}`}
+        {isMobile ? (
+          // Mobile simplified timeline: center active dot, show faded partial neighbor, small chevrons, swipe support
+          <div className="w-full flex items-center justify-center mb-6" style={{ gap: 12 }}>
+            <button
+              aria-label="Previous step"
+              onClick={goPrev}
+              className="text-white bg-transparent p-2 rounded-md"
+              style={{ fontSize: 18, opacity: 0.9 }}
+            >
+              ◀
+            </button>
+
+            <div
+              className="relative"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+              style={{ width: 120, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}
+            >
+              {/* Previous partial (faded) */}
+              <div
                 style={{
-                  fontSize: '16px',
                   position: 'absolute',
-                  left: `calc(${percent}%)`,
-                  top: 0,
-                  transform: 'translateX(-50%)',
-                  minWidth: 0,
-                  maxWidth: 180,
-                  whiteSpace: 'normal',
-                  overflow: 'visible',
-                  textOverflow: 'clip',
-                  margin: 0,
-                  paddingBottom: 0,
-                  lineHeight: 1.1,
+                  left: -26,
+                  width: 28,
+                  height: 28,
+                  borderRadius: '50%',
+                  background: '#232628',
+                  border: '3px solid rgba(255,255,255,0.12)',
+                  opacity: 0.6,
                 }}
-                onClick={() => setSelected(idx)}
+              />
+
+              {/* Active dot */}
+              <div
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'ArrowLeft') goPrev(); if (e.key === 'ArrowRight') goNext(); }}
+                className="flex items-center justify-center"
+                style={{ zIndex: 20 }}
               >
-                {step.label}
-              </span>
-            );
-          })}
-        </div>
+                <span
+                  className={`block w-9 h-9 rounded-full bg-[#A3C64A]/70`}
+                  style={{ boxShadow: '0 0 8px rgba(163,198,74,0.45)', border: '3px solid #A3C64A' }}
+                />
+              </div>
+
+              {/* Next partial (faded) */}
+              <div
+                style={{
+                  position: 'absolute',
+                  right: -26,
+                  width: 28,
+                  height: 28,
+                  borderRadius: '50%',
+                  background: '#232628',
+                  border: '3px solid rgba(255,255,255,0.12)',
+                  opacity: 0.6,
+                }}
+              />
+            </div>
+
+            <button
+              aria-label="Next step"
+              onClick={goNext}
+              className="text-white bg-transparent p-2 rounded-md"
+              style={{ fontSize: 18, opacity: 0.9 }}
+            >
+              ▶
+            </button>
+          </div>
+        ) : null}
+        {/* Headers Row */}
+        {!isMobile ? (
+          <div className="w-full relative" style={{ marginTop: 27, marginBottom: 6, height: 32 }}>
+            {steps.map((step, idx) => {
+              const percent = (idx) / (steps.length - 1) * 100;
+              return (
+                <span
+                  key={step.label}
+                  className={`block font-bold text-center select-none ${selected === idx ? 'text-[#A3C64A]' : 'text-white'}`}
+                  style={{
+                    fontSize: '16px',
+                    position: 'absolute',
+                    left: `calc(${percent}%)`,
+                    top: 0,
+                    transform: 'translateX(-50%)',
+                    minWidth: 0,
+                    maxWidth: 180,
+                    whiteSpace: 'normal',
+                    overflow: 'visible',
+                    textOverflow: 'clip',
+                    margin: 0,
+                    paddingBottom: 0,
+                    lineHeight: 1.1,
+                  }}
+                  onClick={() => setSelected(idx)}
+                >
+                  {step.label}
+                </span>
+              );
+            })}
+          </div>
+        ) : (
+          // Mobile: show active label only
+          <div style={{ marginTop: 18, marginBottom: 6, height: 'auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div className="text-center text-white font-bold" style={{ fontSize: 16, maxWidth: 220 }}>{steps[selected].label}</div>
+          </div>
+        )}
         <div className="relative w-full flex items-center" style={{ minHeight: 70 }}>
           {/* Base line with faded edges (single gradient line) */}
           <div
