@@ -118,6 +118,23 @@ export default function VideoBackground() {
         await videoEl.play();
         return true;
       } catch {
+        // log the rejection to help debugging on devices/browsers
+        // eslint-disable-next-line no-console
+        console.warn('promo-video.play() rejected (no message)');
+        return false;
+      }
+    };
+
+    const attemptPlayWithLog = async (): Promise<boolean> => {
+      try {
+        await resumeAudioContext();
+        await videoEl.play();
+        // eslint-disable-next-line no-console
+        console.debug('promo-video.play() succeeded');
+        return true;
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('promo-video.play() failed:', err);
         return false;
       }
     };
@@ -144,7 +161,7 @@ export default function VideoBackground() {
 
     // Also try when video is ready to play
     const onCanPlay = () => {
-      attemptPlay().catch(() => {
+      attemptPlayWithLog().catch(() => {
         // ignore
       });
       videoEl.removeEventListener('canplay', onCanPlay);
@@ -153,7 +170,7 @@ export default function VideoBackground() {
 
     // If still blocked, fallback to first touch
     touchHandler = () => {
-      attemptPlay().catch(() => {
+      attemptPlayWithLog().catch(() => {
         // ignore
       });
       if (touchHandler) {
@@ -165,9 +182,20 @@ export default function VideoBackground() {
 
     // If autoplay succeeded remove mobile overlay
     (async () => {
-      const ok = await attemptPlay();
+      const ok = await attemptPlayWithLog();
       if (ok) setOverlayActive(false);
     })();
+
+    // Additional event triggers that can help on iOS/Arc: try to play when
+    // the page becomes visible, when pageshow fires, or when window gains focus.
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') attemptPlayWithLog().catch(() => {});
+    };
+    const handlePageShow = () => { attemptPlayWithLog().catch(() => {}); };
+    const handleFocus = () => { attemptPlayWithLog().catch(() => {}); };
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('pageshow', handlePageShow);
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       mounted = false;
@@ -178,6 +206,9 @@ export default function VideoBackground() {
         window.removeEventListener('touchstart', touchHandler);
         touchHandler = null;
       }
+      try { document.removeEventListener('visibilitychange', handleVisibility); } catch {}
+      try { window.removeEventListener('pageshow', handlePageShow); } catch {}
+      try { window.removeEventListener('focus', handleFocus); } catch {}
     };
   }, [pathname]);
 
