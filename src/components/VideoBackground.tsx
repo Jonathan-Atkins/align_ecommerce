@@ -6,7 +6,7 @@ export default function VideoBackground() {
   const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
   const [overlayActive, setOverlayActive] = useState(false);
-  const initialSrc = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
+  const initialSrc = '';
   const [srcUrlState, setSrcUrlState] = useState(initialSrc);
 
   // Do not render the promo video on the josh-success page so it appears black.
@@ -34,26 +34,28 @@ export default function VideoBackground() {
     const videoEl = document.getElementById('promo-video') as HTMLVideoElement | null;
     if (!videoEl) return;
 
-    // Try to prefer a silent promo video if present in `public/` to improve autoplay success on mobile.
+    // Determine which source to use (prefer a confirmed silent file if present).
     (async () => {
+      const defaultPath = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
+      let chosen = defaultPath;
       try {
         const silentPath = '/promo2-silent.mp4';
-        // Only attempt once on client; HEAD request to check existence
         const res = await fetch(silentPath, { method: 'HEAD', cache: 'no-store' });
-        if (res.ok) {
-          setSrcUrlState(silentPath);
-          // update element src if already present
-          try {
-            const el = document.getElementById('promo-video') as HTMLVideoElement | null;
-            if (el) {
-              el.src = silentPath;
-              try { el.load(); } catch {}
-            }
-          } catch {}
-        }
+        if (res.ok) chosen = silentPath;
       } catch {
-        // ignore network errors
+        // ignore network errors and fall back to default
       }
+      try {
+        setSrcUrlState(chosen);
+      } catch {}
+      // update element src if already present
+      try {
+        const el = document.getElementById('promo-video') as HTMLVideoElement | null;
+        if (el) {
+          el.src = chosen;
+          try { el.load(); } catch {}
+        }
+      } catch {}
     })();
 
     // Ensure loop is set (defensive) and attempt to play on mobile devices.
@@ -65,19 +67,18 @@ export default function VideoBackground() {
     // - Retry play() a few times and also try on 'canplay' event
     // - Keep a touchstart fallback
 
-    videoEl.muted = true;
-    videoEl.defaultMuted = true;
-    videoEl.setAttribute('muted', '');
-    videoEl.playsInline = true;
-    videoEl.setAttribute('playsinline', '');
+    // Force muted/playsInline etc before any meaningful load — helps iOS decide autoplay.
+    try { videoEl.muted = true; } catch {}
+    try { videoEl.defaultMuted = true; } catch {}
+    try { videoEl.setAttribute('muted', ''); } catch {}
+    try { videoEl.playsInline = true; } catch {}
+    try { videoEl.setAttribute('playsinline', ''); } catch {}
     try { videoEl.setAttribute('webkit-playsinline', ''); } catch {}
-    videoEl.autoplay = true;
-    videoEl.setAttribute('autoplay', '');
-    videoEl.preload = 'auto';
-    // reload so attributes take effect if needed
-    try { videoEl.load(); } catch {
-      // ignore
-    }
+    try { videoEl.autoplay = true; } catch {}
+    try { videoEl.setAttribute('autoplay', ''); } catch {}
+    try { videoEl.preload = 'auto'; } catch {}
+    // Defensive load in case src was already assigned synchronously
+    try { videoEl.load(); } catch {}
 
     let mounted = true;
     let touchHandler: (() => void) | null = null;
@@ -148,7 +149,7 @@ export default function VideoBackground() {
         try { videoEl.currentTime = 0; } catch {
           /* ignore */
         }
-        const ok = await attemptPlay();
+        const ok = await attemptPlayWithLog();
         if (ok) { played = true; break; }
         // wait a bit before retrying
         await new Promise((res) => setTimeout(res, 200 + i * 100));
@@ -159,14 +160,22 @@ export default function VideoBackground() {
       }
     })();
 
-    // Also try when video is ready to play
+    // Also try when video is ready to play or metadata/data is loaded
     const onCanPlay = () => {
-      attemptPlayWithLog().catch(() => {
-        // ignore
-      });
-      videoEl.removeEventListener('canplay', onCanPlay);
+      attemptPlayWithLog().catch(() => {});
+      try { videoEl.removeEventListener('canplay', onCanPlay); } catch {}
     };
-    videoEl.addEventListener('canplay', onCanPlay);
+    const onLoadedData = () => {
+      attemptPlayWithLog().catch(() => {});
+      try { videoEl.removeEventListener('loadeddata', onLoadedData); } catch {}
+    };
+    const onLoadedMeta = () => {
+      attemptPlayWithLog().catch(() => {});
+      try { videoEl.removeEventListener('loadedmetadata', onLoadedMeta); } catch {}
+    };
+    try { videoEl.addEventListener('canplay', onCanPlay); } catch {}
+    try { videoEl.addEventListener('loadeddata', onLoadedData); } catch {}
+    try { videoEl.addEventListener('loadedmetadata', onLoadedMeta); } catch {}
 
     // If still blocked, fallback to first touch
     touchHandler = () => {
