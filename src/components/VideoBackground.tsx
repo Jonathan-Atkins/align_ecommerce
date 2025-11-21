@@ -58,9 +58,7 @@ export default function VideoBackground() {
     // Ensure loop is set (defensive) and attempt to play on mobile devices.
     videoEl.loop = true;
 
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
-    if (!isMobile) return;
-    // Strengthen autoplay attempt:
+    // Strengthen autoplay attempt (run on all devices):
     // - Ensure attributes are set (muted, playsInline, autoplay)
     // - Try to resume an AudioContext (may help unlocking playback on some platforms)
     // - Retry play() a few times and also try on 'canplay' event
@@ -221,6 +219,7 @@ export default function VideoBackground() {
         id="promo-video"
         src={srcUrlState}
         muted
+        autoPlay
         loop
         playsInline
         preload="auto"
