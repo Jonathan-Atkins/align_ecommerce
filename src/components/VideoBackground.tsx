@@ -15,10 +15,11 @@ export default function VideoBackground() {
     if (typeof window === 'undefined') return;
     const mq = window.matchMedia('(max-width: 640px)');
     setIsMobile(mq.matches);
-    setOverlayActive(mq.matches);
+    // Do not show the overlay by default; only show if autoplay ultimately fails
+    setOverlayActive(false);
     const onChange = (e: MediaQueryListEvent) => {
       setIsMobile(e.matches);
-      setOverlayActive(e.matches);
+      setOverlayActive(false);
     };
     if (typeof mq.addEventListener === 'function') {
       mq.addEventListener('change', onChange as (this: MediaQueryList, ev: MediaQueryListEvent) => void);
@@ -65,9 +66,11 @@ export default function VideoBackground() {
     // - Keep a touchstart fallback
 
     videoEl.muted = true;
+    videoEl.defaultMuted = true;
     videoEl.setAttribute('muted', '');
     videoEl.playsInline = true;
     videoEl.setAttribute('playsinline', '');
+    try { videoEl.setAttribute('webkit-playsinline', ''); } catch {}
     videoEl.autoplay = true;
     videoEl.setAttribute('autoplay', '');
     videoEl.preload = 'auto';
@@ -122,15 +125,20 @@ export default function VideoBackground() {
     // Try a few times with short delays (helps if network/load timing is the issue)
     (async () => {
       const maxAttempts = 10;
+      let played = false;
       for (let i = 0; i < maxAttempts && mounted; i++) {
         // reset to start in case buffering left it paused
         try { videoEl.currentTime = 0; } catch {
           /* ignore */
         }
         const ok = await attemptPlay();
-        if (ok) return;
+        if (ok) { played = true; break; }
         // wait a bit before retrying
         await new Promise((res) => setTimeout(res, 200 + i * 100));
+      }
+      if (!played && mounted) {
+        // show overlay so the user can tap to start playback
+        setOverlayActive(true);
       }
     })();
 
