@@ -6,7 +6,7 @@ export default function VideoBackground() {
   const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
   const [overlayActive, setOverlayActive] = useState(false);
-  const initialSrc = '';
+  const initialSrc = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
   const [srcUrlState, setSrcUrlState] = useState(initialSrc);
 
   // Do not render the promo video on the josh-success page so it appears black.
@@ -14,48 +14,55 @@ export default function VideoBackground() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mq = window.matchMedia('(max-width: 640px)');
-    setIsMobile(mq.matches);
+    setIsMobile(mq.matches || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
     // Do not show the overlay by default; only show if autoplay ultimately fails
     setOverlayActive(false);
     const onChange = (e: MediaQueryListEvent) => {
       setIsMobile(e.matches);
       setOverlayActive(false);
     };
+
+    // Attach media query listener but do NOT early-return — continue running
+    // the rest of the effect so autoplay attempts always execute.
+    let removeMqListener = () => {};
     if (typeof mq.addEventListener === 'function') {
       mq.addEventListener('change', onChange as (this: MediaQueryList, ev: MediaQueryListEvent) => void);
-      return () => { try { mq.removeEventListener('change', onChange as (this: MediaQueryList, ev: MediaQueryListEvent) => void); } catch {} };
+      removeMqListener = () => { try { mq.removeEventListener('change', onChange as (this: MediaQueryList, ev: MediaQueryListEvent) => void); } catch {} };
+    } else {
+      type LegacyMQL = { addListener: (l: (e: MediaQueryListEvent) => void) => void; removeListener: (l: (e: MediaQueryListEvent) => void) => void };
+      const legacy = mq as unknown as LegacyMQL;
+      if (typeof legacy.addListener === 'function') {
+        legacy.addListener(onChange);
+        removeMqListener = () => { try { if (legacy.removeListener) legacy.removeListener(onChange); } catch {} };
+      }
     }
-    type LegacyMQL = { addListener: (l: (e: MediaQueryListEvent) => void) => void; removeListener: (l: (e: MediaQueryListEvent) => void) => void };
-    const legacy = mq as unknown as LegacyMQL;
-    if (typeof legacy.addListener === 'function') {
-      legacy.addListener(onChange);
-      return () => { try { if (legacy.removeListener) legacy.removeListener(onChange); } catch {} };
-    }
-    const videoEl = document.getElementById('promo-video') as HTMLVideoElement | null;
-    if (!videoEl) return;
 
-    // Determine which source to use (prefer a confirmed silent file if present).
+    const videoEl = document.getElementById('promo-video') as HTMLVideoElement | null;
+    if (!videoEl) {
+      // still return a cleanup that removes mq listeners if video element isn't present yet
+      return () => { removeMqListener(); };
+    }
+
+    // Try to prefer a silent promo video if present in `public/` to improve autoplay success on mobile.
     (async () => {
-      const defaultPath = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
-      let chosen = defaultPath;
       try {
         const silentPath = '/promo2-silent.mp4';
+        // Only attempt once on client; HEAD request to check existence
         const res = await fetch(silentPath, { method: 'HEAD', cache: 'no-store' });
-        if (res.ok) chosen = silentPath;
-      } catch {
-        // ignore network errors and fall back to default
-      }
-      try {
-        setSrcUrlState(chosen);
-      } catch {}
-      // update element src if already present
-      try {
-        const el = document.getElementById('promo-video') as HTMLVideoElement | null;
-        if (el) {
-          el.src = chosen;
-          try { el.load(); } catch {}
+        if (res.ok) {
+          setSrcUrlState(silentPath);
+          // update element src if already present
+          try {
+            const el = document.getElementById('promo-video') as HTMLVideoElement | null;
+            if (el) {
+              el.src = silentPath;
+              try { el.load(); } catch {}
+            }
+          } catch {}
         }
-      } catch {}
+      } catch {
+        // ignore network errors
+      }
     })();
 
     // Ensure loop is set (defensive) and attempt to play on mobile devices.
@@ -67,18 +74,19 @@ export default function VideoBackground() {
     // - Retry play() a few times and also try on 'canplay' event
     // - Keep a touchstart fallback
 
-    // Force muted/playsInline etc before any meaningful load — helps iOS decide autoplay.
-    try { videoEl.muted = true; } catch {}
-    try { videoEl.defaultMuted = true; } catch {}
-    try { videoEl.setAttribute('muted', ''); } catch {}
-    try { videoEl.playsInline = true; } catch {}
-    try { videoEl.setAttribute('playsinline', ''); } catch {}
+    videoEl.muted = true;
+    videoEl.defaultMuted = true;
+    videoEl.setAttribute('muted', '');
+    videoEl.playsInline = true;
+    videoEl.setAttribute('playsinline', '');
     try { videoEl.setAttribute('webkit-playsinline', ''); } catch {}
-    try { videoEl.autoplay = true; } catch {}
-    try { videoEl.setAttribute('autoplay', ''); } catch {}
-    try { videoEl.preload = 'auto'; } catch {}
-    // Defensive load in case src was already assigned synchronously
-    try { videoEl.load(); } catch {}
+    videoEl.autoplay = true;
+    videoEl.setAttribute('autoplay', '');
+    videoEl.preload = 'auto';
+    // reload so attributes take effect if needed
+    try { videoEl.load(); } catch {
+      // ignore
+    }
 
     let mounted = true;
     let touchHandler: (() => void) | null = null;
@@ -149,7 +157,7 @@ export default function VideoBackground() {
         try { videoEl.currentTime = 0; } catch {
           /* ignore */
         }
-        const ok = await attemptPlayWithLog();
+        const ok = await attemptPlay();
         if (ok) { played = true; break; }
         // wait a bit before retrying
         await new Promise((res) => setTimeout(res, 200 + i * 100));
@@ -160,22 +168,14 @@ export default function VideoBackground() {
       }
     })();
 
-    // Also try when video is ready to play or metadata/data is loaded
+    // Also try when video is ready to play
     const onCanPlay = () => {
-      attemptPlayWithLog().catch(() => {});
-      try { videoEl.removeEventListener('canplay', onCanPlay); } catch {}
+      attemptPlayWithLog().catch(() => {
+        // ignore
+      });
+      videoEl.removeEventListener('canplay', onCanPlay);
     };
-    const onLoadedData = () => {
-      attemptPlayWithLog().catch(() => {});
-      try { videoEl.removeEventListener('loadeddata', onLoadedData); } catch {}
-    };
-    const onLoadedMeta = () => {
-      attemptPlayWithLog().catch(() => {});
-      try { videoEl.removeEventListener('loadedmetadata', onLoadedMeta); } catch {}
-    };
-    try { videoEl.addEventListener('canplay', onCanPlay); } catch {}
-    try { videoEl.addEventListener('loadeddata', onLoadedData); } catch {}
-    try { videoEl.addEventListener('loadedmetadata', onLoadedMeta); } catch {}
+    videoEl.addEventListener('canplay', onCanPlay);
 
     // If still blocked, fallback to first touch
     touchHandler = () => {
@@ -208,6 +208,7 @@ export default function VideoBackground() {
 
     return () => {
       mounted = false;
+      removeMqListener();
       try { videoEl.removeEventListener('canplay', onCanPlay); } catch {
         // ignore
       }
