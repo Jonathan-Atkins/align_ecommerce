@@ -147,75 +147,39 @@ export default function Timeline() {
       {/* Timeline Flexbox */}
       <div className="w-full max-w-5xl flex flex-col items-center">
         {isMobile ? (
-          // Mobile simplified timeline: center active dot, show faded partial neighbor, small chevrons, swipe support
-          <div className="w-full flex items-center justify-center mb-6" style={{ gap: 12 }}>
-            <button
-              aria-label="Previous step"
-              onClick={goPrev}
-              className="text-white bg-transparent p-2 rounded-md"
-              style={{ fontSize: 18, opacity: 0.9 }}
-            >
-              ◀
-            </button>
-
+          // Mobile arrows replaced with custom animated arrows (scoped styles in globals.css)
+          <div className="timeline-arrows w-full flex items-center justify-center mb-6" style={{ gap: 12 }}>
             <div
-              className="relative"
+              className="center-con"
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
-              style={{ width: 120, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}
             >
-              {/* Previous partial (faded) */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: -26,
-                  width: 28,
-                  height: 28,
-                  borderRadius: '50%',
-                  background: '#232628',
-                  border: '3px solid rgba(255,255,255,0.12)',
-                  opacity: 0.6,
-                }}
-              />
-
-              {/* Active dot */}
-              <div
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'ArrowLeft') goPrev(); if (e.key === 'ArrowRight') goNext(); }}
-                className="flex items-center justify-center"
-                style={{ zIndex: 20 }}
-              >
-                <span
-                  className={`block w-9 h-9 rounded-full bg-[#A3C64A]/70`}
-                  style={{ boxShadow: '0 0 8px rgba(163,198,74,0.45)', border: '3px solid #A3C64A' }}
-                />
+              <div className="round" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div id="cta" style={{ display: 'flex', alignItems: 'center' }}>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Previous step"
+                    className={`arrow primera next`}
+                    onClick={() => {
+                      goPrev();
+                    }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPrev(); } }}
+                  />
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Next step"
+                    className={`arrow segunda next`}
+                    onClick={() => {
+                      goNext();
+                    }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goNext(); } }}
+                  />
+                </div>
               </div>
-
-              {/* Next partial (faded) */}
-              <div
-                style={{
-                  position: 'absolute',
-                  right: -26,
-                  width: 28,
-                  height: 28,
-                  borderRadius: '50%',
-                  background: '#232628',
-                  border: '3px solid rgba(255,255,255,0.12)',
-                  opacity: 0.6,
-                }}
-              />
             </div>
-
-            <button
-              aria-label="Next step"
-              onClick={goNext}
-              className="text-white bg-transparent p-2 rounded-md"
-              style={{ fontSize: 18, opacity: 0.9 }}
-            >
-              ▶
-            </button>
           </div>
         ) : null}
         {/* Headers Row */}

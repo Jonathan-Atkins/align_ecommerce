@@ -697,3 +697,52 @@ b, strong {
   .typewriter-wrapper h3 { margin-bottom: 2.5rem; }
 }
 
+  /* Scoped timeline mobile arrow styles (converted from provided snippet) */
+  .timeline-arrows .center-con {
+    display: flex;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timeline-arrows .round {
+    position: relative;
+    border: 2px solid #66FF00;
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+  }
+
+  .timeline-arrows #cta{ width:100%; cursor:pointer; position: relative; display:flex; gap:8px; align-items:center; justify-content:center }
+
+  .timeline-arrows .arrow{ left: 30%; position: relative; margin: 0; width: 18px; height: 18px; background-size: contain; display:inline-block; }
+  .timeline-arrows .segunda{ margin-left: 8px; }
+  .timeline-arrows .next { background-image: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHN0eWxlPi5zdDB7ZmlsbDojZmZmfTwvc3R5bGU+PHBhdGggY2xhc3M9InN0MCIgZD0iTTMxOS4xIDIxN2MyMC4yIDIwLjIgMTkuOSA1My4yLS42IDczLjdzLTUzLjUgMjAuOC03My43LjZsLTE5MC0xOTBjLTIwLjEtMjAuMi0xOS44LTUzLjIuNy03My43UzEwOSA2LjggMTI5LjEgMjdsMTkwIDE5MHoiLz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMzE5LjEgMjkwLjVjMjAuMi0yMC4yIDE5LjktNTMuMi0uNi03My43cy01My41LTIwLjgtNzMuNy0uNmwtMTkwIDE5MGMtMjAuMiAyMC4yLTE5LjkgNTMuMi42IDczLjdzNTMuNSAyMC44IDczLjcuNmwxOTAtMTkweiIvPjwvc3ZnPg==); background-repeat:no-repeat; background-position:center; }
+
+  /* rotate primera (left) */
+  .timeline-arrows .arrow.primera { transform: rotate(180deg); }
+
+  @keyframes bounceAlpha {
+    0% {opacity: 1; transform: translateX(0px) scale(1);} 
+    25%{opacity: 0; transform:translateX(10px) scale(0.9);} 
+    26%{opacity: 0; transform:translateX(-10px) scale(0.9);} 
+    55% {opacity: 1; transform: translateX(0px) scale(1);} 
+  }
+
+  .timeline-arrows .bounceAlpha {
+    animation-name: bounceAlpha;
+    animation-duration:1.4s;
+    animation-iteration-count:infinite;
+    animation-timing-function:linear;
+  }
+
+  .timeline-arrows .arrow.primera.bounceAlpha { animation-delay:0.2s; }
+
+  .timeline-arrows .round:hover .arrow{ animation-name: bounceAlpha; animation-duration:1.4s; animation-iteration-count:infinite; animation-timing-function:linear; }
+  .timeline-arrows .round:hover .arrow.primera{ animation-name: bounceAlpha; animation-duration:1.4s; animation-delay:0.2s; animation-iteration-count:infinite; animation-timing-function:linear; }
+
+
