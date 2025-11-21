@@ -8,6 +8,11 @@ export default function VideoBackground() {
   const [overlayActive, setOverlayActive] = useState(false);
   const initialSrc = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
   const [srcUrlState, setSrcUrlState] = useState(initialSrc);
+  const [hasAttemptedPlay, setHasAttemptedPlay] = useState(false);
+
+  const fallbackBackground = {
+    background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)',
+  } as const;
 
   // Do not render the promo video on the josh-success page so it appears black.
   
@@ -128,7 +133,6 @@ export default function VideoBackground() {
         return true;
       } catch {
         // log the rejection to help debugging on devices/browsers
-        // eslint-disable-next-line no-console
         console.warn('promo-video.play() rejected (no message)');
         return false;
       }
@@ -138,11 +142,9 @@ export default function VideoBackground() {
       try {
         await resumeAudioContext();
         await videoEl.play();
-        // eslint-disable-next-line no-console
         console.debug('promo-video.play() succeeded');
         return true;
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.warn('promo-video.play() failed:', err);
         return false;
       }
@@ -177,6 +179,11 @@ export default function VideoBackground() {
     };
     videoEl.addEventListener('canplay', onCanPlay);
 
+    const onLoadedData = () => {
+      attemptPlayWithLog().catch(() => {});
+    };
+    videoEl.addEventListener('loadeddata', onLoadedData);
+
     // If still blocked, fallback to first touch
     touchHandler = () => {
       attemptPlayWithLog().catch(() => {
@@ -189,10 +196,16 @@ export default function VideoBackground() {
     };
     window.addEventListener('touchstart', touchHandler, { passive: true, once: true });
 
+    const handleOrientation = () => {
+      attemptPlayWithLog().catch(() => {});
+    };
+    window.addEventListener('orientationchange', handleOrientation);
+
     // If autoplay succeeded remove mobile overlay
     (async () => {
       const ok = await attemptPlayWithLog();
       if (ok) setOverlayActive(false);
+      setHasAttemptedPlay(true);
     })();
 
     // Additional event triggers that can help on iOS/Arc: try to play when
@@ -212,6 +225,7 @@ export default function VideoBackground() {
       try { videoEl.removeEventListener('canplay', onCanPlay); } catch {
         // ignore
       }
+      try { videoEl.removeEventListener('loadeddata', onLoadedData); } catch {}
       if (touchHandler) {
         window.removeEventListener('touchstart', touchHandler);
         touchHandler = null;
@@ -219,14 +233,12 @@ export default function VideoBackground() {
       try { document.removeEventListener('visibilitychange', handleVisibility); } catch {}
       try { window.removeEventListener('pageshow', handlePageShow); } catch {}
       try { window.removeEventListener('focus', handleFocus); } catch {}
+      try { window.removeEventListener('orientationchange', handleOrientation); } catch {}
     };
   }, [pathname]);
 
   // Do not render the promo video on the josh-success page so it appears black.
   if (pathname && pathname.startsWith("/auth/josh-success")) return null;
-  const srcUrl = typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_PROMO_URL || '/promo2.mp4') : '/promo2.mp4';
-
-
   const handleOverlayStart = async () => {
     try {
       const videoEl = document.getElementById('promo-video') as HTMLVideoElement | null;
@@ -262,8 +274,13 @@ export default function VideoBackground() {
     setOverlayActive(false);
   };
 
+  const showFallback = overlayActive || !hasAttemptedPlay;
+
   return (
-    <div className={`fixed inset-0 w-full h-full -z-10 ${isMobile ? '' : 'pointer-events-none'}`}>
+    <div
+      className={`fixed inset-0 w-full h-full -z-10 ${isMobile ? '' : 'pointer-events-none'}`}
+      style={showFallback ? fallbackBackground : undefined}
+    >
       <video
         id="promo-video"
         src={srcUrlState}
@@ -272,8 +289,12 @@ export default function VideoBackground() {
         loop
         playsInline
         preload="auto"
+        controls={false}
         className="w-full h-full object-cover"
         style={{ position: 'absolute', inset: 0 }}
+        poster=""
+        disablePictureInPicture
+        controlsList="nodownload noremoteplayback noplaybackrate"
       />
       {isMobile && overlayActive ? (
         <button
