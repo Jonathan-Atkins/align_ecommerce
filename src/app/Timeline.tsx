@@ -146,44 +146,42 @@ export default function Timeline() {
       </div>
       {/* Timeline Flexbox */}
       <div className="w-full max-w-5xl flex flex-col items-center">
+        {/* Headers Row (desktop) OR Mobile controls (buttons flanking the active label) */}
         {isMobile ? (
-          // Mobile arrows replaced with custom animated arrows (scoped styles in globals.css)
-          <div className="timeline-arrows w-full flex items-center justify-center mb-6" style={{ gap: 12 }}>
+          <div
+            className="timeline-arrows w-full flex items-center justify-between mb-6"
+            style={{ gap: 12, alignItems: 'center' }}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <div
-              className="center-con"
-              onTouchStart={onTouchStart}
-              onTouchMove={onTouchMove}
-              onTouchEnd={onTouchEnd}
+              role="button"
+              tabIndex={0}
+              aria-label="Previous step"
+              className="round left"
+              onClick={() => goPrev()}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPrev(); } }}
             >
-              <div className="round" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div id="cta" style={{ display: 'flex', alignItems: 'center' }}>
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    aria-label="Previous step"
-                    className={`arrow primera next`}
-                    onClick={() => {
-                      goPrev();
-                    }}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPrev(); } }}
-                  />
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    aria-label="Next step"
-                    className={`arrow segunda next`}
-                    onClick={() => {
-                      goNext();
-                    }}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goNext(); } }}
-                  />
-                </div>
-              </div>
+              <span className={`arrow primera`} />
+            </div>
+
+            <div style={{ flex: '0 1 auto', display: 'flex', justifyContent: 'center', padding: '0 8px' }}>
+              <div className="text-center text-white font-bold" style={{ fontSize: 16, maxWidth: 220 }}>{steps[selected].label}</div>
+            </div>
+
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Next step"
+              className="round right"
+              onClick={() => goNext()}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goNext(); } }}
+            >
+              <span className={`arrow segunda`} />
             </div>
           </div>
-        ) : null}
-        {/* Headers Row */}
-        {!isMobile ? (
+        ) : (
           <div className="w-full relative" style={{ marginTop: 27, marginBottom: 6, height: 32 }}>
             {steps.map((step, idx) => {
               const percent = (idx) / (steps.length - 1) * 100;
@@ -212,11 +210,6 @@ export default function Timeline() {
                 </span>
               );
             })}
-          </div>
-        ) : (
-          // Mobile: show active label only
-          <div style={{ marginTop: 18, marginBottom: 6, height: 'auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <div className="text-center text-white font-bold" style={{ fontSize: 16, maxWidth: 220 }}>{steps[selected].label}</div>
           </div>
         )}
         <div className="relative w-full flex items-center" style={{ minHeight: 70 }}>

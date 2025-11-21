@@ -379,7 +379,7 @@ export default function Navbar() {
                             className="ml-4 group"
                         >
                             <span className="sr-only">Menu</span>
-                            <div className="flex h-10 w-10 items-center justify-center rounded-3xl bg-white p-2 hover:bg-slate-200 transition">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-3xl bg-transparent p-2 transition">
                                 <div className="space-y-2">
                                     <span
                                         className={
