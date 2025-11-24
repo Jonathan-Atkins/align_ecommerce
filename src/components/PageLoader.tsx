@@ -338,10 +338,12 @@ export default function PageLoader() {
   return (
     <div className={`page-loader-overlay ${fadingOut ? "fade-out" : ""}`} role="status" aria-live="polite">
       {/* Phrase container: 'We' and 'Are' centered above the triangle */}
+      {/*
       <div className="loader-phrase" aria-hidden="true">
         <span className="phrase-word">We</span>
         <span className="phrase-word">Are</span>
       </div>
+      */}
 
       <div className="loader-triangle-7" aria-hidden="true">
         <img
@@ -355,9 +357,11 @@ export default function PageLoader() {
       </div>
 
       {/* Center label: 'Align' visible; the trailing 'ed' appears after 'Are' */}
+      {/*
       <div className="loader-centered-label" aria-hidden="true">
         <span className="loader-align">Align</span><span className="loader-ed">ed</span>
       </div>
+      */}
     </div>
   );
 }

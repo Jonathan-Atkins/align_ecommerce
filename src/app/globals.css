@@ -274,7 +274,7 @@ b, strong {
   justify-content: center;
   background: rgba(0,0,0,0.98); /* slightly translucent to better blend with video */
   z-index: 99999;
-  transition: opacity 700ms ease, visibility 700ms ease;
+  transition: opacity 400ms ease, visibility 200ms ease;
   opacity: 1;
   pointer-events: auto;
 }
@@ -299,7 +299,7 @@ b, strong {
   backdrop-filter: blur(10px);
   pointer-events: auto; /* continue to block interaction */
 }
-.loading-screen.fade-out { opacity: 0; pointer-events: none; transition: opacity 1.3s ease; }
+.loading-screen.fade-out { opacity: 0; pointer-events: none; transition: opacity 100ms ease; }
 
 /* Auto background goodbye animation (per example) */
 @keyframes goodbyeScreen {
@@ -310,7 +310,7 @@ b, strong {
 /* Run the goodbye animation automatically (delay controlled here) */
 .loading-screen {
   /* Longer background fade so it doesn't complete too quickly */
-  animation: goodbyeScreen 5.5s forwards 3.5s;
+  animation: goodbyeScreen 4.5s forwards 2s;
 }
 
 /* When this class is applied to the page root, help ensure background content
@@ -320,7 +320,7 @@ b, strong {
   visibility: hidden !important;
 }
 
-/* Triangle SVG loader animation (neon) */
+/* Loader image container (triangle SVG removed). */
 .loader-triangle-7 {
   width: 320px;
   height: 320px;
@@ -328,16 +328,10 @@ b, strong {
   align-items: center;
   justify-content: center;
   background: transparent;
-  --tr-duration: 3s; /* slightly faster than 4s for a snappier feel */
 }
 
-/* Keep triangle visually behind text to avoid overlap while preserving SVG animation */
+/* Keep loader image visually behind text to avoid overlap */
 .loader-triangle-7 { position: relative; z-index: 1000; }
-
-.loader-triangle-7 svg {
-  overflow: visible; /* ensure glow isn't clipped */
-  display: block;
-}
 
 /* Support the raster logo in place of the SVG triangle. Keep sizing, drop-shadow
    glow and a subtle pulse so the image integrates with the loader feel. */
@@ -348,28 +342,12 @@ b, strong {
   height: auto;
   max-width: 80%;
   filter: drop-shadow(0 0 8px rgba(57,255,20,0.45)) drop-shadow(0 0 18px rgba(57,255,20,0.18));
-  animation: logo-pulse var(--tr-duration) ease-in-out alternate infinite;
+  animation: logo-pulse 3s ease-in-out alternate infinite;
 }
 
 @keyframes logo-pulse {
   from { transform: scale(1); opacity: 1; }
   to   { transform: scale(1.02); opacity: 0.96; }
-}
-
-.loader-triangle-7 path.triangle-path {
-  stroke-dasharray: 0 226;
-  animation: anm-tr7-dash var(--tr-duration) ease-in-out alternate infinite;
-  stroke: #66FF00;
-  stroke-width: 10;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  stroke-opacity: 0.98;
-  filter: drop-shadow(0 0 8px rgba(57,255,20,0.45)) drop-shadow(0 0 18px rgba(57,255,20,0.18));
-}
-
-@keyframes anm-tr7-dash {
-  from { stroke-dasharray: 0 226; }
-  to { stroke-dasharray: 226 0; }
 }
 
 /* One-time fade-in for side words and 'ed' tail. They should play once when overlay mounts. */
@@ -683,14 +661,8 @@ b, strong {
     width: 220px;
     height: 220px;
   }
-  .loader-triangle-7 svg {
-    width: 220px;
-    height: 220px;
-  }
   /* Reduce stroke a touch on mobile for balance (does not change animation behavior) */
-  .loader-triangle-7 path.triangle-path {
-    stroke-width: 12;
-  }
+  /* triangle SVG removed; no stroke rules needed */
 
   /* Ensure the phrase is always clearly above the triangle on mobile */
   .loader-phrase {

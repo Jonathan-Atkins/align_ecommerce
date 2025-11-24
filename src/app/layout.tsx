@@ -9,6 +9,7 @@ import VideoBackground from "../components/VideoBackground";
 // `src/components/PageLoader.tsx` but is not used so it can be restored
 // later if desired.
 import CursorGlow from "../components/CursorGlow";
+import Footer from "./components/Footer";
 import PageCloakController from "../components/PageCloakController";
 
 const geistSans = Geist({
@@ -51,6 +52,7 @@ export default function RootLayout({
     <main className="w-full min-h-screen flex flex-col">{children}</main>
     {/* Cursor glow: mounted here so it covers navbar, hero, timeline only on landing page */}
     <CursorGlow />
+    <Footer />
   </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>

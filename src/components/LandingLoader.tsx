@@ -15,7 +15,7 @@ declare global {
 // `.loading-screen` background you provided.
 
 const INITIAL_POST_LOAD_MS = 10_000;
-const FADE_DURATION = 700;
+const FADE_DURATION = 100; // reduced fade duration (ms)
 const FAILSAFE_BUFFER_MS = 7_000;
 
 export default function LandingLoader() {
@@ -134,10 +134,12 @@ export default function LandingLoader() {
 
   return (
     <div className={`loading-screen page-loader-overlay ${fadingOut ? 'fade-out' : ''}`} role="status" aria-live="polite">
+      {/*
       <div className="loader-phrase" aria-hidden="true">
         <span className="phrase-word">We</span>
         <span className="phrase-word">Are</span>
       </div>
+      */}
 
       <div className="loader-triangle-7" aria-hidden="true">
         <img
@@ -150,9 +152,11 @@ export default function LandingLoader() {
         />
       </div>
 
+      {/*
       <div className="loader-centered-label" aria-hidden="true">
         <span className="loader-align">Align</span><span className="loader-ed">ed</span>
       </div>
+      */}
     </div>
   );
 }
