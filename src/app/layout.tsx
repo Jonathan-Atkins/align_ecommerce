@@ -3,7 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import VideoBackground from "../components/VideoBackground";
-import PageLoader from "../components/PageLoader";
+// PageLoader is intentionally not mounted here — loader will be handled
+// directly on the landing page to allow the landing content to render
+// behind the frosted-glass overlay. The original component remains in
+// `src/components/PageLoader.tsx` but is not used so it can be restored
+// later if desired.
 import CursorGlow from "../components/CursorGlow";
 import PageCloakController from "../components/PageCloakController";
 
@@ -35,9 +39,12 @@ export default function RootLayout({
           {/* Global page loader for route transitions */}
         {/* Controller to ensure the server-side cloak is removed on non-landing routes */}
         <PageCloakController />
-        <PageLoader />
+        {/* PageLoader is mounted on the landing page via `LandingLoader`.
+          The original `PageLoader` component file remains in the repo but
+          is intentionally not rendered here so the landing content can
+          appear behind the glass overlay. */}
   {/* Cloak wrapper: initially hidden server-side to prevent content flash.*/}
-  <div id="page-cloak" className="page-loader-hidden">
+  <div id="page-cloak">
     {/* Video background sits behind everything except the green info bar */}
     <VideoBackground />
     <Navbar />
