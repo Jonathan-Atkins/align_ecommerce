@@ -140,15 +140,14 @@ export default function LandingLoader() {
       </div>
 
       <div className="loader-triangle-7" aria-hidden="true">
-        <svg width="260px" height="260px" viewBox="0 0 226 200" version="1.1" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
-          <g id="Page-1" fill="none" fillRule="evenodd">
-            <g id="Artboard" fillRule="nonzero">
-              <g id="white-bg-logo">
-                <path d="M113,5.08219117 L4.28393801,197.5 L221.716062,197.5 L113,5.08219117 Z" id="Triangle-3-Copy" className="triangle-path" fill="none" stroke="#39FF14" strokeWidth="14" strokeLinejoin="round" strokeLinecap="round" />
-              </g>
-            </g>
-          </g>
-        </svg>
+        <img
+          src="/align_vegas_logo.png"
+          alt="Align Vegas logo"
+          width={260}
+          height={260}
+          className="loader-logo"
+          style={{ display: 'block' }}
+        />
       </div>
 
       <div className="loader-centered-label" aria-hidden="true">
