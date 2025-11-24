@@ -339,6 +339,23 @@ b, strong {
   display: block;
 }
 
+/* Support the raster logo in place of the SVG triangle. Keep sizing, drop-shadow
+   glow and a subtle pulse so the image integrates with the loader feel. */
+.loader-triangle-7 img,
+.loader-triangle-7 .loader-logo {
+  display: block;
+  width: 260px;
+  height: auto;
+  max-width: 80%;
+  filter: drop-shadow(0 0 8px rgba(57,255,20,0.45)) drop-shadow(0 0 18px rgba(57,255,20,0.18));
+  animation: logo-pulse var(--tr-duration) ease-in-out alternate infinite;
+}
+
+@keyframes logo-pulse {
+  from { transform: scale(1); opacity: 1; }
+  to   { transform: scale(1.02); opacity: 0.96; }
+}
+
 .loader-triangle-7 path.triangle-path {
   stroke-dasharray: 0 226;
   animation: anm-tr7-dash var(--tr-duration) ease-in-out alternate infinite;
