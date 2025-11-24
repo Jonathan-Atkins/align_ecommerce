@@ -283,6 +283,36 @@ b, strong {
   pointer-events: none;
 }
 
+/* Loading-screen style (landing overlay). Matches the example you provided */
+.loading-screen {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  pointer-events: auto; /* continue to block interaction */
+}
+.loading-screen.fade-out { opacity: 0; pointer-events: none; transition: opacity 1.3s ease; }
+
+/* Auto background goodbye animation (per example) */
+@keyframes goodbyeScreen {
+  from { opacity: 1; transform: translateZ(0); }
+  to { opacity: 0; transform: translateZ(0); }
+}
+
+/* Run the goodbye animation automatically (delay controlled here) */
+.loading-screen {
+  /* Longer background fade so it doesn't complete too quickly */
+  animation: goodbyeScreen 5.5s forwards 3.5s;
+}
+
 /* When this class is applied to the page root, help ensure background content
    is not visible (defense-in-depth). The overlay itself sits above everything
    and will prevent interaction while visible. */
