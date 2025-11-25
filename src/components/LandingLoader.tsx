@@ -78,11 +78,11 @@ export default function LandingLoader() {
       }
       sessionStorage.setItem('alignPageLoaderShown', '1');
       // keep a quick in-memory flag too for compatibility
-      (window as any).__alignPageLoaderShown = true;
+      window.__alignPageLoaderShown = true;
     } catch {
       // fall back to in-memory flag if sessionStorage isn't available
-      if ((window as unknown as { __alignPageLoaderShown?: boolean }).__alignPageLoaderShown) return;
-      (window as unknown as { __alignPageLoaderShown?: boolean }).__alignPageLoaderShown = true;
+      if ((window as Window).__alignPageLoaderShown) return;
+      (window as Window).__alignPageLoaderShown = true;
     }
     setMounted(true);
     setIsLoading(true);
