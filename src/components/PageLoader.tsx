@@ -18,9 +18,10 @@ function findAnchor(el: Element | null): HTMLAnchorElement | null {
 }
 
 const LANDING_PATH = "/";
-const INITIAL_POST_LOAD_MS = 10_000; // 10s wait after landing page load + video readiness
-const FADE_DURATION = 700;
-const FAILSAFE_BUFFER_MS = 7_000; // keep failsafe comfortably beyond the post-load wait
+const INITIAL_POST_LOAD_MS = process.env.NODE_ENV === 'development' ? 1000 : 10_000; // 10s wait after landing page load + video readiness
+const FADE_DURATION = 200;
+const DEFAULT_FAILSAFE_MS = 7_000; // keep failsafe comfortably beyond the post-load wait
+const FAILSAFE_BUFFER_MS = process.env.NODE_ENV === 'development' ? 2500 : DEFAULT_FAILSAFE_MS;
 
 export default function PageLoader() {
   const [isLoading, setIsLoading] = useState(false);
@@ -82,13 +83,15 @@ export default function PageLoader() {
       return;
     }
 
-    // If we've already shown the loader in this tab (memory flag), don't run again
-    // Note: we intentionally use an in-memory window flag so a full page refresh
-    // will still show the loader again (the flag is cleared on refresh).
-    if (window.__alignPageLoaderShown) return;
-
-    // Mark as shown for this session/tab immediately so navigations don't re-trigger
-    window.__alignPageLoaderShown = true;
+    // If we've already shown the loader in this session (sessionStorage), skip showing again.
+    try {
+      if (sessionStorage.getItem('alignPageLoaderShown')) return;
+      sessionStorage.setItem('alignPageLoaderShown', '1');
+      (window as unknown as { __alignPageLoaderShown?: boolean }).__alignPageLoaderShown = true;
+    } catch {
+      if ((window as unknown as { __alignPageLoaderShown?: boolean }).__alignPageLoaderShown) return;
+      (window as unknown as { __alignPageLoaderShown?: boolean }).__alignPageLoaderShown = true;
+    }
 
     setMounted(true);
     setIsLoading(true);
@@ -97,16 +100,19 @@ export default function PageLoader() {
     let videoReady = false;
 
     const tryFinish = () => {
+      console.debug('[PageLoader] tryFinish? windowLoaded=', windowLoaded, 'videoReady=', videoReady);
       if (!(windowLoaded && videoReady)) return;
       if (loadTimerRef.current) {
         window.clearTimeout(loadTimerRef.current);
       }
+      console.debug('[PageLoader] scheduling post-load hide in', INITIAL_POST_LOAD_MS, 'ms');
       loadTimerRef.current = window.setTimeout(() => {
         queueHide();
       }, INITIAL_POST_LOAD_MS);
     };
 
     const onWindowLoad = () => {
+      console.debug('[PageLoader] window.load');
       windowLoaded = true;
       tryFinish();
     };
@@ -115,13 +121,22 @@ export default function PageLoader() {
 
     const videoEl = document.getElementById("promo-video") || document.querySelector("video");
     if (videoEl) {
+      console.debug('[PageLoader] found promo video; attaching listeners');
       const onVideoReady = () => {
+        console.debug('[PageLoader] video ready (canplay/loadeddata)');
         videoReady = true;
+        tryFinish();
+      };
+      const onVideoError = (ev?: Event) => {
+        console.warn('[PageLoader] video error', ev);
+        videoReady = true; // treat error as ready so loader won't hang
         tryFinish();
       };
       videoEl.addEventListener("canplaythrough", onVideoReady, { once: true });
       videoEl.addEventListener("loadeddata", onVideoReady, { once: true });
+      videoEl.addEventListener("error", onVideoError, { once: true });
     } else {
+      console.debug('[PageLoader] no promo video element found; marking videoReady');
       videoReady = true;
       tryFinish();
     }
@@ -129,8 +144,12 @@ export default function PageLoader() {
     if (failSafeTimerRef.current) {
       window.clearTimeout(failSafeTimerRef.current);
     }
+    console.debug('[PageLoader] setting failsafe for', INITIAL_POST_LOAD_MS + FAILSAFE_BUFFER_MS, 'ms');
     failSafeTimerRef.current = window.setTimeout(
-      () => queueHide(),
+      () => {
+        console.warn('[PageLoader] failsafe triggered');
+        queueHide();
+      },
       INITIAL_POST_LOAD_MS + FAILSAFE_BUFFER_MS,
     );
 
@@ -149,17 +168,17 @@ export default function PageLoader() {
 
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const root = document.getElementById("page-cloak");
+    // const root = document.getElementById("page-cloak"); // unused; kept for reference
 
     if (isLoading) {
       setFadingOut(false);
       setMounted(true);
-      if (root) root.classList.add("page-loader-hidden");
+      // Do not hide the page root; keep content visible so the overlay can
+      // present a frosted-glass backdrop.
       return;
     }
 
     if (mounted) {
-      if (root) root.classList.remove("page-loader-hidden");
       setFadingOut(true);
       // Log how long the loader was active up until the fade starts
       try {

@@ -266,19 +266,24 @@ b, strong {
 }
 
 /* Global page loader overlay styles */
-.page-loader-overlay {
+.page-loader-overlay,
+.loading-screen {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.98); /* slightly translucent to better blend with video */
+  /* frosted translucent background shared by both overlay variants */
+  background-color: rgba(255,255,255,0.45);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   z-index: 99999;
   transition: opacity 400ms ease, visibility 200ms ease;
   opacity: 1;
   pointer-events: auto;
 }
-.page-loader-overlay.fade-out {
+.page-loader-overlay.fade-out,
+.loading-screen.fade-out {
   opacity: 0;
   pointer-events: none;
 }
@@ -535,6 +540,11 @@ b, strong {
   .cursor-glow { display: none !important; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  /* Respect reduced motion preference by hiding the cursor glow */
+  .cursor-glow { display: none !important; }
+}
+
 
 /* Typewriter empty-state animation (converted from provided SCSS) */
 .typewriter {
@@ -763,5 +773,29 @@ b, strong {
   .timeline-arrows .round:active { transform: translateY(0); }
   .timeline-arrows .round:hover .arrow::before { animation: chevronPulse 900ms ease-in-out infinite }
   .timeline-arrows .round:focus-within { outline: 3px solid rgba(102,255,0,0.12); }
+
+
+
+/* Glow style for the word 'Align' inserted by AlignGlow component */
+.glow-word {
+  color: #A6C07A;
+  display: inline-block;
+  text-decoration: none;
+  animation: alignGlow 2.5s ease-in-out infinite;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes alignGlow {
+  0% {
+    text-shadow: 0 0 4px rgba(166,192,122,0.6), 0 0 8px rgba(166,192,122,0.35);
+    transform: translateZ(0);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(166,192,122,0.95), 0 0 20px rgba(166,192,122,0.6);
+  }
+  100% {
+    text-shadow: 0 0 4px rgba(166,192,122,0.6), 0 0 8px rgba(166,192,122,0.35);
+  }
+}
 
 

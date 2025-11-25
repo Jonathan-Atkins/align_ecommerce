@@ -10,6 +10,7 @@ import VideoBackground from "../components/VideoBackground";
 // later if desired.
 import CursorGlow from "../components/CursorGlow";
 import Footer from "./components/Footer";
+import AlignGlow from "./components/AlignGlow";
 import PageCloakController from "../components/PageCloakController";
 
 const geistSans = Geist({
@@ -44,7 +45,7 @@ export default function RootLayout({
           The original `PageLoader` component file remains in the repo but
           is intentionally not rendered here so the landing content can
           appear behind the glass overlay. */}
-  {/* Cloak wrapper: initially hidden server-side to prevent content flash.*/}
+  {/* Cloak wrapper: do NOT hide the page root server-side. Keep content visible so overlays can be frosted/glass. */}
   <div id="page-cloak">
     {/* Video background sits behind everything except the green info bar */}
     <VideoBackground />
@@ -52,6 +53,7 @@ export default function RootLayout({
     <main className="w-full min-h-screen flex flex-col">{children}</main>
     {/* Cursor glow: mounted here so it covers navbar, hero, timeline only on landing page */}
     <CursorGlow />
+    <AlignGlow />
     <Footer />
   </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
