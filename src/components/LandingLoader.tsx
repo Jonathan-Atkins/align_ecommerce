@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 declare global {
   interface Window {
@@ -14,9 +15,10 @@ declare global {
 // and renders the same triangle + words inside an overlay that uses the
 // `.loading-screen` background you provided.
 
-const INITIAL_POST_LOAD_MS = 10_000;
-const FADE_DURATION = 700;
-const FAILSAFE_BUFFER_MS = 7_000;
+const INITIAL_POST_LOAD_MS = process.env.NODE_ENV === 'development' ? 1000 : 10_000;
+const FADE_DURATION = 100; // reduced fade duration (ms)
+const DEFAULT_FAILSAFE_MS = 7_000;
+const FAILSAFE_BUFFER_MS = process.env.NODE_ENV === 'development' ? 2500 : DEFAULT_FAILSAFE_MS;
 
 export default function LandingLoader() {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,9 +65,25 @@ export default function LandingLoader() {
     // Only run on initial mount for the landing page. Respect the in-memory
     // session flag so we don't show repeatedly in the same tab.
     if (typeof window === 'undefined') return;
-    if (window.__alignPageLoaderShown) return;
-
-    window.__alignPageLoaderShown = true;
+    // If we've already shown the loader in this tab/session, skip.
+    try {
+      if (sessionStorage.getItem('alignPageLoaderShown')) {
+        // If the loader was already shown this session, remove the server-
+        // rendered initial loader immediately so the page doesn't stay masked.
+        try {
+          const initial = document.getElementById('initial-loader');
+          if (initial) initial.parentElement?.removeChild(initial);
+        } catch {}
+        return;
+      }
+      sessionStorage.setItem('alignPageLoaderShown', '1');
+      // keep a quick in-memory flag too for compatibility
+      window.__alignPageLoaderShown = true;
+    } catch {
+      // fall back to in-memory flag if sessionStorage isn't available
+      if ((window as Window).__alignPageLoaderShown) return;
+      (window as Window).__alignPageLoaderShown = true;
+    }
     setMounted(true);
     setIsLoading(true);
 
@@ -73,12 +91,15 @@ export default function LandingLoader() {
     let videoReady = false;
 
     const tryFinish = () => {
+      console.debug('[LandingLoader] tryFinish? windowLoaded=', windowLoaded, 'videoReady=', videoReady);
       if (!(windowLoaded && videoReady)) return;
       if (loadTimerRef.current) window.clearTimeout(loadTimerRef.current);
+      console.debug('[LandingLoader] scheduling post-load hide in', INITIAL_POST_LOAD_MS, 'ms');
       loadTimerRef.current = window.setTimeout(() => queueHide(), INITIAL_POST_LOAD_MS);
     };
 
     const onWindowLoad = () => {
+      console.debug('[LandingLoader] window.load');
       windowLoaded = true;
       tryFinish();
     };
@@ -86,19 +107,33 @@ export default function LandingLoader() {
 
     const videoEl = document.getElementById('promo-video') || document.querySelector('video');
     if (videoEl) {
+      console.debug('[LandingLoader] found promo video element; attaching listeners');
       const onVideoReady = () => {
+        console.debug('[LandingLoader] video ready (canplay/loadeddata)');
+        videoReady = true;
+        tryFinish();
+      };
+      const onVideoError = (ev?: Event) => {
+        console.warn('[LandingLoader] video error', ev);
+        // Treat video error as ready so the loader won't hang waiting for media that failed to load
         videoReady = true;
         tryFinish();
       };
       videoEl.addEventListener('canplaythrough', onVideoReady, { once: true });
       videoEl.addEventListener('loadeddata', onVideoReady, { once: true });
+      videoEl.addEventListener('error', onVideoError, { once: true });
     } else {
+      console.debug('[LandingLoader] no promo video element found; marking videoReady');
       videoReady = true;
       tryFinish();
     }
 
     if (failSafeTimerRef.current) window.clearTimeout(failSafeTimerRef.current);
-    failSafeTimerRef.current = window.setTimeout(() => queueHide(), INITIAL_POST_LOAD_MS + FAILSAFE_BUFFER_MS);
+    console.debug('[LandingLoader] setting failsafe for', INITIAL_POST_LOAD_MS + FAILSAFE_BUFFER_MS, 'ms');
+    failSafeTimerRef.current = window.setTimeout(() => {
+      console.warn('[LandingLoader] failsafe triggered');
+      queueHide();
+    }, INITIAL_POST_LOAD_MS + FAILSAFE_BUFFER_MS);
 
     return () => {
       window.removeEventListener('load', onWindowLoad);
@@ -122,6 +157,32 @@ export default function LandingLoader() {
 
     if (mounted) {
       setFadingOut(true);
+
+      // Fade out any server-rendered initial loader overlay first (if present),
+      // then remove it from the DOM after the fade so the client overlay does
+      // not duplicate visuals. Both will use the same fade timing so they
+      // disappear simultaneously.
+      try {
+        const initial = typeof document !== 'undefined' ? document.getElementById('initial-loader') : null;
+        if (initial) {
+          const overlay = initial.querySelector('.page-loader-overlay');
+          if (overlay) overlay.classList.add('fade-out');
+          const timer = window.setTimeout(() => {
+            try { initial.parentElement?.removeChild(initial); } catch {}
+          }, FADE_DURATION + 20);
+          // Also remove the client overlay after same duration
+          const fadeTimer = window.setTimeout(() => {
+            setMounted(false);
+            setFadingOut(false);
+            window.clearTimeout(timer);
+          }, FADE_DURATION + 20);
+          return () => {
+            window.clearTimeout(fadeTimer);
+            window.clearTimeout(timer);
+          };
+        }
+      } catch {}
+
       const fadeTimer = window.setTimeout(() => {
         setMounted(false);
         setFadingOut(false);
@@ -132,12 +193,14 @@ export default function LandingLoader() {
 
   if (!mounted) return null;
 
-  return (
+  const overlay = (
     <div className={`loading-screen page-loader-overlay ${fadingOut ? 'fade-out' : ''}`} role="status" aria-live="polite">
+      {/*
       <div className="loader-phrase" aria-hidden="true">
         <span className="phrase-word">We</span>
         <span className="phrase-word">Are</span>
       </div>
+      */}
 
       <div className="loader-triangle-7" aria-hidden="true">
         <img
@@ -150,9 +213,19 @@ export default function LandingLoader() {
         />
       </div>
 
+      {/*
       <div className="loader-centered-label" aria-hidden="true">
         <span className="loader-align">Align</span><span className="loader-ed">ed</span>
       </div>
+      */}
     </div>
   );
+
+  // Render the overlay as a portal into document.body so it is not
+  // affected by the `visibility: hidden` applied to `#page-cloak`.
+  if (typeof document !== "undefined" && document.body) {
+    return createPortal(overlay, document.body);
+  }
+
+  return overlay;
 }

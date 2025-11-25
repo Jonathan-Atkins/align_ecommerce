@@ -10,22 +10,21 @@ export default function CursorGlow() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    // Only enable on the landing page (root path)
-    if (pathname !== '/') {
-      el.style.display = 'none';
-      return;
-    }
-
     // Disable on touch/coarse pointer devices (mobile/tablet)
     const isCoarse = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
     if (isCoarse || 'ontouchstart' in window) {
       el.style.display = 'none';
       return;
     }
-
-    // Respect prefers-reduced-motion (no motion changes if user prefers reduced motion)
+    // Respect prefers-reduced-motion: hide glow for users who prefer reduced motion
     const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      el.style.display = 'none';
+      return;
+    }
+
+    // Ensure element is visible (CSS keeps it off-screen until pointer moves)
+    el.style.display = '';
 
     function onPointerMove(e: PointerEvent) {
       if (!el) return;
@@ -37,7 +36,6 @@ export default function CursorGlow() {
       // No requestAnimationFrame smoothing — user requested exact tracking
     }
 
-    // If reduced motion is requested we still track but avoid any CSS transitions (none are set)
     window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     return () => {
