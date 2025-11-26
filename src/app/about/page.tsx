@@ -60,13 +60,13 @@ export default function Page() {
         }
       `}</style>
 
-      <div className="text-center text-white p-8">
+      <div className="text-center text-white px-8 py-16 max-w-5xl mx-auto flex flex-col items-center">
         <div className="title-wrap">
           <h1 className="text-4xl font-bold fadeInUp-animation">About Us</h1>
           <div className="horizontal-line" aria-hidden="true" />
         </div>
 
-        <p className="mt-12 text-lg opacity-80 fadeInUp-animation fadeInUp-delay max-w-2xl mx-auto">
+        <p className="mt-16 text-2xl opacity-80 fadeInUp-animation fadeInUp-delay max-w-4xl mx-auto">
           Align eCommerce is an omni-channel, multi solutions, payment provider specializing in card non present, higher risk merchant services. With over 10 years of experience, and 8 different unique banking relationships, partnering with Align has proven to increase sales and revenue. Our One-on-One Success Plans will not only ensure you have enough processing capacity to operate comfortably but will also ensure you have the proper procedures in place to protect your day-to-day business operations.
         </p>
       </div>

@@ -28,7 +28,7 @@ const labels = [
 ];
 
 // REQUIRED VALUES
-const PANEL_WIDTH = 300;
+const PANEL_WIDTH = 260;
 const PANEL_HEIGHT = 187;
 const GAP = 20; // FIXED gap between faces
 
@@ -48,31 +48,32 @@ export default function IndustryServed() {
   }, [total]);
 
   return (
-    <div className="carousel-container">
-      <div
-        className="carousel"
-        style={{
-          ["--radius" as any]: `${radius}px`,
-          ["--angle" as any]: `${angle}deg`,
-        }}
-      >
-        {images.map((src, i) => (
-          <div
-            className="carousel-face"
-            key={i}
-            style={{ ["--i" as any]: i }}
-          >
-            <img src={src} alt={labels[i]} />
-            <div className="carousel-label">{labels[i]}</div>
-          </div>
-        ))}
-      </div>
-
-      <style>{`
+    <div>
+      <h2 className="text-3xl font-bold text-center mt-24 mb-40 text-white">Industries Served</h2>
+      <div className="carousel-container">
+        <div
+          className="carousel"
+          style={{
+            ["--radius" as any]: `${radius}px`,
+            ["--angle" as any]: `${angle}deg`,
+          }}
+        >
+          {images.map((src, i) => (
+            <div
+              className="carousel-face"
+              key={i}
+              style={{ ["--i" as any]: i }}
+            >
+              <img src={src} alt={labels[i]} />
+              <div className="carousel-label">{labels[i]}</div>
+            </div>
+          ))}
+        </div>
+        <style>{`
 /* Outer container */
 .carousel-container {
-  width: ${PANEL_WIDTH + 40}px;
-  height: ${PANEL_HEIGHT + 40}px;
+  width: ${PANEL_WIDTH + 100}px;
+  height: ${PANEL_HEIGHT + 100}px;
   margin: 60px auto;
   perspective: 1200px;
 }
@@ -136,6 +137,7 @@ export default function IndustryServed() {
   }
 }
       `}</style>
+      </div>
     </div>
   );
 }
