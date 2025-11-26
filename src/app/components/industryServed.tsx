@@ -61,7 +61,7 @@ export default function IndustryServed() {
           {images.map((src, i) => (
             <div
               className="carousel-face"
-              key={labels[i]}
+              key={`${labels[i]}-${i}`}
               style={{ "--i": i } as React.CSSProperties}
             >
               <img src={src} alt={labels[i]} />
