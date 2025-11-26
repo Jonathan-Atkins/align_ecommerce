@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 
 const images = [
   "/WebDesign.jpg",
@@ -33,6 +33,8 @@ const PANEL_HEIGHT = 187;
 const GAP = 20; // FIXED gap between faces
 
 export default function IndustryServed() {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setMounted(true); }, []);
   const total = images.length;
 
   // Angle per face
@@ -47,10 +49,14 @@ export default function IndustryServed() {
     return fullFace / (2 * Math.tan(theta / 2));
   }, [total]);
 
+  if (!mounted) return null;
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center mt-24 mb-40 text-white">Industries Served</h2>
-      <div className="carousel-container">
+          <div className="title-wrap">
+            <h2 className="text-3xl font-bold text-center mt-0 mb-0 text-white" style={{ marginLeft: '40px' }}>Industries Served</h2>
+            <div className="horizontal-line" aria-hidden="true" style={{ marginLeft: '40px' }} />
+          </div>
+      <div className="carousel-container mx-auto " style={{ marginLeft: '8px' }}>
         <div
           className="carousel"
           style={{
@@ -76,6 +82,12 @@ export default function IndustryServed() {
   height: ${PANEL_HEIGHT + 100}px;
   margin: 60px auto;
   perspective: 1200px;
+  margin-top: 130px;
+  margin-bottom: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 /* Rotating ring */

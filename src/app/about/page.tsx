@@ -32,7 +32,7 @@ export default function Page() {
         }
 
         /* underline-style horizontal line that grows from center */
-        .title-wrap { position: relative; display: inline-block; }
+        .title-wrap { position: relative; display: inline-block; j }
 
         .horizontal-line {
           position: absolute;
@@ -60,7 +60,7 @@ export default function Page() {
         }
       `}</style>
 
-      <div className="text-center text-white px-8 py-16 max-w-5xl mx-auto flex flex-col items-center">
+      <div className="flex flex-col items-center justify-center text-center text-white px-8 py-16 max-w-5xl mx-auto">
         <div className="title-wrap">
           <h1 className="text-4xl font-bold fadeInUp-animation">About Us</h1>
           <div className="horizontal-line" aria-hidden="true" />
@@ -70,7 +70,7 @@ export default function Page() {
           Align eCommerce is an omni-channel, multi solutions, payment provider specializing in card non present, higher risk merchant services. With over 10 years of experience, and 8 different unique banking relationships, partnering with Align has proven to increase sales and revenue. Our One-on-One Success Plans will not only ensure you have enough processing capacity to operate comfortably but will also ensure you have the proper procedures in place to protect your day-to-day business operations.
         </p>
       </div>
-      <div className="flex justify-center mt-16">
+      <div className="flex flex-col items-center justify-center mt-16 w-full">
         <IndustryServed />
       </div>
     </main>
