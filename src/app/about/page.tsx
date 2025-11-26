@@ -1,11 +1,12 @@
-"use client";
 
+"use client";
 import React from "react";
+import IndustryServed from "../components/industryServed";
 
 export default function Page() {
   return (
     <main
-      className="w-full min-h-screen flex items-start justify-center"
+      className="w-full min-h-screen flex flex-col"
       style={{ paddingTop: '40px', background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)' }}
     >
       <style>{`
@@ -68,6 +69,9 @@ export default function Page() {
         <p className="mt-12 text-lg opacity-80 fadeInUp-animation fadeInUp-delay max-w-2xl mx-auto">
           Align eCommerce is an omni-channel, multi solutions, payment provider specializing in card non present, higher risk merchant services. With over 10 years of experience, and 8 different unique banking relationships, partnering with Align has proven to increase sales and revenue. Our One-on-One Success Plans will not only ensure you have enough processing capacity to operate comfortably but will also ensure you have the proper procedures in place to protect your day-to-day business operations.
         </p>
+      </div>
+      <div className="flex justify-center mt-16">
+        <IndustryServed />
       </div>
     </main>
   );

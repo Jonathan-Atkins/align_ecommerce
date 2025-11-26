@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 declare global {
   interface Window {
     __alignPageLoaderShown?: boolean;
+    __lovableReady?: boolean;
   }
 }
 
@@ -84,11 +85,13 @@ export default function LandingLoader() {
       if ((window as Window).__alignPageLoaderShown) return;
       (window as Window).__alignPageLoaderShown = true;
     }
+    console.log('I am LandingLoader');
     setMounted(true);
     setIsLoading(true);
 
     let windowLoaded = false;
     let videoReady = false;
+    let lovableReadyHandler: (() => void) | null = null;
 
     const tryFinish = () => {
       console.debug('[LandingLoader] tryFinish? windowLoaded=', windowLoaded, 'videoReady=', videoReady);
@@ -122,6 +125,22 @@ export default function LandingLoader() {
       videoEl.addEventListener('canplaythrough', onVideoReady, { once: true });
       videoEl.addEventListener('loadeddata', onVideoReady, { once: true });
       videoEl.addEventListener('error', onVideoError, { once: true });
+      // Also listen for a normalized "lovable-ready" signal if an external
+      // provider (lovable.dev) dispatches it. Treat it as equivalent to
+      // the promo video being ready so the loader can finish.
+      lovableReadyHandler = () => {
+        console.debug('[LandingLoader] received lovable-ready');
+        videoReady = true;
+        tryFinish();
+      };
+      const winFlag = (window as unknown as { __lovableReady?: boolean }).__lovableReady;
+      if (winFlag) {
+        // If the adapter already marked the global flag, treat as ready
+        lovableReadyHandler();
+      } else {
+        window.addEventListener('lovable-ready', lovableReadyHandler, { once: true });
+        window.addEventListener('lovableReady', lovableReadyHandler, { once: true });
+      }
     } else {
       console.debug('[LandingLoader] no promo video element found; marking videoReady');
       videoReady = true;
@@ -137,6 +156,11 @@ export default function LandingLoader() {
 
     return () => {
       window.removeEventListener('load', onWindowLoad);
+      if (lovableReadyHandler) {
+        try { window.removeEventListener('lovable-ready', lovableReadyHandler); } catch {}
+        try { window.removeEventListener('lovableReady', lovableReadyHandler); } catch {}
+        lovableReadyHandler = null;
+      }
       if (loadTimerRef.current) {
         window.clearTimeout(loadTimerRef.current);
         loadTimerRef.current = null;
@@ -202,8 +226,8 @@ export default function LandingLoader() {
       </div>
       */}
 
-      <div className="loader-triangle-7" aria-hidden="true">
-        <img
+      <div className="loader-logo-wrapper" aria-hidden="true">
+          <img
           src="/align_vegas_logo.png"
           alt="Align Vegas logo"
           width={260}
