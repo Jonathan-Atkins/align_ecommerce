@@ -32,6 +32,15 @@ export default function LandingLoader() {
 
   const MIN_ACTIVE_MS = 6_500;
 
+  const hideInitialLoader = () => {
+    const initial = typeof document !== 'undefined' ? document.getElementById('initial-loader') : null;
+    if (!initial) return;
+
+    initial.classList.add('initial-loader-hidden');
+    const overlay = initial.querySelector('.page-loader-overlay');
+    if (overlay) overlay.classList.add('fade-out');
+  };
+
   const queueHide = () => {
     if (hideTimerRef.current) {
       window.clearTimeout(hideTimerRef.current);
@@ -41,20 +50,24 @@ export default function LandingLoader() {
       const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
       if (startTimeRef.current === null) {
         setIsLoading(false);
+        hideInitialLoader();
         return;
       }
       const elapsed = now - startTimeRef.current;
       if (elapsed >= MIN_ACTIVE_MS) {
         setIsLoading(false);
+        hideInitialLoader();
       } else {
         const remaining = Math.max(0, Math.ceil(MIN_ACTIVE_MS - elapsed));
         hideTimerRef.current = window.setTimeout(() => {
           hideTimerRef.current = null;
           setIsLoading(false);
+          hideInitialLoader();
         }, remaining);
       }
     } catch {
       setIsLoading(false);
+      hideInitialLoader();
     }
   };
 
@@ -73,7 +86,7 @@ export default function LandingLoader() {
         // rendered initial loader immediately so the page doesn't stay masked.
         try {
           const initial = document.getElementById('initial-loader');
-          if (initial) initial.parentElement?.removeChild(initial);
+          if (initial) hideInitialLoader();
         } catch {}
         return;
       }
@@ -191,18 +204,13 @@ export default function LandingLoader() {
         if (initial) {
           const overlay = initial.querySelector('.page-loader-overlay');
           if (overlay) overlay.classList.add('fade-out');
-          const timer = window.setTimeout(() => {
-            try { initial.parentElement?.removeChild(initial); } catch {}
-          }, FADE_DURATION + 20);
-          // Also remove the client overlay after same duration
           const fadeTimer = window.setTimeout(() => {
+            hideInitialLoader();
             setMounted(false);
             setFadingOut(false);
-            window.clearTimeout(timer);
           }, FADE_DURATION + 20);
           return () => {
             window.clearTimeout(fadeTimer);
-            window.clearTimeout(timer);
           };
         }
       } catch {}

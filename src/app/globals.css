@@ -338,6 +338,21 @@ b, strong {
   visibility: hidden !important;
 }
 
+/* When the initial server-rendered loader has finished fading, keep it
+   non-interactive and invisible so React reconciliation won't collide with
+   manual DOM removals. */
+#initial-loader.initial-loader-hidden,
+.initial-loader-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.initial-loader-hidden .page-loader-overlay {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Loader logo wrapper (replaces the old triangle container). */
 .loader-logo-wrapper {
   width: 320px;
