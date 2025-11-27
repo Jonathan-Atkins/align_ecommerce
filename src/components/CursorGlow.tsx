@@ -11,20 +11,19 @@ export default function CursorGlow() {
     const el = ref.current;
     if (!el) return;
     // Disable on touch/coarse pointer devices (mobile/tablet)
-    const isCoarse = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-    if (isCoarse || 'ontouchstart' in window) {
-      el.style.display = 'none';
-      return;
-    }
-    // Respect prefers-reduced-motion: hide glow for users who prefer reduced motion
-    const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
+    const isCoarse = typeof window !== 'undefined'
+      && window.matchMedia
+      && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
+    if (isCoarse) {
       el.style.display = 'none';
       return;
     }
 
-    // Ensure element is visible (CSS keeps it off-screen until pointer moves)
+    // Ensure element is visible and placed on-screen immediately
     el.style.display = '';
+    const initialX = window.innerWidth / 2 - 50; // half glow size
+    const initialY = window.innerHeight / 2 - 50;
+    el.style.transform = `translate(${initialX}px, ${initialY}px)`;
 
     function onPointerMove(e: PointerEvent) {
       if (!el) return;
