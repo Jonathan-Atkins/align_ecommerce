@@ -33,7 +33,7 @@ const MissionHighlight: React.FC = () => {
     const triggers = elements.map((el) =>
       ScrollTrigger.create({
         trigger: el,
-        start: "top 60%",
+        start: "top 90%",
         onEnter: () => el.classList.add("active"),
         onLeaveBack: () => el.classList.remove("active"), // ← NEW: unhighlight when scrolling up
       })
@@ -45,7 +45,7 @@ const MissionHighlight: React.FC = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="-mt-8 text-white">
+    <div ref={containerRef} className="-mt-1 text-white">
       <main className="mission-main -mt-8">
         {/* Section 1 */}
         <div className="title-wrap">
