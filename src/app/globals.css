@@ -286,7 +286,6 @@ b, strong {
 .page-loader-overlay.fade-out,
 .loading-screen.fade-out {
   opacity: 0;
-  pointer-events: none;
 }
 
 /* When the overlay fades, smoothly transition the logo to a neutral
@@ -318,6 +317,7 @@ b, strong {
   pointer-events: auto; /* continue to block interaction */
 }
 .loading-screen.fade-out { opacity: 0; pointer-events: none; transition: opacity 100ms ease; }
+.loading-screen.fade-out { opacity: 0; transition: opacity 100ms ease; }
 
 /* Auto background goodbye animation (per example) */
 @keyframes goodbyeScreen {

@@ -52,7 +52,7 @@ export default function IndustryServed() {
   if (!mounted) return null;
   return (
     <div>
-          <div className="title-wrap">
+          <div className="title-wrap"style={{ marginLeft: '6px' }}>
             <h2 className="text-3xl font-bold text-center mt-0 mb-0 text-white" style={{ marginLeft: '40px' }}>Industries Served</h2>
             <div className="horizontal-line" aria-hidden="true" style={{ marginLeft: '40px' }} />
           </div>

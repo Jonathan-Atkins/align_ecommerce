@@ -62,7 +62,7 @@ export default function Page() {
 
       <div className="flex flex-col items-center justify-center text-center text-white px-8 py-16 max-w-5xl mx-auto">
         <div className="title-wrap">
-          <h1 className="text-4xl font-bold fadeInUp-animation">About Us</h1>
+          <h1 className="text-4xl font-bold fadeInUp-animation" style={{ marginLeft: '2px' }}>About Us</h1>
           <div className="horizontal-line" aria-hidden="true" />
         </div>
 
