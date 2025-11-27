@@ -1,3 +1,10 @@
+/* Custom highlight color for MissionHighlight */
+.text-highlight {
+  background: linear-gradient(90deg, #A6C07A 0%, #A6C07A 100%);
+  color: #171717;
+  border-radius: 4px;
+  padding: 0 4px;
+}
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 @import "tailwindcss";
 
