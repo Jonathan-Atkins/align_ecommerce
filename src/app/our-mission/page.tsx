@@ -1,17 +1,18 @@
 "use client";
 
 import React from "react";
+import MissionHighlight from "../components/MissionHighlight";
 
-export default function Page() {
+export default function OurMissionPage() {
   return (
     <main
-      className="w-full min-h-screen flex items-center justify-center"
+      className="w-full min-h-screen flex flex-col items-center justify-center"
       style={{ background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)' }}
     >
-      <div className="text-center text-white p-8">
+      <div className="text-center text-white p-8 py-16 max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold">Our Mission</h1>
-        <p className="mt-4 text-lg opacity-80">Placeholder page — content coming soon.</p>
       </div>
+      <MissionHighlight />
     </main>
   );
 }
