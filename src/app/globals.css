@@ -1,3 +1,7 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import "tailwindcss";
+
 /* Custom highlight color for MissionHighlight */
 .text-highlight {
   background: linear-gradient(90deg, #A6C07A 0%, #A6C07A 100%);
@@ -5,8 +9,6 @@
   border-radius: 4px;
   padding: 0 4px;
 }
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-@import "tailwindcss";
 
 /* underline-style horizontal line that grows from center */
 .title-wrap { position: relative; display: inline-block; }
@@ -855,9 +857,9 @@ b, strong {
   --bg-color-hsl: 59, 3%, 94%;
   --bg-color: hsl(var(--bg-color-hsl));
   --bg-color-translucent: hsla(var(--bg-color-hsl), 0.95);
-  --bg-color-highlight: hsl(60, 90%, 50%);
+  --bg-color-highlight: hsl(92, 78%, 59%);
   --color-text: hsl(192, 14%, 20%);
-  --color-text-highlight: hsl(192, 14%, 0%);
+  --color-text-highlight: hsl(0, 100%, 1%);
   --page-width: 80ch;
   --paragraph-font-size: min(max(1.2rem, 4vw), 1.4rem);
   --header-font-size: min(max(2rem, 8vw), 4rem);
@@ -913,7 +915,7 @@ body {
 }
 
 .mission-main {
-  margin: 12rem auto;
+  margin: 3rem auto;
   padding: 0 var(--padding);
   max-width: var(--page-width);
 }
