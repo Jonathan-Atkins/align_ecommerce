@@ -560,13 +560,8 @@ b, strong {
   /* No transitions — we update transform directly for zero-lag tracking */
 }
 
-@media (pointer: coarse), (max-width: 768px) {
+@media (pointer: coarse) {
   /* Hide on mobile/coarse pointers */
-  .cursor-glow { display: none !important; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* Respect reduced motion preference by hiding the cursor glow */
   .cursor-glow { display: none !important; }
 }
 
