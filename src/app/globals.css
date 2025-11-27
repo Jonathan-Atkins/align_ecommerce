@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* underline-style horizontal line that grows from center */
 .title-wrap { position: relative; display: inline-block; }
 
@@ -25,15 +27,10 @@
     transform: scaleX(1);
   }
 }
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
-@import "tailwindcss";
-
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-global: 'Montserrat', sans-serif;
 }
 
 
@@ -145,7 +142,7 @@ html, body {
 
 
 html, body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-global);
   font-weight: 400;
 }
 /* Remove global background color */
@@ -455,7 +452,7 @@ b, strong {
 }
 
 .loader-phrase .phrase-word {
-  font-family: 'Gruppo', var(--font-global);
+  font-family: var(--font-global);
   font-weight: 700;
   color: #fff;
   user-select: none;
@@ -491,7 +488,7 @@ b, strong {
 .loader-centered-label { z-index: 100002; }
 .loader-centered-label .loader-align,
 .loader-centered-label .loader-ed {
-  font-family: 'Gruppo', var(--font-global);
+  font-family: var(--font-global);
   font-weight: 700;
   font-size: 44px;
   display: inline-block;
