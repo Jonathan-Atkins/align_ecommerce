@@ -1,3 +1,30 @@
+/* underline-style horizontal line that grows from center */
+.title-wrap { position: relative; display: inline-block; }
+
+.horizontal-line {
+  position: absolute;
+  left: -12px;
+  right: -12px;
+  bottom: -8px;
+  height: 3px;
+  background: linear-gradient(to right, transparent 0%, #A6C07A 30%, #A6C07A 70%, transparent 100%);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: fadeInLine 600ms ease-out forwards;
+  animation-delay: 1.65s;
+}
+
+@keyframes fadeInLine {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
 @import "tailwindcss";
@@ -818,4 +845,155 @@ b, strong {
   }
 }
 
+:root {
+  --bg-color-hsl: 59, 3%, 94%;
+  --bg-color: hsl(var(--bg-color-hsl));
+  --bg-color-translucent: hsla(var(--bg-color-hsl), 0.95);
+  --bg-color-highlight: hsl(60, 90%, 50%);
+  --color-text: hsl(192, 14%, 20%);
+  --color-text-highlight: hsl(192, 14%, 0%);
+  --page-width: 80ch;
+  --paragraph-font-size: min(max(1.2rem, 4vw), 1.4rem);
+  --header-font-size: min(max(2rem, 8vw), 4rem);
+  --space: 2rem;
+  --padding: 8vmin;
+  --duration: 1s;
+  --ease: cubic-bezier(0.25, 1, 0.5, 1);
+}
 
+.dark-mode {
+  --bg-color-hsl: 0, 0%, 7%;
+  --bg-color: hsl(var(--bg-color-hsl));
+  --bg-color-translucent: hsla(var(--bg-color-hsl), 0.95);
+  --bg-color-highlight: hsl(238, 70%, 40%);
+  --color-text: hsl(0, 0%, 80%);
+  --color-text-highlight: hsl(0, 0%, 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-weight: 400;
+  color: var(--color-text);
+  background-color: var(--bg-color);
+  transition: background calc(var(--duration) / 4) var(--ease);
+}
+
+.mission-header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  padding: calc(var(--space) / 2) var(--padding);
+  width: 100%;
+  max-width: var(--page-width);
+  background-color: var(--bg-color-translucent);
+  transition: background calc(var(--duration) / 4) var(--ease);
+  z-index: 10;
+}
+
+.mission-header .wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.mission-header .wrapper > * + * {
+  margin-left: 4px;
+}
+
+.mission-main {
+  margin: 12rem auto;
+  padding: 0 var(--padding);
+  max-width: var(--page-width);
+}
+
+.mission-main h1 {
+  font-size: var(--header-font-size);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 4rem;
+}
+
+.mission-main h2 {
+  font-size: 1.6rem;
+  margin-top: 3rem;
+}
+
+.mission-main p {
+  margin: 1.5rem 0;
+  font-size: var(--paragraph-font-size);
+  line-height: 1.7;
+}
+
+/* Reset default mark yellow */
+mark {
+  background: none;
+  color: inherit;
+}
+
+/* Base highlight styling – neutral at rest */
+.text-highlight {
+  background-repeat: no-repeat;
+  background-size: 0% 100%; /* hidden initially */
+  transition:
+    color calc(var(--duration) / 4) var(--ease),
+    background-color calc(var(--duration) / 4) var(--ease),
+    background-size var(--duration) var(--ease);
+  position: relative;
+  color: inherit;
+}
+
+.text-highlight.active {
+  color: var(--color-text-highlight);
+  background-size: 100% 100%;
+}
+
+/* Modes */
+[data-highlight="background"] .text-highlight {
+  background-image: linear-gradient(
+    var(--bg-color-highlight),
+    var(--bg-color-highlight)
+  );
+}
+
+[data-highlight="half"] .text-highlight {
+  --line-size: 0.5em;
+  background-image: linear-gradient(
+    transparent calc(100% - var(--line-size)),
+    var(--bg-color-highlight) var(--line-size)
+  );
+}
+
+[data-highlight="underline"] .text-highlight {
+  --line-size: 0.15em;
+  background-image: linear-gradient(
+    transparent calc(100% - var(--line-size)),
+    var(--color-text) var(--line-size)
+  );
+}
+
+.text-highlight::before,
+.text-highlight::after {
+  position: absolute;
+  clip-path: inset(100%);
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  content: "";
+}
+
+.text-highlight::before {
+  content: " [highlight start] ";
+}
+
+.text-highlight::after {
+  content: " [highlight end] ";
+}
