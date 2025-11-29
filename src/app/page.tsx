@@ -1,12 +1,7 @@
-import HeroSection from "./HeroSection";
-import Timeline from "./Timeline";
+import LandingPage from "./components/LandingPage";
 
 export default function HomePage() {
   return (
-    <>
-      <HeroSection />
-      <Timeline />
-      {/* ...other homepage sections... */}
-    </>
+    <LandingPage />
   );
 }
