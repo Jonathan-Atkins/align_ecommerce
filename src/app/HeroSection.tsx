@@ -4,9 +4,14 @@ import React, { useRef, useEffect } from "react";
 import Image from 'next/image';
 import './globals.css';
 
-export default function HeroSection() {
+type HeroSectionProps = {
+  onReady?: () => void;
+};
+
+export default function HeroSection({ onReady }: HeroSectionProps) {
   const cursorGlowRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const hasAnnouncedReady = useRef(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -56,6 +61,19 @@ export default function HeroSection() {
     const p = v.play();
     if (p && typeof p.then === 'function') p.catch(() => {});
 
+    const markReady = () => {
+      if (hasAnnouncedReady.current) return;
+      hasAnnouncedReady.current = true;
+      onReady?.();
+    };
+
+    const signalReadyOnce = () => {
+      markReady();
+    };
+
+    v.addEventListener('loadeddata', signalReadyOnce);
+    v.addEventListener('canplaythrough', signalReadyOnce);
+
     // Ensure the video never stops: handle ended, paused, and tab visibility
     const ensurePlay = () => {
       if (!v) return;
@@ -77,13 +95,17 @@ export default function HeroSection() {
     v.addEventListener('ended', onEnded);
     v.addEventListener('pause', onPause);
     document.addEventListener('visibilitychange', onVisibility);
+    v.addEventListener('playing', signalReadyOnce);
 
     return () => {
+      v.removeEventListener('loadeddata', signalReadyOnce);
+      v.removeEventListener('canplaythrough', signalReadyOnce);
       v.removeEventListener('ended', onEnded);
       v.removeEventListener('pause', onPause);
       document.removeEventListener('visibilitychange', onVisibility);
+      v.removeEventListener('playing', signalReadyOnce);
     };
-  }, []);
+  }, [onReady]);
 
   return (
     <section
