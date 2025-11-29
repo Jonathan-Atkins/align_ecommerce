@@ -114,9 +114,9 @@ export default function HeroSection() {
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Align{' '}
             <span className="glow-text green-pulse">Scales</span>
-            {' '}and Processes High Risk Clients{' '}
+            {' '}<span style={{ color: '#fff' }}>and Processes High Risk Clients</span>{' '}
             <span className="glow-text green-pulse">Securely</span>
-            {' '}&{' '}
+            {' '}<span style={{ color: '#fff' }}>&</span>{' '}
             <span className="glow-text green-pulse">Seamlessly</span>
           </h1>
           <div className="mb-8 max-w-2xl bg-white/5 dark:bg-black/20 border border-gray-200/20 dark:border-white/5 rounded-xl p-6 md:p-8 backdrop-blur-sm shadow-none">
@@ -125,28 +125,28 @@ export default function HeroSection() {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 max-w-md">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
+            <div className="rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left bg-[#1a2233]">
               <span className="font-semibold text-[#A6C07A] glow-text green-pulse">99% Approval Rate</span>
-              <div className="text-xs text-gray-500 dark:text-gray-400">Industry-leading acceptance</div>
+              <div className="text-xs text-gray-100">Industry-leading acceptance</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
+            <div className="rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left bg-[#1a2233]">
               <span className="font-semibold text-[#A6C07A] glow-text green-pulse">No Setup Fee</span>
-              <div className="text-xs text-gray-500 dark:text-gray-400">Start processing immediately</div>
+              <div className="text-xs text-gray-100">Start processing immediately</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
+            <div className="rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left bg-[#1a2233]">
               <span className="font-semibold text-[#A6C07A] glow-text green-pulse">Chargeback Protection</span>
-              <div className="text-xs text-gray-500 dark:text-gray-400">Advance security features</div>
+              <div className="text-xs text-gray-100">Advance security features</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left">
+            <div className="rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 text-left bg-[#1a2233]">
               <span className="font-semibold text-[#A6C07A] glow-text green-pulse">24 Hour Approval</span>
-              <div className="text-xs text-gray-500 dark:text-gray-400">Quick application process</div>
+              <div className="text-xs text-gray-100">Quick application process</div>
             </div>
           </div>
         </div>
         {/* Form Section */}
         <div className="flex-1 max-w-md w-full min-w-0 mt-0 md:mt-12 lg:mt-10">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 md:p-8">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white text-center">Get Started Today!</h2>
+          <div className="bg-[#1a2233] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 md:p-8">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100 text-center">Get Started Today!</h2>
             <form className="space-y-4">
               <input
                 type="text"

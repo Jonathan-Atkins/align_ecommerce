@@ -138,8 +138,8 @@ export default function Timeline() {
         minHeight: '65vh',
       }}
     >
-      <h2 className="text-6xl font-bold text-center text-gray-900 dark:text-white font-[Montserrat] mb-10">
-        What <span className="green-pulse">Align</span> Offers
+      <h2 className="text-6xl font-bold text-center font-[Montserrat] mb-10">
+        <span className="text-white">What</span> <span className="green-pulse">Align</span> <span className="text-white">Offers</span>
       </h2>
       <div className="flex justify-center items-center mb-6">
         {/* <span className="text-lg text-gray-400 italic">(click dots for more!)</span> */}
