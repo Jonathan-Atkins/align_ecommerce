@@ -33,13 +33,21 @@ export default function LandingLoader() {
 
   const MIN_ACTIVE_MS = 6_500;
 
-  const hideInitialLoader = () => {
+  const hideInitialLoader = (instant?: boolean) => {
     const initial = typeof document !== 'undefined' ? document.getElementById('initial-loader') : null;
     if (!initial) return;
 
-    initial.classList.add('initial-loader-hidden');
     const overlay = initial.querySelector('.page-loader-overlay');
     if (overlay) overlay.classList.add('fade-out');
+
+    if (instant) {
+      initial.classList.add('initial-loader-hidden');
+      return;
+    }
+
+    window.setTimeout(() => {
+      initial.classList.add('initial-loader-hidden');
+    }, FADE_DURATION);
   };
 
   const queueHide = () => {
@@ -87,7 +95,7 @@ export default function LandingLoader() {
         // rendered initial loader immediately so the page doesn't stay masked.
         try {
           const initial = document.getElementById('initial-loader');
-          if (initial) hideInitialLoader();
+          if (initial) hideInitialLoader(true);
         } catch {}
         return;
       }
@@ -252,7 +260,8 @@ export default function LandingLoader() {
     >
       <style>{`
         @keyframes fadeinout {
-          0% { opacity: 1; }
+          0% { opacity: 0; }
+          50% { opacity: 1; }
           100% { opacity: 0; }
         }
       `}</style>
@@ -276,7 +285,7 @@ export default function LandingLoader() {
             boxShadow: '0 0 40px #A3C64A',
             background: 'transparent',
             opacity: fadingOut ? 1 : 1,
-            animation: fadingOut ? `fadeinout ${FADE_DURATION}ms forwards` : undefined,
+            animation: fadingOut ? `fadeinout ${FADE_DURATION}ms ease-in-out forwards` : undefined,
           }}
           priority
         />
