@@ -38,24 +38,56 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          {/* Global page loader for route transitions */}
+        {/* Server-side glassmorphism loader overlay for instant paint */}
+        <div
+          id="initial-loader"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            zIndex: 99999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255,255,255,0.21)',
+            boxShadow: '0 4px 30px rgba(0,0,0,0.1)',
+            backdropFilter: 'blur(9.1px)',
+            WebkitBackdropFilter: 'blur(9.1px)',
+            transition: 'opacity 0.2s',
+          }}
+        >
+          <img
+            src="/align_vegas_logo.png"
+            alt="Align Vegas logo"
+            width={260}
+            height={260}
+            style={{
+              display: 'block',
+              boxShadow: '0 0 40px #A3C64A',
+              background: 'transparent',
+            }}
+          />
+        </div>
+        {/* Global page loader for route transitions */}
         {/* Controller to ensure the server-side cloak is removed on non-landing routes */}
         <PageCloakController />
         {/* PageLoader is mounted on the landing page via `LandingLoader`.
           The original `PageLoader` component file remains in the repo but
           is intentionally not rendered here so the landing content can
           appear behind the glass overlay. */}
-  {/* Cloak wrapper: do NOT hide the page root server-side. Keep content visible so overlays can be frosted/glass. */}
-  <div id="page-cloak">
-    {/* Video background sits behind everything except the green info bar */}
-    <VideoBackground />
-    <Navbar />
-    <main className="w-full min-h-screen flex flex-col">{children}</main>
-    {/* Cursor glow: mounted here so it covers navbar, hero, timeline only on landing page */}
-    <CursorGlow />
-    <AlignGlow />
-    <Footer />
-  </div>
+        {/* Cloak wrapper: do NOT hide the page root server-side. Keep content visible so overlays can be frosted/glass. */}
+        <div id="page-cloak">
+          {/* Video background sits behind everything except the green info bar */}
+          <VideoBackground />
+          <Navbar />
+          <main className="w-full min-h-screen flex flex-col">{children}</main>
+          {/* Cursor glow: mounted here so it covers navbar, hero, timeline only on landing page */}
+          <CursorGlow />
+          <AlignGlow />
+          <Footer />
+        </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>

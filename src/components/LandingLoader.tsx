@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { createPortal } from "react-dom";
 
 declare global {
@@ -17,7 +18,7 @@ declare global {
 // `.loading-screen` background you provided.
 
 const INITIAL_POST_LOAD_MS = process.env.NODE_ENV === 'development' ? 1000 : 10_000;
-const FADE_DURATION = 100; // reduced fade duration (ms)
+const FADE_DURATION = 2000; // 2 seconds for both background and logo fade
 const DEFAULT_FAILSAFE_MS = 7_000;
 const FAILSAFE_BUFFER_MS = process.env.NODE_ENV === 'development' ? 2500 : DEFAULT_FAILSAFE_MS;
 
@@ -208,7 +209,7 @@ export default function LandingLoader() {
             hideInitialLoader();
             setMounted(false);
             setFadingOut(false);
-          }, FADE_DURATION + 20);
+          }, FADE_DURATION + 80);
           return () => {
             window.clearTimeout(fadeTimer);
           };
@@ -226,30 +227,60 @@ export default function LandingLoader() {
   if (!mounted) return null;
 
   const overlay = (
-    <div className={`loading-screen page-loader-overlay ${fadingOut ? 'fade-out' : ''}`} role="status" aria-live="polite">
-      {/*
-      <div className="loader-phrase" aria-hidden="true">
-        <span className="phrase-word">We</span>
-        <span className="phrase-word">Are</span>
-      </div>
-      */}
-
-      <div className="loader-logo-wrapper" aria-hidden="true">
-          <img
+    <div
+      className={`loading-screen page-loader-overlay ${fadingOut ? 'fade-out' : ''}`}
+      role="status"
+      aria-live="polite"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+        pointerEvents: 'none',
+        background: 'rgba(255, 255, 255, 0.21)',
+        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+        backdropFilter: 'blur(9.1px)',
+        WebkitBackdropFilter: 'blur(9.1px)',
+        transition: `opacity ${FADE_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+        opacity: fadingOut ? 0 : 1,
+      }}
+    >
+      <style>{`
+        @keyframes fadeinout {
+          0% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `}</style>
+      <div
+        className="loader-logo-wrapper"
+        aria-hidden="true"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Image
           src="/align_vegas_logo.png"
           alt="Align Vegas logo"
           width={260}
           height={260}
           className="loader-logo"
-          style={{ display: 'block' }}
+          style={{
+            display: 'block',
+            boxShadow: '0 0 40px #A3C64A',
+            background: 'transparent',
+            opacity: fadingOut ? 1 : 1,
+            animation: fadingOut ? `fadeinout ${FADE_DURATION}ms forwards` : undefined,
+          }}
+          priority
         />
       </div>
-
-      {/*
-      <div className="loader-centered-label" aria-hidden="true">
-        <span className="loader-align">Align</span><span className="loader-ed">ed</span>
-      </div>
-      */}
     </div>
   );
 
