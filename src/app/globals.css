@@ -313,8 +313,7 @@ b, strong {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   z-index: 99999;
-  /* faster overlay fade to match quicker logo fade */
-  transition: opacity 240ms cubic-bezier(.2,.8,.2,1), visibility 160ms ease;
+  transition: opacity 2000ms cubic-bezier(.4,0,.2,1), visibility 2000ms ease;
   opacity: 1;
   pointer-events: auto;
 }
@@ -332,7 +331,7 @@ b, strong {
   transform: rotateX(0deg) rotateZ(0deg) translate3d(0px, 0px, 0px) !important;
   filter: drop-shadow(0 0 0 rgba(0,0,0,0)) !important;
   opacity: 0;
-  transition: transform 80ms cubic-bezier(.2,.8,.2,1), filter 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease;
+  transition: transform 300ms cubic-bezier(.2,.8,.2,1), filter 300ms cubic-bezier(.2,.8,.2,1), opacity 2000ms ease;
 }
 
 /* Loading-screen style (landing overlay). Matches the example you provided */
@@ -351,19 +350,13 @@ b, strong {
   backdrop-filter: blur(10px);
   pointer-events: auto; /* continue to block interaction */
 }
-.loading-screen.fade-out { opacity: 0; pointer-events: none; transition: opacity 100ms ease; }
-.loading-screen.fade-out { opacity: 0; transition: opacity 100ms ease; }
+.loading-screen.fade-out { opacity: 0; pointer-events: none; transition: opacity 2000ms cubic-bezier(.4,0,.2,1); }
+.loading-screen.fade-out { opacity: 0; transition: opacity 2000ms cubic-bezier(.4,0,.2,1); }
 
 /* Auto background goodbye animation (per example) */
 @keyframes goodbyeScreen {
   from { opacity: 1; transform: translateZ(0); }
   to { opacity: 0; transform: translateZ(0); }
-}
-
-/* Run the goodbye animation automatically (delay controlled here) */
-.loading-screen {
-  /* Longer background fade so it doesn't complete too quickly */
-  animation: goodbyeScreen 4.5s forwards 2s;
 }
 
 /* When this class is applied to the page root, help ensure background content
