@@ -59,3 +59,23 @@
     max-width: 220px;
   }
 }
+
+/* Make arrows always visible and scale with screen size */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #A6C07A;
+  z-index: 10;
+  opacity: 1 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    font-size: min(28px, 8vw) !important;
+    width: min(36px, 10vw) !important;
+    height: min(36px, 10vw) !important;
+  }
+}
