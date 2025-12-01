@@ -1,0 +1,61 @@
+/* Swiper styles for Why Align page */
+.swiper {
+  width: 100%;
+  max-width: 900px;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 350px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: 0px;
+}
+.slide-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.slide-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.slide-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+.slide-list li {
+  margin-bottom: 0.5rem;
+}
+.slide-image {
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+  object-fit: contain;
+  margin: 0 auto 1rem auto;
+  background: #222;
+  border-radius: 8px;
+}
+@media (max-width: 600px) {
+  .swiper-slide {
+    min-height: 220px;
+    font-size: 1rem;
+  }
+  .slide-title {
+    font-size: 1.2rem;
+  }
+  .slide-image {
+    height: 120px;
+    max-width: 220px;
+  }
+}
