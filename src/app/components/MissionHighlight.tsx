@@ -79,7 +79,7 @@ const MissionHighlight: React.FC = () => {
           bottom line.
         </p>
 
-        {/* Section 3 */}
+        {/* Section 3-ignore this message */}
         <div className="title-wrap">
           <h2>Driving Success</h2>
           <div className="horizontal-line" aria-hidden="true" />
