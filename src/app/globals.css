@@ -8,7 +8,6 @@
   color: #171717;
   border-radius: 4px;
   padding: 0 4px;
-}
 
 /* underline-style horizontal line that grows from center */
 .title-wrap { position: relative; display: inline-block; }
@@ -95,57 +94,7 @@ html, body {
 }
 
 /* Reduce spacing on smaller screens for better fit */
-.blog-list {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-@media (max-width: 768px) {
-  .blog-list article.border.border-zinc-800 {
-    width: 100%;
-    margin: 24px 0;
-    box-shadow: none;
-  }
-}
-.blog-list {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Hover glow using app green color */
-.blog-list article.border.border-zinc-800:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.6), 0 0 36px rgba(163,198,74,0.15);
-  border-color: rgba(163,198,74,0.6);
-}
-
-/* Content and image column helpers */
-.blog-list .image-col { background: #0b0b0b; flex: 0 0 45%; max-width: 45%; height: 468px; position: relative; overflow: hidden; }
-.blog-list .content-col { background: transparent; flex: 1 1 55%; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
-.nav-button {
-  background-color: var(--nav-button-bg);
-  color: white;
-}
-
-/* Mini-nav dropdown styling */
-.mini-nav-dropdown {
-  min-width: 140px;
-  z-index: 50;
-}
-.mini-nav .mini-nav-inner > button {
-  /* ensure buttons don't grow unexpectedly */
-  white-space: nowrap;
-}
-
-
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Loader and overlay styles removed */
 }
 
 
