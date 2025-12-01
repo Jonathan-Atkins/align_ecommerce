@@ -10,7 +10,6 @@ const navLinks = [
     { name: "About Us", href: "/about" },
     { name: "Our Mission", href: "/our-mission" },
     { name: "Why Align", href: "/why-align" },
-    { name: "Referral Program", href: "/referral-program" },
     { name: "Blog", href: "/blog" },
 ];
 

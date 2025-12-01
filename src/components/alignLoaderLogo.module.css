@@ -1,0 +1,17 @@
+/* Pulsing effect for the Align loader logo */
+
+.align-logo-pulse {
+  animation: pulseBeat 2.2s ease-in-out infinite;
+}
+
+.align-logo-pulse:hover {
+  animation: pulseBeat 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseBeat {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.03); }
+  50%  { transform: scale(1.015); }
+  75%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}

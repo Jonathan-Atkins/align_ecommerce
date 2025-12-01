@@ -11,7 +11,7 @@ import VideoBackground from "../components/VideoBackground";
 import CursorGlow from "../components/CursorGlow";
 import Footer from "./components/Footer";
 import AlignGlow from "./components/AlignGlow";
-import PageCloakController from "../components/PageCloakController";
+import OverlayLoaderController from "../components/OverlayLoaderController";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,24 +38,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          {/* Global page loader for route transitions */}
-        {/* Controller to ensure the server-side cloak is removed on non-landing routes */}
-        <PageCloakController />
-        {/* PageLoader is mounted on the landing page via `LandingLoader`.
-          The original `PageLoader` component file remains in the repo but
-          is intentionally not rendered here so the landing content can
-          appear behind the glass overlay. */}
-  {/* Cloak wrapper: do NOT hide the page root server-side. Keep content visible so overlays can be frosted/glass. */}
-  <div id="page-cloak">
-    {/* Video background sits behind everything except the green info bar */}
-    <VideoBackground />
-    <Navbar />
-    <main className="w-full min-h-screen flex flex-col">{children}</main>
-    {/* Cursor glow: mounted here so it covers navbar, hero, timeline only on landing page */}
-    <CursorGlow />
-    <AlignGlow />
-    <Footer />
-  </div>
+        <OverlayLoaderController />
+        <div id="page-cloak">
+          <VideoBackground />
+          <Navbar />
+          <main className="w-full min-h-screen flex flex-col">{children}</main>
+          <CursorGlow />
+          <AlignGlow />
+          <Footer />
+        </div>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet" />
       </body>
     </html>
