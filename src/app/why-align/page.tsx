@@ -87,6 +87,10 @@ export default function WhyAlignPage() {
 						autoplay={{ delay: 3500, disableOnInteraction: false }}
 						loop={true}
 						className={styles.swiper}
+						style={{
+							'--swiper-navigation-size': '36px',
+							'--swiper-navigation-color': '#A6C07A',
+						} as React.CSSProperties}
 					>
 						{slides.map((slide, idx) => (
 							<SwiperSlide
@@ -135,6 +139,9 @@ export default function WhyAlignPage() {
 										</ul>
 									)}
 								</div>
+								{/* Swiper navigation arrows for mobile */}
+								<div className="swiper-button-prev" style={{ display: 'block' }} />
+								<div className="swiper-button-next" style={{ display: 'block' }} />
 							</SwiperSlide>
 						))}
 					</Swiper>
