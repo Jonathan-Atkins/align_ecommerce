@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
-import VideoBackground from "../components/VideoBackground";
 // PageLoader is intentionally not mounted here — loader will be handled
 // directly on the landing page to allow the landing content to render
 // behind the frosted-glass overlay. The original component remains in
@@ -11,7 +10,6 @@ import VideoBackground from "../components/VideoBackground";
 import CursorGlow from "../components/CursorGlow";
 import Footer from "./components/Footer";
 import AlignGlow from "./components/AlignGlow";
-import OverlayLoaderController from "../components/OverlayLoaderController";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,11 +36,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <OverlayLoaderController />
+        {/* OverlayLoaderController removed */}
         <div id="page-cloak">
-          <VideoBackground />
           <Navbar />
-          <main className="w-full min-h-screen flex flex-col">{children}</main>
+          <div style={{ background: 'linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)', minHeight: 'calc(100vh - 120px)' }}>
+            <main className="w-full min-h-screen flex flex-col">{children}</main>
+          </div>
           <CursorGlow />
           <AlignGlow />
           <Footer />

@@ -1,7 +1,9 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
+import type { Swiper as SwiperType } from 'swiper';
 import ScrambleHover from "./ScrambleHover";
 import { Swiper, SwiperSlide } from "swiper/react";
+import type { SwiperRef } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -65,7 +67,7 @@ const slides = [
    },
 ];
 export default function WhyAlignPage() {
-		const swiperRef = useRef(null);
+		const swiperRef = useRef<SwiperRef | null>(null);
 		const [isMobile, setIsMobile] = useState(false);
 
 		useEffect(() => {
