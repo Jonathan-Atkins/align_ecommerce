@@ -1,0 +1,17 @@
+/* Faded background image for feature card */
+ .feature-card-bg {
+  background: url('/customersupport.png') center center/cover no-repeat;
+  position: relative;
+}
+.feature-card-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(34,34,34,0.7); /* dark overlay for fade */
+  border-radius: 0.75rem; /* match rounded-xl */
+  z-index: 1;
+}
+.feature-card-bg > * {
+  position: relative;
+  z-index: 2;
+}

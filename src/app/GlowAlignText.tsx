@@ -8,8 +8,8 @@ export function GlowAlignText({ children }: { children: React.ReactNode }) {
   // Helper to recursively process children
   function process(node: React.ReactNode): React.ReactNode {
     if (typeof node === "string") {
-      // Regex: match 'Align' in any case, not as part of another word
-      const regex = /\b(align)\b/gi;
+      // Regex: match 'Align' or 'Aligned' in any case, not as part of another word
+      const regex = /\b(align(?:ed)?)\b/gi;
       const parts = [];
       let lastIndex = 0;
       let match;
