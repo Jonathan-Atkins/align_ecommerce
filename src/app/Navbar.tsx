@@ -7,9 +7,8 @@ import { usePathname } from 'next/navigation';
 
 const navLinks = [
     { name: "Home", href: "/" },
-    { name: "About Us", href: "/about" },
+    { name: "About Align", href: "/about" },
     { name: "Our Mission", href: "/our-mission" },
-    { name: "Why Align", href: "/why-align" },
     { name: "Blog", href: "/blog" },
 ];
 
@@ -406,30 +405,45 @@ export default function Navbar() {
                      )}
  
                                                              {/* Animated floating dropdown under hamburger, using navLinks, with fade/slide and floating over navbar */}
-                                                             {isCompact && (
-                                                                 <div
-                                                                     className={`absolute top-full right-0 mt-2 z-50 pointer-events-none`}
-                                                                     style={{ minWidth: '16rem' }}
-                                                                 >
-                                                                     <ul
-                                                                         className={`bg-white shadow-md rounded-lg p-1 space-y-0.5 transition-all duration-300 ease-out transform ${open ? 'opacity-100 translate-y-2 pointer-events-auto' : 'opacity-0 -translate-y-2'} drop-shadow-xl`}
-                                                                         role="menu"
-                                                                         aria-orientation="vertical"
-                                                                     >
-                                                                         {navLinks.map((link) => (
-                                                                             <li key={link.name}>
-                                                                                 <Link
-                                                                                     href={link.href}
-                                                                                     onClick={() => setOpen(false)}
-                                                                                     className="dropdown-item flex items-center gap-x-3.5 py-3 px-6 rounded-lg text-lg font-bold text-black hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors"
-                                                                                 >
-                                                                                     {link.name}
-                                                                                 </Link>
-                                                                             </li>
-                                                                         ))}
-                                                                     </ul>
-                                                                 </div>
-                                                             )}
+                    {isCompact && (
+                        <div
+                            className={`absolute top-full right-0 mt-2 z-50 pointer-events-none`}
+                            style={{ minWidth: '16rem' }}
+                        >
+                            <ul
+                                className={`bg-white shadow-md rounded-lg p-1 space-y-0.5 transition-all duration-300 ease-out transform ${open ? 'opacity-100 translate-y-2 pointer-events-auto' : 'opacity-0 -translate-y-2'} drop-shadow-xl`}
+                                role="menu"
+                                aria-orientation="vertical"
+                            >
+                                {navLinks.map((link) => (
+                                    <li key={link.name}>
+                                        <Link
+                                            href={link.href}
+                                            onClick={() => setOpen(false)}
+                                            className="dropdown-item flex items-center gap-x-3.5 py-3 px-6 rounded-lg text-lg font-bold text-black hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                                <li key="lets-connect">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setOpen(false);
+                                            const el = document.getElementById('contact-us');
+                                            if (el) {
+                                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                            }
+                                        }}
+                                        className="dropdown-item flex items-center gap-x-3.5 py-3 px-6 rounded-lg text-lg font-bold text-[#7C8F5A] hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors"
+                                    >
+                                        Lets Connect
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                  </div>
             </nav>
         </>

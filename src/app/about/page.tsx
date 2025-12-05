@@ -1,7 +1,8 @@
 
 "use client";
 import React from "react";
-import IndustryServed from "../components/industryServed";
+import Numbers from "../components/Numbers";
+import WhyAlign from "../components/WhyAlign";
 
 export default function Page() {
   return (
@@ -62,17 +63,19 @@ export default function Page() {
 
       <div className="flex flex-col items-center justify-center text-center text-white px-8 py-16 max-w-5xl mx-auto">
         <div className="title-wrap">
-          <h1 className="text-4xl font-bold fadeInUp-animation" style={{ marginLeft: '2px' }}>About Us</h1>
+          <h1 className="text-4xl font-bold fadeInUp-animation" style={{ marginLeft: '2px' }}>Who is Align</h1>
           <div className="horizontal-line" aria-hidden="true" />
         </div>
 
-        <p className="mt-16 text-2xl opacity-80 fadeInUp-animation fadeInUp-delay max-w-4xl mx-auto">
-          Align eCommerce is an omni-channel, multi solutions, payment provider specializing in card non present, higher risk merchant services. With over 10 years of experience, and 8 different unique banking relationships, partnering with Align has proven to increase sales and revenue. Our One-on-One Success Plans will not only ensure you have enough processing capacity to operate comfortably but will also ensure you have the proper procedures in place to protect your day-to-day business operations.
+        <p className="mt-16 text-2xl opacity-80 fadeInUp-animation fadeInUp-delay max-w-4xl mx-auto font-extrabold" style={{ fontWeight: 900 }}>
+          Merchants need a payment processor that goes above and beyond. Focused on customer needs driven by support makes us the go-to choice for merchants big and small. With over 10 years of experience and billions of payments processed, with Align you get a trustworthy and honest partner for all your payment processing needs.
         </p>
       </div>
-      <div className="flex flex-col items-center justify-center mt-16 w-full">
-        <IndustryServed />
+      {/* Numbers component at the bottom */}
+      <div className="w-full flex justify-center">
+        <Numbers />
       </div>
+      <WhyAlign />
     </main>
   );
 }

@@ -1,15 +1,30 @@
 import React, { useRef, useEffect, useState } from "react";
 
-function formatShorthand(num: number): string {
-  if (num >= 1_000_000_000) return "$1B";
-  if (num >= 1_000_000) return `$${Math.round(num / 1_000_000)}M`;
-  return `$${num}`;
+interface AnimatedCounterProps {
+  start: number;
+  end: number;
+  duration?: number;
+  delay?: number;
+  suffix?: string;
+  loop?: boolean;
+  loopDelay?: number;
 }
 
-const AnimatedCounter: React.FC = () => {
+function formatValue(num: number, suffix?: string) {
+  if (suffix === "auto") {
+    if (num < 1000) return `${num} M`;
+    if (num === 1000) return `1 B`;
+  }
+  if (suffix === "B") return `${num}B`;
+  if (suffix === "K") return `${num}K`;
+  if (suffix === "M") return `${num} M`;
+  return `${num}`;
+}
+
+const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ start, end, duration = 1800, delay = 0, suffix = "", loop = false, loopDelay = 6000 }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState(70_200_000); // $70.2M
+  const [value, setValue] = useState(start);
 
   useEffect(() => {
     const observer = new window.IntersectionObserver(
@@ -28,22 +43,20 @@ const AnimatedCounter: React.FC = () => {
   useEffect(() => {
     if (!visible) return;
     let animationFrame: number;
-    let timeoutId: NodeJS.Timeout;
-    const start = 70_200_000;
-    const end = 1_000_000_000;
-    const duration = 3000; // ms
-    const loopDelay = 70000; // ms (wait 1s after animation before looping)
-
+    let delayTimeout: NodeJS.Timeout;
+    let loopTimeout: NodeJS.Timeout;
     function startAnimation() {
       const startTime = performance.now();
       function animate(now: number) {
         const elapsed = now - startTime;
         if (elapsed >= duration) {
           setValue(end);
-          timeoutId = setTimeout(() => {
-            setValue(start);
-            startAnimation();
-          }, loopDelay);
+          if (loop) {
+            loopTimeout = setTimeout(() => {
+              setValue(start);
+              startAnimation();
+            }, loopDelay);
+          }
           return;
         }
         const progress = elapsed / duration;
@@ -53,16 +66,24 @@ const AnimatedCounter: React.FC = () => {
       }
       animationFrame = requestAnimationFrame(animate);
     }
-    setValue(start);
-    startAnimation();
+    if (delay > 0) {
+      delayTimeout = setTimeout(() => {
+        setValue(start);
+        startAnimation();
+      }, delay);
+    } else {
+      setValue(start);
+      startAnimation();
+    }
     return () => {
       cancelAnimationFrame(animationFrame);
-      clearTimeout(timeoutId);
+      clearTimeout(delayTimeout);
+      clearTimeout(loopTimeout);
     };
-  }, [visible]);
+  }, [visible, start, end, duration, delay, loop, loopDelay]);
 
   return (
-    <span ref={ref}>{formatShorthand(value)}</span>
+    <span ref={ref}>{formatValue(value, suffix)}</span>
   );
 };
 

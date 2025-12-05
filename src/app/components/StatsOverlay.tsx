@@ -18,7 +18,7 @@ const StatsOverlay: React.FC = () => (
           </div>
           <div className="w-full flex gap-4">
             <div className="flex-1 bg-black rounded-lg p-6 flex flex-col items-center justify-center min-w-0">
-              <span className="text-3xl font-bold text-white"><AnimatedCounter /></span>
+              <span className="text-3xl font-bold text-white"><AnimatedCounter start={702} end={1000} duration={1800} suffix="auto" /></span>
               <span className="text-green-400 font-semibold mt-2">In Payments</span>
             </div>
             <div className="flex-1 bg-black rounded-lg p-6 flex flex-col items-center justify-center min-w-0">
