@@ -6,6 +6,7 @@ import MetorBackground from "./components/MetorBackground";
 import StatsOverlay from "./components/StatsOverlay";
 import IndustryServed from "./components/industryServed";
 import FocusOnBusiness from "./components/focusOnBusiness";
+import Testimonials from "./components/Testimonials";
 
 const features = [
 	{
@@ -113,12 +114,12 @@ function FeatureCard({ title, icon }: { title: string; icon: string }) {
               `}</style>
 						</div>
 						{/* Removed OmniChannel Background image as requested */}
-						<span className="bg-[#C3E86B] rounded-full flex items-center justify-center" style={{ position: 'absolute', left: 9, bottom: 15, width: 48, height: 48, zIndex: 10, boxShadow: '0 0 24px 8px #C3E86B, 0 0 48px 16px #C3E86B55' }}>
+						<span className="bg-[#C3E86B] rounded-full flex items-center justify-center feature-card-icon-mobile-center" style={{ position: 'absolute', left: '50%', bottom: 15, width: 48, height: 48, zIndex: 10, boxShadow: '0 0 24px 8px #C3E86B, 0 0 48px 16px #C3E86B55', transform: 'translateX(-50%)' }}>
 							<Image src="/ccicon.png" alt="Credit Card Icon" width={28} height={28} style={{ objectFit: 'contain' }} />
 						</span>
 					</>
 				) : (
-					<span className="bg-[#C3E86B] rounded-full flex items-center justify-center" style={{ position: 'absolute', left: 9, bottom: 15, width: 48, height: 48, zIndex: 10, boxShadow: '0 0 24px 8px #C3E86B, 0 0 48px 16px #C3E86B55' }}>
+					<span className="bg-[#C3E86B] rounded-full flex items-center justify-center feature-card-icon-mobile-center" style={{ position: 'absolute', left: '50%', bottom: 15, width: 48, height: 48, zIndex: 10, boxShadow: '0 0 24px 8px #C3E86B, 0 0 48px 16px #C3E86B55', transform: 'translateX(-50%)' }}>
 						{icon.startsWith('/') ? (
 							<Image src={icon} alt="Feature Icon" width={28} height={22} style={{ objectFit: 'contain' }} />
 						) : (
@@ -132,11 +133,11 @@ function FeatureCard({ title, icon }: { title: string; icon: string }) {
 }
 
 export default function Homepage() {
-	return (
-		<main>
-			{/* Landing page content */}
-			<section>
-				<div className="min-h-screen flex items-center justify-center">
+	   return (
+		   <main>
+			   {/* Landing page content */}
+			   <section>
+				   <div className="min-h-screen flex items-center justify-center">
 					   <div className="w-full max-w-6xl p-4 md:p-8 flex flex-col md:grid md:grid-cols-2 md:gap-8">
 						   {/* Hero card: order-1 on mobile, order-2 on desktop */}
 						   <div
@@ -168,18 +169,19 @@ export default function Homepage() {
 								   <FeatureCard {...features[2]} />
 							   </div>
 						   </div>
-					</div>
-				</div>
-			</section>
-			{/* Metor Background as next section below */}
-			<section className="w-full relative min-h-[700px] flex items-center justify-center">
-				<MetorBackground />
-				<StatsOverlay />
-			</section>
-			{/* IndustryServed section below MetorBackground */}
-			<IndustryServed />
-			<FocusOnBusiness />
-		</main>
-	);
+					   </div>
+				   </div>
+			   </section>
+			   {/* Metor Background as next section below */}
+			   <section className="w-full relative min-h-[700px] flex items-center justify-center">
+				   <MetorBackground />
+				   <StatsOverlay />
+			   </section>
+			   {/* IndustryServed section below MetorBackground */}
+			   <IndustryServed />
+			   <FocusOnBusiness />
+			   <Testimonials />
+		   </main>
+	   );
 }
 import { GlowAlignText } from "../app/GlowAlignText";
