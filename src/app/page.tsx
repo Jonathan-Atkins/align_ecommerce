@@ -5,6 +5,7 @@ import './featureCardBg.css';
 import MetorBackground from "./components/MetorBackground";
 import StatsOverlay from "./components/StatsOverlay";
 import IndustryServed from "./components/industryServed";
+import FocusOnBusiness from "./components/focusOnBusiness";
 
 const features = [
 	{
@@ -177,6 +178,7 @@ export default function Homepage() {
 			</section>
 			{/* IndustryServed section below MetorBackground */}
 			<IndustryServed />
+			<FocusOnBusiness />
 		</main>
 	);
 }
