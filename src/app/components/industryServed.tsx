@@ -51,12 +51,17 @@ export default function IndustryServed() {
 
   if (!mounted) return null;
   return (
-    <div>
-          <div className="title-wrap"style={{ marginLeft: '8px', marginBottom: '100px', marginTop: '60px' }}>
-            <h2 className="text-3xl font-bold text-center mt-0 mb-0 text-white" style={{ marginLeft: '40px', marginBottom: '200px' }}>Industries Served</h2>
-            <div className="horizontal-line" aria-hidden="true" style={{ marginLeft: '40px' }} />
-          </div>
-      <div className="carousel-container mx-auto " style={{ marginRight: '450px', marginLeft: '450px', marginBottom: '80px' }}>
+    <section
+      className="w-full min-h-[400px] flex flex-col items-center justify-center pt-24 pb-8"
+      style={{
+        background: "linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)",
+      }}
+    >
+      <div className="title-wrap" style={{ marginBottom: '24px' }}>
+        <h2 className="text-3xl font-bold text-center mt-70 mb-30 text-white">Industries Served</h2>
+        <div className="horizontal-line" aria-hidden="true" />
+      </div>
+      <div className="carousel-container mx-auto">
         <div
           className="carousel"
           style={{
@@ -80,10 +85,10 @@ export default function IndustryServed() {
 .carousel-container {
   width: ${PANEL_WIDTH + 100}px;
   height: ${PANEL_HEIGHT + 100}px;
-  margin: 60px auto;
+  margin: 0 auto 40px auto;
   perspective: 1200px;
-  margin-top: 130px;
-  margin-bottom: 80px;
+  margin-top: 0px;
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,6 +155,6 @@ export default function IndustryServed() {
 }
       `}</style>
       </div>
-    </div>
+    </section>
   );
 }

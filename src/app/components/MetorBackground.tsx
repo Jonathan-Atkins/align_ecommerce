@@ -163,7 +163,7 @@ const MetorBackground: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[600px] md:h-[700px] lg:h-[800px] xl:h-[900px] overflow-hidden">
+    <div className="relative w-full h-[400px] sm:h-[600px] md:h-[700px] lg:h-[800px] xl:h-[900px] overflow-hidden" style={{ marginBottom: "-100px", marginTop: "-180px"  }}>
       <canvas ref={bgCanvasRef} className="absolute top-0 left-0 w-full h-full" />
       <canvas ref={terCanvasRef} className="absolute top-0 left-0 w-full h-full" />
     </div>
