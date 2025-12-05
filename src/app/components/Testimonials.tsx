@@ -86,67 +86,21 @@ export default function Testimonials() {
         <button
           type="button"
           className={styles.ctaButton}
-          onClick={e => {
-            const el = document.getElementById('get-started-today');
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            // Simple click feedback animation
-            e.currentTarget.classList.add('clicked');
-            setTimeout(() => {
-              e.currentTarget.classList.remove('clicked');
-            }, 350);
-          }}
+            onClick={e => {
+              const el = document.getElementById('contact-us');
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+              e.currentTarget.classList.add('clicked');
+              setTimeout(() => {
+                e.currentTarget.classList.remove('clicked');
+              }, 350);
+            }}
         >
           Get in Touch
         </button>
       </div>
-      {/* Contact Form Section */}
-      <div id="get-started-today" className="flex justify-center w-full mt-16 mb-4">
-        <div className="flex-1 max-w-md w-full min-w-0">
-          <div className="bg-[#1a2233] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 md:p-8">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-100 text-center">Get Started Today!</h2>
-            <form className="space-y-4">
-              <input
-                type="text"
-                placeholder="Business Name"
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="First Name"
-                  className="w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  className="w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Phone Number"
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              <button
-                type="submit"
-                className="w-full bg-[#F6A94A] hover:bg-[#e08a1b] text-white font-bold py-3 rounded-lg transition-colors"
-              >
-                Start Processing Today
-              </button>
-            </form>
-            <div className="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">
-              {/* Already filled out a form? <a href="/auth" className="text-[#7C8F5A] underline">Login</a> */}
-            </div>
-          </div>
-        </div>
-      </div>
+        {/* ...existing code... */}
     </section>
   );
 }

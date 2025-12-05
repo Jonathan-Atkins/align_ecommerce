@@ -366,7 +366,7 @@ export default function Navbar() {
                                 type="button"
                                 className="bg-[#95B75D] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
                                 onClick={() => {
-                                    const el = document.getElementById('get-started-today');
+                                    const el = document.getElementById('contact-us');
                                     if (el) {
                                         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                     }
