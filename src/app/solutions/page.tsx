@@ -60,7 +60,7 @@ export default function SolutionsPage() {
                 E-invoicing
               </h2>
               <p className="w-full text-xs md:text-lg text-gray-700 leading-tight md:leading-relaxed break-words whitespace-pre-line text-center md:text-left px-4" style={{wordBreak: 'break-word', overflowWrap: 'break-word', width: '100%'}}>
-                Lorem ipsum dolor sit amet consectetur. Tortor nulla pulvinar consectetur viverra id cursus. Phasellus quam a ipsum odio facilisis eleifend vestibulum velit. Eu at porttitor sit vitae etiam aenean. Vitae egestas imperdiet tristique nam sit pharetra accumsan varius sagittis. Lorem ipsum dolor sit amet consectetur. Tortor nulla pulvinar consectetur viverra id cursus. Phasellus quam a ipsum odio facilisis eleifend vestibulum velit. Eu at porttitor sit vitae etiam aenean.
+                Lorem ipsum dolore sit amet consectetur. Tortor nulla pulvinar consectetur viverra id cursus. Phasellus quam a ipsum odio facilisis eleifend vestibulum velit. Eu at porttitor sit vitae etiam aenean. Vitae egestas imperdiet tristique nam sit pharetra accumsan varius sagittis. Lorem ipsum dolor sit amet consectetur. Tortor nulla pulvinar consectetur viverra id cursus. Phasellus quam a ipsum odio facilisis eleifend vestibulum velit. Eu at porttitor sit vitae etiam aenean.
               </p>
             </div>
           </div>
