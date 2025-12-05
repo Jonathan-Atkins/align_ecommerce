@@ -26,24 +26,38 @@ const AnimatedPercent: React.FC = () => {
 
   useEffect(() => {
     if (!visible) return;
+    let animationFrame: number;
+    let timeoutId: NodeJS.Timeout;
     const start = 70.2;
     const end = 99.9;
     const duration = 3000; // ms
-    const startTime = performance.now();
+    const loopDelay = 70000; // ms (wait 1s after animation before looping)
 
-    function animate(now: number) {
-      const elapsed = now - startTime;
-      if (elapsed >= duration) {
-        setValue(end);
-        return;
+    function startAnimation() {
+      const startTime = performance.now();
+      function animate(now: number) {
+        const elapsed = now - startTime;
+        if (elapsed >= duration) {
+          setValue(end);
+          timeoutId = setTimeout(() => {
+            setValue(start);
+            startAnimation();
+          }, loopDelay);
+          return;
+        }
+        const progress = elapsed / duration;
+        const current = start + (end - start) * progress;
+        setValue(current);
+        animationFrame = requestAnimationFrame(animate);
       }
-      const progress = elapsed / duration;
-      // Smooth increment
-      const current = start + (end - start) * progress;
-      setValue(current);
-      requestAnimationFrame(animate);
+      animationFrame = requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
+    setValue(start);
+    startAnimation();
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      clearTimeout(timeoutId);
+    };
   }, [visible]);
 
   return (

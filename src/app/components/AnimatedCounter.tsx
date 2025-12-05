@@ -27,25 +27,38 @@ const AnimatedCounter: React.FC = () => {
 
   useEffect(() => {
     if (!visible) return;
+    let animationFrame: number;
+    let timeoutId: NodeJS.Timeout;
     const start = 70_200_000;
     const end = 1_000_000_000;
     const duration = 3000; // ms
-    const startTime = performance.now();
+    const loopDelay = 70000; // ms (wait 1s after animation before looping)
 
-    function animate(now: number) {
-      const elapsed = now - startTime;
-      if (elapsed >= duration) {
-        setValue(end);
-        return;
+    function startAnimation() {
+      const startTime = performance.now();
+      function animate(now: number) {
+        const elapsed = now - startTime;
+        if (elapsed >= duration) {
+          setValue(end);
+          timeoutId = setTimeout(() => {
+            setValue(start);
+            startAnimation();
+          }, loopDelay);
+          return;
+        }
+        const progress = elapsed / duration;
+        const current = Math.floor(start + (end - start) * progress);
+        setValue(current);
+        animationFrame = requestAnimationFrame(animate);
       }
-      const progress = elapsed / duration;
-      // Smooth increment
-      const current = Math.floor(start + (end - start) * progress);
-      setValue(current);
-      requestAnimationFrame(animate);
+      animationFrame = requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
-    // eslint-disable-next-line
+    setValue(start);
+    startAnimation();
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      clearTimeout(timeoutId);
+    };
   }, [visible]);
 
   return (

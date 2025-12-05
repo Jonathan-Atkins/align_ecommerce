@@ -342,7 +342,7 @@ export default function Navbar() {
                                 <Link
                                     ref={idx === 0 ? firstLinkRef : undefined}
                                     href={link.href}
-                                    className={`px-3 text-[14px] font-semibold transition-colors uppercase whitespace-nowrap text-white hover:text-[#A6C07A]`}
+                                    className={`px-3 text-[18px] font-semibold transition-colors uppercase whitespace-nowrap text-white hover:text-[#A6C07A]`}
                                 >
                                     {link.name}
                                 </Link>
@@ -362,13 +362,19 @@ export default function Navbar() {
                 <div className="relative z-30">
                     {!isCompact ? (
                         <div ref={ctaRef} className="ml-4">
-                            <Link
-                                href="/contact"
+                            <button
+                                type="button"
                                 className="bg-[#95B75D] hover:bg-[#7C8F5A] border-gradient transition-colors text-white text-[15px] font-semibold px-3 py-1 rounded-full flex items-center whitespace-nowrap"
+                                onClick={() => {
+                                    const el = document.getElementById('get-started-today');
+                                    if (el) {
+                                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    }
+                                }}
                             >
                                 <span className="inline-block">LETS CONNECT</span>
                                 <span className="ml-2 text-lg font-bold">&#8250;</span>
-                            </Link>
+                            </button>
                         </div>
                     ) : (
                         <button

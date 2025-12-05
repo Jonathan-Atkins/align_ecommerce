@@ -65,7 +65,7 @@ const FocusOnBusiness: React.FC = () => {
               </div>
             <div
               className="text-white text-center px-2 text-lg md:text-lg sm:text-base break-words"
-              style={{ marginBottom: 80, fontSize: 'clamp(0.95rem, 3vw, 1.15rem)', wordBreak: 'break-word', lineHeight: 1.4 }}
+              style={{ marginBottom: 80, fontSize: 'clamp(0.95rem, 3vw, 1.15rem)', wordBreak: 'break-word', lineHeight: 1.4, fontWeight: 800 }}
             >
               Align Ecommerce excels in fast merchant approvals, even for &quot;high risk&quot; businesses. Our expertise ensures quick, accurate evaluations, speeding up the setup process so you can get started without delay. With Align, fast and reliable approvals are a standard, not an exception.
             </div>

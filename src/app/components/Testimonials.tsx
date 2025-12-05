@@ -83,10 +83,26 @@ export default function Testimonials() {
       <div className={styles.ctaBox}>
         <div className={styles.ctaText}>Start your free cost savings analysis today</div>
         <div className={styles.ctaSubtext}>No commitment — Just real results.</div>
-        <button className={styles.ctaButton}>Get in Touch</button>
+        <button
+          type="button"
+          className={styles.ctaButton}
+          onClick={e => {
+            const el = document.getElementById('get-started-today');
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            // Simple click feedback animation
+            e.currentTarget.classList.add('clicked');
+            setTimeout(() => {
+              e.currentTarget.classList.remove('clicked');
+            }, 350);
+          }}
+        >
+          Get in Touch
+        </button>
       </div>
       {/* Contact Form Section */}
-      <div className="flex justify-center w-full mt-16 mb-4">
+      <div id="get-started-today" className="flex justify-center w-full mt-16 mb-4">
         <div className="flex-1 max-w-md w-full min-w-0">
           <div className="bg-[#1a2233] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 md:p-8">
             <h2 className="text-2xl font-semibold mb-4 text-gray-100 text-center">Get Started Today!</h2>
