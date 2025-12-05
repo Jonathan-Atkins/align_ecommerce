@@ -29,16 +29,31 @@ const FocusOnBusiness: React.FC = () => {
           </h1>
         </div>
         {/* Right Side: Placeholder for card */}
-        <div className="flex-1 flex items-center justify-center h-full mt-10 md:mt-0" style={ {marginRight: 90 }}>
+        <div
+          className="flex-1 flex items-center justify-center h-full mt-10 md:mt-0 focus-business-card-mobile-center focus-business-card-mobile-padding"
+          style={{ marginRight: 90 }}
+        >
           <div
             className="w-full max-w-5xl h-60 rounded-2xl shadow-md flex flex-col items-center justify-center"
             style={{
               background: 'rgba(120,130,140,0.25)',
-              marginTop: typeof window !== 'undefined' && window.innerWidth < 768 ? 200 : undefined,
-              marginLeft: typeof window !== 'undefined' && window.innerWidth < 768 ? 'auto' : undefined,
-              marginRight: typeof window !== 'undefined' && window.innerWidth < 768 ? 'auto' : undefined
+              marginTop: typeof window !== 'undefined' && window.innerWidth < 768 ? 40 : undefined
             }}
           >
+                  <style>{`
+                    @media (max-width: 768px) {
+                      .focus-business-card-mobile-center {
+                        margin-left: auto !important;
+                        margin-right: auto !important;
+                        justify-content: center !important;
+                        margin-right: 0 !important;
+                      }
+                      .focus-business-card-mobile-padding {
+                        padding-left: 2rem !important;
+                        padding-right: 2rem !important;
+                      }
+                    }
+                  `}</style>
             {/* Placeholder for icon, title, and description */}
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
               {/* Icon placeholder */}

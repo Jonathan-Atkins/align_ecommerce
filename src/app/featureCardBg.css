@@ -1,3 +1,9 @@
+@media (max-width: 768px) {
+  .feature-card-icon-mobile-center {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
 /* Faded background image for feature card */
  .feature-card-bg {
   background: url('/customersupport.png') center center/cover no-repeat;
