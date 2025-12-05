@@ -3,8 +3,13 @@ import AnimatedCounter from "./AnimatedCounter";
 import AnimatedPercent from "./AnimatedPercent";
 
 const StatsOverlay: React.FC = () => (
-  <div className="absolute inset-0 flex items-center justify-center z-8 pointer-events-none">
-    <div className="flex flex-col-reverse md:flex-row items-start justify-center w-full max-w-5xl mx-auto gap-8 md:gap-12 px-4 md:px-8">
+  <div className="absolute inset-0 flex flex-col items-center justify-center z-8 pointer-events-none">
+    {/* Mobile-only gradient margin for separation */}
+    <div id="stats-gradient-margin" className="w-full" />
+    <div
+      className="flex flex-col-reverse md:flex-row items-start justify-center w-full max-w-5xl mx-auto gap-4 md:gap-12 px-4 md:px-8 stats-overlay-mobile"
+      style={ {marginTop: '40px'}}
+    >
       {/* Left Card */}
       <div className="flex-1 rounded-2xl shadow-lg flex flex-col items-center p-6 md:p-10 min-w-0">
         <div className="w-full flex flex-col items-center">
@@ -24,7 +29,7 @@ const StatsOverlay: React.FC = () => (
         </div>
       </div>
       {/* Right Card */}
-      <div className="flex-1 rounded-2xl flex flex-col justify-start p-6 md:p-10 min-w-0" style={{border: 'none', background: 'rgba(120,130,140,0.25)'}}>
+      <div className="flex-1 rounded-2xl flex flex-col justify-start p-6 md:p-20 min-w-0 stats-card-mobile" style={{border: 'none', background: 'rgba(120,130,140,0.25)'}}>
         <h1 className="font-bold text-2xl md:text-3xl mb-4 text-black">
           Stop settling for average<br />
           <span className="glow-word">Align</span> your business with excellence
@@ -38,13 +43,33 @@ const StatsOverlay: React.FC = () => (
       </div>
     </div>
     <style jsx>{`
+      #stats-gradient-margin {
+        display: none;
+      }
       @media (max-width: 768px) {
-        .flex-col.md\:flex-row {
-          flex-direction: column !important;
+        #stats-gradient-margin {
+          display: block;
+          height: 200px;
+          width: 100%;
+          background: linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%);
         }
-        .flex-1 {
+        .stats-overlay-mobile {
+          margin-top: 200px !important;
+        }
+        .stats-card-mobile {
           width: 100% !important;
-          margin-bottom: 2rem;
+          max-width: 100vw !important;
+          box-sizing: border-box;
+          padding: 16px !important;
+          margin: 0 auto !important;
+          font-size: 1rem !important;
+          text-align: center;
+        }
+        .stats-card-mobile h1 {
+          font-size: 1.25rem !important;
+        }
+        .stats-card-mobile p {
+          font-size: 1rem !important;
         }
       }
     `}</style>

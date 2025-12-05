@@ -30,15 +30,15 @@ function FeatureCard({ title, icon }: { title: string; icon: string }) {
 	if (title === 'Omnichannel Payment Experiences') bgImage = '/omnichannelbg.png';
 	if (title === 'Accept All Forms of Payments') bgImage = '/majorccbg.png';
 	return (
-		<div
-			className="rounded-xl bg-[#222] feature-card-bg flex flex-col justify-between"
-			style={{
-				height: 220,
-				position: 'relative',
-				background: `url('${bgImage}') center center/cover no-repeat`,
-				overflow: 'hidden',
-			}}
-		>
+		   <div
+			   className="rounded-xl bg-[#222] feature-card-bg flex flex-col justify-between"
+			   style={{
+				   height: 220,
+				   position: 'relative',
+				   background: `url('${bgImage}') center center/cover no-repeat`,
+				   overflow: 'hidden',
+			   }}
+		   >
 			<h3 className="text-lg font-semibold text-white m-0 p-4 w-[80%]">{title}</h3>
 			<div style={{ position: 'relative', width: '100%', height: '40px' }}>
 				{title === 'Accept All Forms of Payments' ? (
@@ -136,38 +136,37 @@ export default function Homepage() {
 			{/* Landing page content */}
 			<section>
 				<div className="min-h-screen flex items-center justify-center">
-					<div className="w-full max-w-6xl p-4 md:p-8 flex flex-col md:grid md:grid-cols-2 md:gap-8">
-						{/* Hero card: order-1 on mobile, order-2 on desktop */}
-						<div
-							className="flex flex-col justify-center items-start bg-[#222] rounded-xl p-10 order-1 md:order-2"
-							style={{
-								position: 'relative',
-								background: "url('/align_vegas_logo.png') center center/cover no-repeat",
-								opacity: 1,
-								zIndex: 1,
-							}}
-						>
-							{/* Each word is an individual element, stacked vertically with spacing. Adjust gap-y-2 for vertical spacing. */}
-							{/* Increased pb-8 (padding-bottom) to prevent 'Aligned' from being cut off. Adjust as needed. */}
-							<h1 className="text-5xl font-bold mb-4 pb-8 flex flex-col gap-y-3">
-								<span className="text-white">Seamless</span>
-								<span className="text-white">Payments</span>
-								<span className="text-white">Perfectly</span>
-								{/* Added mb-2 and increased line height to prevent glow from being cut off */}
-								<span className="mb-2 leading-[1.3] inline-block"><GlowAlignText>Aligned.</GlowAlignText></span>
-							</h1>
-							<button className="bg-[#C3E86B] text-black font-semibold px-6 py-3 rounded-full mt-4">
-								Schedule a Free Consultation
-							</button>
-						</div>
-						{/* Feature cards: order-2 on mobile, order-1 on desktop */}
-						<div className="grid grid-rows-2 gap-8 order-2 md:order-1">
-							<div className="grid grid-cols-2 gap-8">
-								<FeatureCard {...features[0]} />
-								<FeatureCard {...features[1]} />
-							</div>
-							<FeatureCard {...features[2]} />
-						</div>
+					   <div className="w-full max-w-6xl p-4 md:p-8 flex flex-col md:grid md:grid-cols-2 md:gap-8">
+						   {/* Hero card: order-1 on mobile, order-2 on desktop */}
+						   <div
+							   className="flex flex-col justify-center items-start bg-[#222] rounded-xl p-10 order-1 md:order-2"
+							   style={{
+								   position: 'relative',
+								   background: "url('/align_vegas_logo.png') center center/cover no-repeat",
+								   opacity: 1,
+								   zIndex: 1,
+							   }}
+						   >
+							   <h1 className="text-5xl font-bold mb-4 pb-8 flex flex-col gap-y-3">
+								   <span className="text-white">Seamless</span>
+								   <span className="text-white">Payments</span>
+								   <span className="text-white">Perfectly</span>
+								   <span className="mb-2 leading-[1.3] inline-block"><GlowAlignText>Aligned.</GlowAlignText></span>
+							   </h1>
+							   <button className="bg-[#C3E86B] text-black font-semibold px-6 py-3 rounded-full mt-4">
+								   Schedule a Free Consultation
+							   </button>
+						   </div>
+						   {/* Feature cards: stack first two vertically on mobile, grid on desktop */}
+						   <div className="order-2 md:order-1 w-full">
+							   <div className="flex flex-col gap-6 md:grid md:grid-cols-2 md:gap-8">
+								   <FeatureCard {...features[0]} />
+								   <FeatureCard {...features[1]} />
+							   </div>
+							   <div className="mt-6 md:mt-8">
+								   <FeatureCard {...features[2]} />
+							   </div>
+						   </div>
 					</div>
 				</div>
 			</section>
