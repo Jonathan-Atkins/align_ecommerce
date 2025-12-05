@@ -3,6 +3,7 @@
 import React from "react";
 import Numbers from "../components/Numbers";
 import WhyAlign from "../components/WhyAlign";
+import ContactUs from "../components/ContactUs";
 
 export default function Page() {
   return (
@@ -76,6 +77,7 @@ export default function Page() {
         <Numbers />
       </div>
       <WhyAlign />
+      <ContactUs />
     </main>
   );
 }
