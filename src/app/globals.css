@@ -73,6 +73,9 @@
 html, body {
   margin: 0;
   padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* helper utilities (optional) */
@@ -107,6 +110,8 @@ html, body {
 /* Remove global background color */
 html, body, #__next {
   background: linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%) !important;
+  width: 100vw;
+  min-height: 100vh;
 }
 
 b, strong {
@@ -835,6 +840,9 @@ body {
   color: var(--color-text);
   background-color: var(--bg-color);
   transition: background calc(var(--duration) / 4) var(--ease);
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .mission-header {

@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import styles from './focusOnBusiness.module.css';
 
 const FocusOnBusiness: React.FC = () => {
   return (
@@ -17,14 +18,17 @@ const FocusOnBusiness: React.FC = () => {
         </div>
         {/* Right Side: Placeholder for card */}
         <div className="flex-1 flex items-center justify-center h-full mt-10 md:mt-0">
-          <div className="w-full max-w-md h-48 bg-white/70 rounded-2xl shadow-md flex flex-col items-center justify-center border border-gray-200">
+          <div className="w-full max-w-5xl h-60 rounded-2xl shadow-md flex flex-col items-center justify-center" style={{ background: 'rgba(120,130,140,0.25)' }}>
             {/* Placeholder for icon, title, and description */}
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
               {/* Icon placeholder */}
               <span className="text-2xl text-green-500">⚡</span>
             </div>
-            <div className="font-semibold text-lg mb-2">Fast Approvals</div>
-            <div className="text-gray-600 text-center px-4 text-sm">
+              <div className={`text-white font-semibold text-2xl mb-2 ${styles['fast-approvals-letters']}`}>
+                <span>Fast</span>
+                <span style={{ marginLeft: '0.5em' }}>Approvals</span>
+              </div>
+            <div className="text-white text-center px-4 text-lg" style={ {marginBottom: 80 }}>
               Align Ecommerce excels in fast merchant approvals, even for &quot;high risk&quot; businesses. Our expertise ensures quick, accurate evaluations, speeding up the setup process so you can get started without delay. With Align, fast and reliable approvals are a standard, not an exception.
             </div>
           </div>
