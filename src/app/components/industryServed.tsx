@@ -2,16 +2,16 @@
 import React, { useMemo, useEffect, useState } from "react";
 
 const images = [
-  "/WebDesign.jpg",
+  "/WebDesign1.jpg",
   "/OnlineCoach.jpg",
-  "/Multi-Level Marketing.jpg",
-  "/Online Gambling.jpg",
-  "/Adult & Dating.jpg",
-  "/Gadget.jpg",
-  "/Nutraceuticals.jpg",
-  "/Marketing.jpg",
-  "/Firearms.jpg",
-  "/Golf Equipment.jpg",
+  "/Multi-Level Marketing.png",
+  "/Online Gambline.jpg",
+  "/Adult and Dating.jpg",
+  "/gadgets.jpg",
+  "/Nutra.jpg",
+  "/market.jpg",
+  "/pistol.jpg",
+  "/golf.jpg",
 ];
 
 const labels = [
@@ -52,11 +52,11 @@ export default function IndustryServed() {
   if (!mounted) return null;
   return (
     <div>
-          <div className="title-wrap"style={{ marginLeft: '6px' }}>
-            <h2 className="text-3xl font-bold text-center mt-0 mb-0 text-white" style={{ marginLeft: '40px' }}>Industries Served</h2>
+          <div className="title-wrap"style={{ marginLeft: '8px', marginBottom: '100px', marginTop: '60px' }}>
+            <h2 className="text-3xl font-bold text-center mt-0 mb-0 text-white" style={{ marginLeft: '40px', marginBottom: '200px' }}>Industries Served</h2>
             <div className="horizontal-line" aria-hidden="true" style={{ marginLeft: '40px' }} />
           </div>
-      <div className="carousel-container mx-auto " style={{ marginLeft: '8px' }}>
+      <div className="carousel-container mx-auto " style={{ marginRight: '450px', marginLeft: '450px', marginBottom: '80px' }}>
         <div
           className="carousel"
           style={{
