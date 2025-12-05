@@ -29,16 +29,16 @@ const StatsOverlay: React.FC = () => (
         </div>
       </div>
       {/* Right Card */}
-      <div className="flex-1 rounded-2xl flex flex-col justify-start p-6 md:p-20 min-w-0 stats-card-mobile" style={{border: 'none', background: 'rgba(120,130,140,0.25)'}}>
-        <h1 className="font-bold text-2xl md:text-3xl mb-4 text-black">
+      <div className="flex-1 rounded-2xl flex flex-col justify-start p-6 md:p-10 min-w-0 stats-card-mobile" style={{border: 'none', background: 'rgba(120,130,140,0.25)', marginBottom: 1 }}>
+        <h1 className="font-bold text-2xl md:text-3xl mb-4 text-yellow-400" style={ {fontWeight: 900, fontFamily: 'Montserrat, sans-serif' }}>
           Stop settling for average<br />
           <span className="glow-word">Align</span> your business with excellence
         </h1>
-        <p className="text-white mb-2">
+        <p className="text-white text-1xl mb-2" style={{ fontWeight: 850, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif' }}>
           At <span className="glow-word font-bold">Align</span> Ecommerce, we don’t just process payments—we protect your profits and power your growth. Recognized by the Las Vegas Review-Journal - Best of Las Vegas and trusted by thousands of merchants, our results speak for themselves. We’ve processed over <span className="font-bold">$1 billion</span> in payments, saving our clients millions in unnecessary fees, and we’re just getting started.
         </p>
-        <p className="text-white">
-          With a <span className="font-bold">99.9% success rate</span> in overturning chargebacks, our clients have peace of mind knowing they’re protected from costly, friendly fraud. Backed by advanced gateways and hundreds of integrations, we build payment solutions tailored to your business… not some cookie-cutter setup.
+        <p className="text-white text-1xl" style={{ fontWeight: 850, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif' }}>
+          With a <span className="font-bold" style={{ fontWeight: 850 }}>99.9% success rate</span> in overturning chargebacks, our clients have peace of mind knowing they’re protected from costly, friendly fraud. Backed by advanced gateways and hundreds of integrations, we build payment solutions tailored to your business… not some cookie-cutter setup.
         </p>
       </div>
     </div>

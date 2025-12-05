@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
 @import "tailwindcss";
 
 /* Custom highlight color for MissionHighlight */
@@ -39,7 +39,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-global: 'Maven Pro', sans-serif;
+  --font-global: 'Montserrat', sans-serif;
 }
 
 
@@ -104,8 +104,8 @@ html, body {
 
 
 html, body {
-  font-family: 'Maven Pro', sans-serif;
-  font-weight: 400;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
 }
 /* Remove global background color */
 html, body, #__next {
