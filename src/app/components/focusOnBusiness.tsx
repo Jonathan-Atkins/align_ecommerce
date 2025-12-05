@@ -11,14 +11,34 @@ const FocusOnBusiness: React.FC = () => {
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between min-h-[400px]">
         {/* Left Side: Centered h1 */}
         <div className="flex-1 flex items-center justify-center md:justify-start h-full">
-          <h1 className="text-4xl md:text-5xl font-bold text-white text-left md:pl-8 mt-16 md:mt-0">
+          <h1
+            className="text-2xl font-bold text-white mt-16 md:mt-0 w-full"
+            style={{
+              fontSize: 'clamp(1.2rem, 6vw, 2.6rem)',
+              textAlign: typeof window !== 'undefined' && window.innerWidth < 768 ? 'center' : 'left',
+              paddingLeft: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : '2rem',
+              paddingRight: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : '2rem',
+              lineHeight: 1.15,
+              wordBreak: 'break-word',
+              margin: 0,
+              marginTop: 5
+            }}
+          >
             Focus on your business,<br />
             Let us do the rest.
           </h1>
         </div>
         {/* Right Side: Placeholder for card */}
-        <div className="flex-1 flex items-center justify-center h-full mt-10 md:mt-0">
-          <div className="w-full max-w-5xl h-60 rounded-2xl shadow-md flex flex-col items-center justify-center" style={{ background: 'rgba(120,130,140,0.25)' }}>
+        <div className="flex-1 flex items-center justify-center h-full mt-10 md:mt-0" style={ {marginRight: 90 }}>
+          <div
+            className="w-full max-w-5xl h-60 rounded-2xl shadow-md flex flex-col items-center justify-center"
+            style={{
+              background: 'rgba(120,130,140,0.25)',
+              marginTop: typeof window !== 'undefined' && window.innerWidth < 768 ? 200 : undefined,
+              marginLeft: typeof window !== 'undefined' && window.innerWidth < 768 ? 'auto' : undefined,
+              marginRight: typeof window !== 'undefined' && window.innerWidth < 768 ? 'auto' : undefined
+            }}
+          >
             {/* Placeholder for icon, title, and description */}
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
               {/* Icon placeholder */}
@@ -28,7 +48,10 @@ const FocusOnBusiness: React.FC = () => {
                 <span>Fast</span>
                 <span style={{ marginLeft: '0.5em' }}>Approvals</span>
               </div>
-            <div className="text-white text-center px-4 text-lg" style={ {marginBottom: 80 }}>
+            <div
+              className="text-white text-center px-2 text-lg md:text-lg sm:text-base break-words"
+              style={{ marginBottom: 80, fontSize: 'clamp(0.95rem, 3vw, 1.15rem)', wordBreak: 'break-word', lineHeight: 1.4 }}
+            >
               Align Ecommerce excels in fast merchant approvals, even for &quot;high risk&quot; businesses. Our expertise ensures quick, accurate evaluations, speeding up the setup process so you can get started without delay. With Align, fast and reliable approvals are a standard, not an exception.
             </div>
           </div>
