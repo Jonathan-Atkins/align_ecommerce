@@ -7,6 +7,7 @@ import StatsOverlay from "./components/StatsOverlay";
 import IndustryServed from "./components/industryServed";
 import FocusOnBusiness from "./components/focusOnBusiness";
 import Testimonials from "./components/Testimonials";
+import ContactUs from "./components/ContactUs";
 
 const features = [
 	{
@@ -181,6 +182,13 @@ export default function Homepage() {
 			   <IndustryServed />
 			   <FocusOnBusiness />
 			   <Testimonials />
+			   {/* ContactUs section at the very bottom */}
+			   <section>
+				   {/* ContactUs component */}
+				   <div className="w-full flex justify-center">
+					   <ContactUs />
+				   </div>
+			   </section>
 		   </main>
 	   );
 }
