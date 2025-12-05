@@ -52,7 +52,7 @@ export default function IndustryServed() {
   if (!mounted) return null;
   return (
     <section
-      className="w-full min-h-[400px] flex flex-col items-center justify-center pt-24 pb-8"
+      className="w-full min-h-[400px] flex flex-col items-center justify-center pt-4 pb-8"
       style={{
         background: "linear-gradient(90deg, #0B132B 0%, #1B3A2D 100%)",
       }}
